@@ -4,7 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import { getSortedPostsData } from "@/lib/posts";
-import { RegionalCategories, InjuryCategories, DiseaseCategories } from "@/components/SidebarCategories";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -76,6 +76,165 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
+
+        {/* 2. 헤더 아래 가로 탭형 네비게이션 바 (마우스 호버 시 하위 메뉴 노출) */}
+        <nav className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 sticky top-[60px] z-40 transition-colors">
+          <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl px-5 py-2 flex items-center gap-8 text-sm font-bold text-slate-700 dark:text-zinc-350">
+            
+            {/* 탭 1: 지역별 의료기관 */}
+            <div className="group relative py-2 cursor-pointer">
+              <span className="hover:text-blue-650 dark:hover:text-blue-400 flex items-center gap-1 transition-colors">
+                📍 지역별 의료기관 <span className="text-[10px] text-slate-400">▼</span>
+              </span>
+              {/* 드롭다운 하위 메뉴 */}
+              <div className="absolute left-0 mt-2 w-56 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-lg p-3 hidden group-hover:block transition-all duration-200 animate-in fade-in slide-in-from-top-1">
+                <div className="space-y-3">
+                  {/* 서울 */}
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      서울특별시 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      <Link href="/blog?region=강남구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 강남구</Link>
+                      <Link href="/blog?region=서초구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 서초구</Link>
+                    </div>
+                  </div>
+                  {/* 부산 */}
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      부산광역시 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      <Link href="/blog?region=해운대구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 해운대구</Link>
+                      <Link href="/blog?region=부산진구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 부산진구</Link>
+                    </div>
+                  </div>
+                  {/* 인천 */}
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      인천광역시 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      <Link href="/blog?region=남동구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 남동구</Link>
+                    </div>
+                  </div>
+                  {/* 대구 */}
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      대구광역시 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      <Link href="/blog?region=중구" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 중구</Link>
+                    </div>
+                  </div>
+                  {/* 경기도 */}
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      경기도 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      <Link href="/blog?region=수원시" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 수원시</Link>
+                      <Link href="/blog?region=성남시" className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• 성남시</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 탭 2: 상해별 보상 가이드 */}
+            <div className="group relative py-2 cursor-pointer">
+              <span className="hover:text-blue-650 dark:hover:text-blue-400 flex items-center gap-1 transition-colors">
+                🩹 상해별 보상 가이드 <span className="text-[10px] text-slate-400">▼</span>
+              </span>
+              <div className="absolute left-0 mt-2 w-64 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-lg p-3 hidden group-hover:block transition-all duration-200 animate-in fade-in slide-in-from-top-1">
+                <div className="space-y-3">
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🦴 척추 골절 및 손상 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['척추압박골절', '척추탈구 및 고정술', '방출성골절'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🩹 관절 및 인대 손상 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['십자인대 파열', '회전근개 파열', '아킬레스건 파열', '손목/발목 골절'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🚗 교통사고 및 배상 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['교통사고 합의금', '일상생활배상책임', '산재 및 근재보험'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 탭 3: 질병별 보상 가이드 */}
+            <div className="group relative py-2 cursor-pointer">
+              <span className="hover:text-blue-650 dark:hover:text-blue-400 flex items-center gap-1 transition-colors">
+                🩺 질병별 보상 가이드 <span className="text-[10px] text-slate-400">▼</span>
+              </span>
+              <div className="absolute left-0 mt-2 w-64 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-lg p-3 hidden group-hover:block transition-all duration-200 animate-in fade-in slide-in-from-top-1">
+                <div className="space-y-3">
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🩻 척추 및 관절 질환 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['목/허리디스크', '척추관협착증', '오십견/퇴행성관절염'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🧠 뇌 및 심혈관 질환 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['뇌경색 / 뇌출혈', '급성 심근경색증', '협심증 보상'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      🎗️ 주요 중증 질환 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['암 진단비 (일반/유사암)', '표적항암 치료비', '경계성 종양'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="group/sub relative">
+                    <span className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-zinc-200 py-1 hover:text-blue-500">
+                      📑 실손의료비 및 비급여 <span>▶</span>
+                    </span>
+                    <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200/60 dark:border-zinc-800/60 shadow-md p-2 hidden group-hover/sub:block">
+                      {['도수치료 / MRI 실비', '비급여 보상 한도', '질병 수술비 청구'].map(item => (
+                        <Link key={item} href={`/blog?category=${item}`} className="block text-xs text-slate-600 dark:text-zinc-400 hover:text-blue-500 py-1">• {item}</Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </nav>
 
         {/* 2. 티스토리 2단 레이아웃 본문 75% : 사이드바 25% 구조 */}
         <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl px-2 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 transition-all duration-300">
@@ -186,9 +345,7 @@ export default function RootLayout({
               </a>
             </div>
 
-            <RegionalCategories />
-            <InjuryCategories />
-            <DiseaseCategories />
+
 
             {/* 인기 태그 및 키워드 목록 */}
             <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
