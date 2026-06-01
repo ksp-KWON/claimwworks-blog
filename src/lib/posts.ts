@@ -6,7 +6,9 @@ export interface PostData {
   title: string;
   date: string;
   summary: string;
-  category: string;
+  category: string;          // 기본 카테고리 (병원보상가이드 등)
+  regionCategory: string;    // 지역 카테고리 (서울강남구, 부산해운대구 등)
+  specialtyCategory: string; // 진료과목 카테고리 (정형외과, 신경외과 등)
   tags: string[];
   content: string;
   published?: boolean;
@@ -43,8 +45,10 @@ export function getSortedPostsData(includeUnpublished = false): Omit<PostData, '
         date: formatDate(post.date),
         summary: post.summary || '',
         category: post.category || '',
+        regionCategory: post.regionCategory || '',
+        specialtyCategory: post.specialtyCategory || '',
         tags: Array.isArray(post.tags) ? post.tags : [],
-        published: post.published !== false, // 기본값 true
+        published: post.published !== false,
       };
     })
     // 관리자가 아닐 때는 비공개(published: false) 글 필터링
@@ -81,6 +85,8 @@ export function getPostData(slug: string, includeUnpublished = false): PostData 
       date: formatDate(post.date),
       summary: post.summary || '',
       category: post.category || '',
+      regionCategory: post.regionCategory || '',
+      specialtyCategory: post.specialtyCategory || '',
       tags: Array.isArray(post.tags) ? post.tags : [],
       content: post.content || '',
       published,

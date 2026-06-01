@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
 
@@ -111,7 +112,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         prose-tr:transition-colors hover:prose-tr:bg-slate-50 dark:hover:prose-tr:bg-zinc-800/50
       ">
         <div className="overflow-x-auto pb-4">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {post.content}
           </ReactMarkdown>
         </div>
