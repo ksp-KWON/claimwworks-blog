@@ -136,3 +136,10 @@ body {
   animation: marquee 20s linear infinite;
 }
 
+/* 배너 버튼 제목용 마퀴 (짧은 텍스트에 최적화된 빠른 속도) */
+.animate-marquee-sm {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 8s linear infinite;
+}
+

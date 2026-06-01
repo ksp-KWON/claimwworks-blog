@@ -98,8 +98,8 @@ export default function RootLayout({
               <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
                 ⚖️
               </div>
-              <div className="min-w-0">
-                <span className="block text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+              <div className="min-w-0 overflow-hidden">
+                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   보상스쿨 손해사정사
                 </span>
                 <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">신체손해사정사 소개</span>
@@ -111,8 +111,8 @@ export default function RootLayout({
               <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
                 💬
               </div>
-              <div className="min-w-0">
-                <span className="block text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
+              <div className="min-w-0 overflow-hidden">
+                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                   실시간 카톡 상담
                 </span>
                 <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">평균 5분 이내 답변 완료</span>
@@ -124,8 +124,8 @@ export default function RootLayout({
               <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
                 📋
               </div>
-              <div className="min-w-0">
-                <span className="block text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
+              <div className="min-w-0 overflow-hidden">
+                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                   구글 상담신청 양식
                 </span>
                 <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">상세 예약 밀착 분석</span>
@@ -137,8 +137,8 @@ export default function RootLayout({
               <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-rose-500 to-red-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
                 📺
               </div>
-              <div className="min-w-0">
-                <span className="block text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors truncate">
+              <div className="min-w-0 overflow-hidden">
+                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
                   보상스쿨 유튜브
                 </span>
                 <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">실전 보상 노하우 무료구독</span>
