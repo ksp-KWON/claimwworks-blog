@@ -2,8 +2,14 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getPostData } from '@/lib/posts';
+import { getPostData, getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
+
+// 빌드 시 모든 블로그 글을 미리 생성 (정적 사이트 배포용)
+export async function generateStaticParams() {
+  const posts = getSortedPostsData(false);
+  return posts.map((post) => ({ slug: post.slug }));
+}
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;

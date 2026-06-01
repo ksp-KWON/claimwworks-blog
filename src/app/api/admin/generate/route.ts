@@ -3,6 +3,9 @@ import { cookies } from 'next/headers';
 import { exec } from 'child_process';
 import path from 'path';
 
+// 로카에서만 사용하는 관리자 API - Cloudflare 배포 시 사용 불가
+export const dynamic = 'force-static';
+
 // 세션 토큰 확인 함수
 const verifyAuth = async () => {
   const cookieStore = await cookies();

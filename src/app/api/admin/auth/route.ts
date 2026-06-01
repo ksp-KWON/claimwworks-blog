@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+// 로카에서만 사용하는 관리자 API - Cloudflare 리드시 접속 불가 (filesystem 불지원)
+export const dynamic = 'force-static';
+
 // 로그인 세션 단순 고정 토큰 (보안성을 위해 환경변수 패스워드로 검증)
 const getSessionToken = () => {
   const password = process.env.ADMIN_PASSWORD || '1234';
