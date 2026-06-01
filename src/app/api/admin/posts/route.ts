@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import fs from 'fs';
-import path from 'path';
 import matter from 'gray-matter';
-
-const POSTS_DIR = path.join(process.cwd(), 'src/content/posts');
+import postsDataInitial from '../../../../../src/lib/posts-data.json';
 
 // 세션 토큰 확인 함수
 const verifyAuth = async () => {
@@ -14,6 +11,10 @@ const verifyAuth = async () => {
   const expectedToken = `session_hira_${Buffer.from(password).toString('base64')}`;
   return sessionCookie && sessionCookie.value === expectedToken;
 };
+
+// 클라우드플레어 환경 대응: 메모리상에 가상의 포스트 DB를 유지합니다.
+// (실제 저장하려면 로컬에서 마크다운 파일을 만들고 git push 해야 합니다.)
+let posts = [...postsDataInitial];
 
 // 1. 블로그 포스트 조회 (전체 목록 or 단일 상세)
 export async function GET(request: Request) {
@@ -25,53 +26,37 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');
 
-    if (!fs.existsSync(POSTS_DIR)) {
-      fs.mkdirSync(POSTS_DIR, { recursive: true });
-    }
-
     if (slug) {
-      const filePath = path.join(POSTS_DIR, `${slug}.md`);
-      if (!fs.existsSync(filePath)) {
+      const post = posts.find((p) => p.slug === slug);
+      if (!post) {
         return NextResponse.json({ success: false, message: '포스트를 찾을 수 없습니다.' }, { status: 404 });
       }
 
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data, content } = matter(fileContents);
-
       return NextResponse.json({
-        slug,
-        title: data.title || '',
-        date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
-        summary: data.summary || '',
-        category: data.category || '',
-        tags: data.tags || [],
-        content,
-        published: data.published !== false,
+        slug: post.slug,
+        title: post.title || '',
+        date: post.date ? new Date(post.date).toISOString().split('T')[0] : '',
+        summary: post.summary || '',
+        category: post.category || '',
+        tags: post.tags || [],
+        content: post.content || '',
+        published: post.published !== false,
       });
     }
 
-    // 전체 리스트
-    const fileNames = fs.readdirSync(POSTS_DIR);
-    const posts = fileNames
-      .filter((file) => file.endsWith('.md'))
-      .map((fileName) => {
-        const fileSlug = fileName.replace(/\.md$/, '');
-        const filePath = path.join(POSTS_DIR, fileName);
-        const fileContents = fs.readFileSync(filePath, 'utf8');
-        const { data } = matter(fileContents);
-
-        return {
-          slug: fileSlug,
-          title: data.title || '',
-          date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
-          summary: data.summary || '',
-          category: data.category || '',
-          published: data.published !== false,
-        };
-      })
+    // 전체 리스트 (최신순)
+    const list = posts
+      .map((p) => ({
+        slug: p.slug,
+        title: p.title || '',
+        date: p.date ? new Date(p.date).toISOString().split('T')[0] : '',
+        summary: p.summary || '',
+        category: p.category || '',
+        published: p.published !== false,
+      }))
       .sort((a, b) => (a.date < b.date ? 1 : -1));
 
-    return NextResponse.json(posts);
+    return NextResponse.json(list);
   } catch (error: any) {
     return NextResponse.json({ success: false, message: '포스트 조회 중 에러가 발생했습니다.' }, { status: 500 });
   }
@@ -91,28 +76,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: '필수 항목(Slug, 제목, 내용)이 누락되었습니다.' }, { status: 400 });
     }
 
-    // 슬러그 포맷팅 (소문자, 하이픈 등)
     slug = slug.toLowerCase().replace(/[^a-z0-9가-힣-]/g, '-');
-    const filePath = path.join(POSTS_DIR, `${slug}.md`);
 
-    if (fs.existsSync(filePath)) {
+    if (posts.some((p) => p.slug === slug)) {
       return NextResponse.json({ success: false, message: '이미 존재하는 슬러그(파일명)입니다. 다른 슬러그를 지정해 주세요.' }, { status: 400 });
     }
 
-    // [이식 규칙] 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
+    // 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
     content = content.replace(/([가-힣]+)\s*:\s*/g, '$1 : ');
 
-    const frontmatter = {
+    const newPost = {
+      slug,
       title,
       date: date || new Date().toISOString().split('T')[0],
       summary: summary || '',
       category: category || '일반',
       tags: Array.isArray(tags) ? tags : tags.split(',').map((t: string) => t.trim()).filter(Boolean),
       published: published !== false,
+      content,
     };
 
-    const fileContent = matter.stringify(content, frontmatter);
-    fs.writeFileSync(filePath, fileContent, 'utf8');
+    posts.push(newPost);
+    console.warn("Cloudflare 환경: 포스트가 메모리에 임시 등록되었습니다. 영구 저장을 원하시면 src/content/posts 폴더 내에 마크다운 파일을 생성하고 git push 하십시오.");
 
     return NextResponse.json({ success: true, slug });
   } catch (error: any) {
@@ -135,37 +120,31 @@ export async function PUT(request: Request) {
     }
 
     slug = slug.toLowerCase().replace(/[^a-z0-9가-힣-]/g, '-');
-    const oldPath = path.join(POSTS_DIR, `${originalSlug}.md`);
-    const newPath = path.join(POSTS_DIR, `${slug}.md`);
+    const index = posts.findIndex((p) => p.slug === originalSlug);
 
-    if (!fs.existsSync(oldPath)) {
+    if (index === -1) {
       return NextResponse.json({ success: false, message: '기존 포스트를 찾을 수 없습니다.' }, { status: 404 });
     }
 
-    if (originalSlug !== slug && fs.existsSync(newPath)) {
+    if (originalSlug !== slug && posts.some((p) => p.slug === slug)) {
       return NextResponse.json({ success: false, message: '수정하려는 슬러그명이 이미 존재합니다.' }, { status: 400 });
     }
 
-    // [이식 규칙] 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
+    // 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
     content = content.replace(/([가-힣]+)\s*:\s*/g, '$1 : ');
 
-    const frontmatter = {
+    posts[index] = {
+      slug,
       title,
       date: date || new Date().toISOString().split('T')[0],
       summary: summary || '',
       category: category || '일반',
       tags: Array.isArray(tags) ? tags : tags.split(',').map((t: string) => t.trim()).filter(Boolean),
       published: published !== false,
+      content,
     };
 
-    const fileContent = matter.stringify(content, frontmatter);
-    fs.writeFileSync(oldPath, fileContent, 'utf8');
-
-    // 슬러그가 달라진 경우 파일 이름 변경
-    if (originalSlug !== slug) {
-      fs.renameSync(oldPath, newPath);
-    }
-
+    console.warn("Cloudflare 환경: 포스트가 메모리에 임시 수정되었습니다.");
     return NextResponse.json({ success: true, slug });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: '포스트 수정 중 에러가 발생했습니다.' }, { status: 500 });
@@ -186,13 +165,14 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, message: '슬러그가 누락되었습니다.' }, { status: 400 });
     }
 
-    const filePath = path.join(POSTS_DIR, `${slug}.md`);
+    const initialLen = posts.length;
+    posts = posts.filter((p) => p.slug !== slug);
 
-    if (!fs.existsSync(filePath)) {
+    if (posts.length === initialLen) {
       return NextResponse.json({ success: false, message: '해당 포스트가 존재하지 않습니다.' }, { status: 404 });
     }
 
-    fs.unlinkSync(filePath);
+    console.warn("Cloudflare 환경: 포스트가 메모리에서 임시 삭제되었습니다.");
     return NextResponse.json({ success: true, message: '성공적으로 삭제되었습니다.' });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: '포스트 삭제 중 에러가 발생했습니다.' }, { status: 500 });

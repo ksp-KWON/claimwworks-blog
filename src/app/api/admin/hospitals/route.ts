@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import fs from 'fs';
-import path from 'path';
-
-const DATA_FILE_PATH = path.join(process.cwd(), 'public/data/medical-info.json');
+import medicalInfo from '../../../../../public/data/medical-info.json';
 
 // 세션 토큰 확인 함수
 const verifyAuth = async () => {
@@ -14,23 +11,9 @@ const verifyAuth = async () => {
   return sessionCookie && sessionCookie.value === expectedToken;
 };
 
-// JSON 파일 읽기 헬퍼
-function readData() {
-  if (!fs.existsSync(DATA_FILE_PATH)) {
-    return [];
-  }
-  const raw = fs.readFileSync(DATA_FILE_PATH, 'utf8');
-  try {
-    return JSON.parse(raw);
-  } catch (e) {
-    return [];
-  }
-}
-
-// JSON 파일 쓰기 헬퍼
-function writeData(data: any) {
-  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(data, null, 2), 'utf8');
-}
+// 클라우드플레어 환경 대응: 파일 시스템 쓰기가 불가능하므로 메모리 내 가상 DB 역할을 수행합니다.
+// (실제 저장하려면 로컬에서 파일을 수정하고 git push해야 합니다.)
+let hospitalsData = [...medicalInfo];
 
 // 1. 전체 병원 목록 가져오기
 export async function GET() {
@@ -38,8 +21,7 @@ export async function GET() {
     return NextResponse.json({ success: false, message: '권한이 없습니다.' }, { status: 401 });
   }
 
-  const data = readData();
-  return NextResponse.json(data);
+  return NextResponse.json(hospitalsData);
 }
 
 // 2. 새로운 병원 등록하기
@@ -50,7 +32,6 @@ export async function POST(request: Request) {
 
   try {
     const newHosp = await request.json();
-    const data = readData();
 
     // 필수값 검증
     if (!newHosp.name || !newHosp.region || !newHosp.specialty) {
@@ -66,8 +47,8 @@ export async function POST(request: Request) {
       treated: false
     };
 
-    data.push(item);
-    writeData(data);
+    hospitalsData.push(item);
+    console.warn("Cloudflare 환경: 병원이 메모리에 임시 등록되었습니다. 영구 저장을 원하시면 public/data/medical-info.json 파일을 로컬에서 수정하고 git push 하십시오.");
 
     return NextResponse.json({ success: true, data: item });
   } catch (error: any) {
@@ -83,20 +64,19 @@ export async function PUT(request: Request) {
 
   try {
     const updatedHosp = await request.json();
-    const data = readData();
 
-    const index = data.findIndex((h: any) => h.id === updatedHosp.id);
+    const index = hospitalsData.findIndex((h: any) => h.id === updatedHosp.id);
     if (index === -1) {
       return NextResponse.json({ success: false, message: '해당 병원을 찾을 수 없습니다.' }, { status: 404 });
     }
 
-    data[index] = {
-      ...data[index],
+    hospitalsData[index] = {
+      ...hospitalsData[index],
       ...updatedHosp
     };
 
-    writeData(data);
-    return NextResponse.json({ success: true, data: data[index] });
+    console.warn("Cloudflare 환경: 병원 정보가 메모리에 임시 수정되었습니다.");
+    return NextResponse.json({ success: true, data: hospitalsData[index] });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: '병원 수정 중 에러가 발생했습니다.' }, { status: 500 });
   }
@@ -116,15 +96,14 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, message: 'ID가 누락되었습니다.' }, { status: 400 });
     }
 
-    let data = readData();
-    const initialLen = data.length;
-    data = data.filter((h: any) => h.id !== id);
+    const initialLen = hospitalsData.length;
+    hospitalsData = hospitalsData.filter((h: any) => h.id !== id);
 
-    if (data.length === initialLen) {
+    if (hospitalsData.length === initialLen) {
       return NextResponse.json({ success: false, message: '해당 병원을 찾을 수 없습니다.' }, { status: 404 });
     }
 
-    writeData(data);
+    console.warn("Cloudflare 환경: 병원이 메모리에서 임시 삭제되었습니다.");
     return NextResponse.json({ success: true, message: '성공적으로 삭제되었습니다.' });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: '병원 삭제 중 에러가 발생했습니다.' }, { status: 500 });

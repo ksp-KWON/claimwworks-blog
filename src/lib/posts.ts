@@ -1,8 +1,5 @@
-import fs from 'fs';
-import path from 'path';
 import matter from 'gray-matter';
-
-const postsDirectory = path.join(process.cwd(), 'src/content/posts');
+import postsData from './posts-data.json';
 
 export interface PostData {
   slug: string;
@@ -38,30 +35,16 @@ function formatDate(dateVal: unknown): string {
 
 // 전체 블로그 목록을 날짜 최신순으로 가져오는 함수 (관리자용은 비공개 글 포함 가능)
 export function getSortedPostsData(includeUnpublished = false): Omit<PostData, 'content'>[] {
-  // 폴더가 없으면 미리 만듭니다.
-  if (!fs.existsSync(postsDirectory)) {
-    fs.mkdirSync(postsDirectory, { recursive: true });
-  }
-
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-      // 마크다운 상단의 메타데이터(frontmatter) 분석
-      const { data } = matter(fileContents);
-
+  const allPostsData = postsData
+    .map((post) => {
       return {
-        slug,
-        title: data.title || '',
-        date: formatDate(data.date),
-        summary: data.summary || '',
-        category: data.category || '',
-        tags: Array.isArray(data.tags) ? data.tags : [],
-        published: data.published !== false, // 기본값 true
+        slug: post.slug,
+        title: post.title || '',
+        date: formatDate(post.date),
+        summary: post.summary || '',
+        category: post.category || '',
+        tags: Array.isArray(post.tags) ? post.tags : [],
+        published: post.published !== false, // 기본값 true
       };
     })
     // 관리자가 아닐 때는 비공개(published: false) 글 필터링
@@ -80,15 +63,12 @@ export function getSortedPostsData(includeUnpublished = false): Omit<PostData, '
 // 특정 블로그 글 하나를 가져오는 함수 (비공개 글은 관리자 권한 없이 조회 불가)
 export function getPostData(slug: string, includeUnpublished = false): PostData | null {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`);
-    if (!fs.existsSync(fullPath)) {
+    const post = postsData.find((p) => p.slug === slug);
+    if (!post) {
       return null;
     }
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    // 마크다운 상단 메타데이터와 본문 내용 파싱
-    const { data, content } = matter(fileContents);
-    const published = data.published !== false;
+    const published = post.published !== false;
 
     // 비공개 글이고 비공개 비포함 옵션일 때 차단
     if (!published && !includeUnpublished) {
@@ -97,12 +77,12 @@ export function getPostData(slug: string, includeUnpublished = false): PostData 
 
     return {
       slug,
-      title: data.title || '',
-      date: formatDate(data.date),
-      summary: data.summary || '',
-      category: data.category || '',
-      tags: Array.isArray(data.tags) ? data.tags : [],
-      content,
+      title: post.title || '',
+      date: formatDate(post.date),
+      summary: post.summary || '',
+      category: post.category || '',
+      tags: Array.isArray(post.tags) ? post.tags : [],
+      content: post.content || '',
       published,
     };
   } catch (error) {
