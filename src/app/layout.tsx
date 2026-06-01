@@ -55,26 +55,33 @@ export default function RootLayout({
         {/* 1. 프리미엄 글래스모피즘 헤더 */}
         <header className="sticky top-0 z-50 w-full h-[60px] border-b border-slate-200/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md text-slate-800 dark:text-zinc-100 shadow-xs transition-colors">
           <div className="mx-auto flex h-full w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5">
-            <div className="flex items-center gap-4 sm:gap-6 overflow-hidden">
-              <div className="overflow-hidden text-ellipsis whitespace-nowrap font-serif font-extrabold text-base sm:text-lg flex-shrink-0 text-slate-900 dark:text-white">
-                <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                  <span role="img" aria-label="건강">🩺</span> 보상스쿨 헬스케어 & 손해사정 보상가이드
+            {/* 로고/제목 영역 - 모바일에서 nav를 위해 충분한 공간 확보 */}
+            <div className="flex items-center min-w-0 flex-1 mr-2">
+              <div className="font-serif font-extrabold text-sm sm:text-base lg:text-lg text-slate-900 dark:text-white min-w-0">
+                <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                  <span role="img" aria-label="건강" className="shrink-0">🩺</span>
+                  {/* 모바일에서는 짧은 제목, 태블릿부터 전체 제목 */}
+                  <span className="hidden sm:inline truncate">보상스쿨 헬스케어 &amp; 손해사정 보상가이드</span>
+                  <span className="sm:hidden">보상스쿨</span>
                 </Link>
               </div>
-
             </div>
-            
-            {/* 원래 자리에 메뉴 배치 */}
-            <div className="flex items-center gap-4 sm:gap-6">
-              <nav className="flex items-center gap-4 sm:gap-6 text-sm font-semibold text-slate-650 dark:text-zinc-300">
-                <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  🏠 홈
+
+            {/* 우측 메뉴 영역 */}
+            <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+              <nav className="flex items-center gap-1 sm:gap-3 text-sm font-semibold text-slate-650 dark:text-zinc-300">
+                {/* 모바일: 아이콘만 표시 / 태블릿+: 아이콘+텍스트 표시 */}
+                <Link href="/" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <span>🏠</span>
+                  <span className="hidden md:inline text-xs">홈</span>
                 </Link>
-                <Link href="/blog" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  ✍️ 블로그
+                <Link href="/blog" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <span>✍️</span>
+                  <span className="hidden md:inline text-xs">블로그</span>
                 </Link>
-                <Link href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  ℹ️ 소개(About)
+                <Link href="/about" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <span>ℹ️</span>
+                  <span className="hidden md:inline text-xs">소개</span>
                 </Link>
               </nav>
               <ThemeToggle />

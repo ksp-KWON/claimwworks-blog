@@ -122,18 +122,17 @@ body {
 }
 
 /* 4. 흘러가는 대형 제목 (Marquee) 애니메이션 효과 */
+/* 시작점: 첫 글자가 컨테이너 맨 왼쪽에서 시작 → 왼쪽으로 흘러감 */
 @keyframes marquee {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  0%   { transform: translateX(0); }         /* 쳉 바로 첫 글자가 왼쪽에 위치 */
+  10%  { transform: translateX(0); }         /* 10% 구간 동안 시작점 정지 (읽어볼 수 있도록) */
+  90%  { transform: translateX(-100%); }     /* 텍스트가 왼쪽으로 완전히 사라짐 */
+  100% { transform: translateX(-100%); }     /* 끝점에서 잠시 대기 후 다시 시작 */
 }
 
 .animate-marquee {
   display: inline-block;
   white-space: nowrap;
-  animation: marquee 25s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
