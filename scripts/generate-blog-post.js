@@ -125,6 +125,9 @@ async function generatePost() {
 3. 시각적 요소: 본문 중간에 해당 병원의 진료 정보나, 교통사고 합의금 산정 기준 등을 요약한 **마크다운 표(Table)**를 최소 1개 이상 반드시 포함할 것. 숫자가 포함된 리스트(1. 2. 3.)와 글머리 기호(-)도 적극 활용할 것.
 4. 전문성과 독창성: 공공데이터를 나열하는 것에 그치지 말고, 실제 보상 실무(자동차보험 지불보증 절차, 후유장해 진단서 발급 꿀팁, 합의 요령)를 환자 눈높이에서 전문가적 통찰을 담아 길게 풀어낼 것.
 5. 문체: 환자에게 신뢰감을 주는 "~습니다", "~합니다" 체를 사용하고, 중요 키워드는 **볼드체**로 강조할 것.
+6. YAML 프론트매터 Title 따옴표 필수: YAML 상단의 title 값은 반드시 전체를 큰따옴표로 감싸서 출력할 것. (예: title: "인천 병원 : 합의금 꿀팁")
+7. 볼드체 마크다운 문법 오류 방지: 볼드체를 사용할 때, 닫는 별표(**) 바로 앞에 절대 공백이 들어가지 않도록 할 것. (올바른 예: **척추 질환 전문성:** 또는 **척추 질환 전문성**: / 잘못된 예: **척추 질환 전문성 : **)
+8. 본문 내 섹션 구분선(---) 삽입: 주요 섹션(## 중제목)이 끝나고 다음 섹션이 시작되기 전에는 반드시 마크다운 수평 구분선(---)을 넣어 시각적으로 영역을 명확히 분리할 것.
 
 [내용 구조]
 - 도입부: 환자의 아픔에 공감하며 병원 소개 (${targetHospital.name})
@@ -135,9 +138,9 @@ async function generatePost() {
 
 아래 형식으로만 출력해줘 (마크다운 코드 블록 등으로 감싸지 말고 날것 그대로 출력해줘):
 ---
-title: (지역명+병원명과 합의금/지불보증 키워드를 섞은 자극적이고 유용한 제목)
+title: "(지역명+병원명과 합의금/지불보증 키워드를 섞은 제목)"
 date: ${new Date().toISOString().split('T')[0]}
-summary: (전체 글을 깔끔하게 정리 한 줄 요약)
+summary: "전체 글을 깔끔하게 정리 한 줄 요약"
 category: 병원보상가이드
 tags: [교통사고합의금, 지불보증, ${targetHospital.region.split(' ').join('')}, ${targetHospital.specialty}, 후유장해]
 ---
@@ -152,9 +155,9 @@ FILENAME: YYYY-MM-DD-영문키워드
     if (isTestMode) {
       // 2,000자 이상의 초고품질 E-E-A-T 만족 포스팅 자동 생성 (오프라인 테스트용)
       textOutput = `---
-title: ${targetHospital.region} ${targetHospital.name} 방문 전 꼭 알아야 할 교통사고 합의금 많이 받는 요령과 지불보증 절차
+title: "${targetHospital.region} ${targetHospital.name} 방문 전 꼭 알아야 할 교통사고 합의금 많이 받는 요령과 지불보증 절차"
 date: ${new Date().toISOString().split('T')[0]}
-summary: ${targetHospital.region}에 위치한 ${targetHospital.name}의 진료 정보와 함께 교통사고 발생 시 지불보증 신청 절차 및 후유장해 보험금 찾는 핵심 노하우를 정리해 드립니다.
+summary: "${targetHospital.region}에 위치한 ${targetHospital.name}의 진료 정보와 함께 교통사고 발생 시 지불보증 신청 절차 및 후유장해 보험금 찾는 핵심 노하우를 정리해 드립니다."
 category: 병원보상가이드
 tags: [교통사고합의금, 지불보증, ${targetHospital.region.split(' ').join('')}, ${targetHospital.specialty}, 후유장해]
 ---
@@ -277,8 +280,8 @@ FILENAME: 2026-05-29-seoul-gangnam-medical-compensation
     // 본문에서 FILENAME 줄 제거
     let finalContent = textOutput.replace(/FILENAME:\s*[^\s\n\r]+/gi, '').trim();
 
-    // 한글 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (예: '요약: 서' -> '요약 : 서')
-    finalContent = finalContent.replace(/([가-힣]+)\s*:\s*/g, '$1 : ');
+    // 한글 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 등의 마크다운 종료 기호 ** 직전은 제외)
+    finalContent = finalContent.replace(/([가-힣]+)\s*:\s*([^*]|$)/g, '$1 : $2');
 
     const savePath = path.join(POSTS_DIR, fileName);
     fs.writeFileSync(savePath, finalContent, 'utf8');
