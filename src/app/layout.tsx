@@ -4,7 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import { getSortedPostsData } from "@/lib/posts";
-import { RegionalCategories, DiagnosisCategories } from "@/components/SidebarCategories";
+import { RegionalCategories, InjuryCategories, DiseaseCategories } from "@/components/SidebarCategories";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +52,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
         
-        {/* 1. 프리미엄 글래스모피즘 헤더 (클레임웍스 브랜딩) */}
+        {/* 1. 프리미엄 글래스모피즘 헤더 */}
         <header className="sticky top-0 z-50 w-full h-[60px] border-b border-slate-200/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md text-slate-800 dark:text-zinc-100 shadow-xs transition-colors">
           <div className="mx-auto flex h-full w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5">
             <div className="overflow-hidden text-ellipsis whitespace-nowrap font-serif font-extrabold text-lg sm:text-xl flex-shrink-0 text-slate-900 dark:text-white">
@@ -61,15 +61,15 @@ export default function RootLayout({
               </Link>
             </div>
             
-            {/* 헤더 메뉴 네비게이션: 홈, 블로그, 소개(About) */}
+            {/* 헤더 메뉴 네비게이션 */}
             <nav className="flex items-center gap-4 sm:gap-6">
-              <Link href="/" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400 transition-colors">
+              <Link href="/" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-450 transition-colors">
                 🏠 홈
               </Link>
-              <Link href="/blog" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400 transition-colors">
+              <Link href="/blog" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-450 transition-colors">
                 ✍️ 블로그
               </Link>
-              <Link href="/about" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400 transition-colors">
+              <Link href="/about" className="text-sm font-semibold text-slate-650 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-450 transition-colors">
                 ℹ️ 소개(About)
               </Link>
               <ThemeToggle />
@@ -85,7 +85,7 @@ export default function RootLayout({
             {children}
           </main>
 
-          {/* 사이드바 영역 (우측 25% - 애드센스 최적화) */}
+          {/* 사이드바 영역 (우측 25%) */}
           <aside className="w-full lg:w-[27%] lg:sticky lg:top-[80px] self-start space-y-6">
             
             {/* 프로필 영역 */}
@@ -107,56 +107,88 @@ export default function RootLayout({
 
             {/* 카카오톡 상담신청 박스 */}
             <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 flex flex-col overflow-hidden">
-              <span className="text-[11px] font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider block mb-3 text-center">💬 빠른 카톡 상담</span>
+              <div className="flex justify-center mb-3">
+                <span className="px-3 py-1 text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-full tracking-wider">💬 실시간 카톡 상담</span>
+              </div>
               <a 
                 href="https://open.kakao.com/o/sWeszp7" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group block relative rounded-2xl overflow-hidden border border-slate-100 dark:border-zinc-800 shadow-xs hover:shadow-md transition-all duration-300"
+                className="group block relative rounded-2xl overflow-hidden border border-amber-100 dark:border-amber-950/20 bg-amber-50/5 dark:bg-amber-950/5 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <div className="relative aspect-video w-full overflow-hidden bg-amber-50 dark:bg-zinc-800/20">
+                <div className="relative aspect-video w-full overflow-hidden bg-amber-50/20 dark:bg-zinc-850/20">
                   <img 
                     src="/kakao_counsel.png" 
                     alt="카카오 상담 신청" 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-3 bg-amber-50/20 dark:bg-zinc-800/20 text-center border-t border-slate-100 dark:border-zinc-800">
-                  <span className="text-xs font-bold text-slate-850 dark:text-zinc-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                    실시간 카톡 보상상담 받기
+                <div className="p-3 bg-amber-50/30 dark:bg-amber-950/10 text-center border-t border-amber-100/50 dark:border-amber-950/20">
+                  <span className="text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    실시간 1:1 카톡 상담 받기
                   </span>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 font-medium">⚡ 평균 5분 이내 빠른 답변 완료</p>
                 </div>
               </a>
             </div>
 
             {/* 구글 설문지 상담신청 박스 */}
             <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 flex flex-col overflow-hidden">
-              <span className="text-[11px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider block mb-3 text-center">📋 상세 상담 예약</span>
+              <div className="flex justify-center mb-3">
+                <span className="px-3 py-1 text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full tracking-wider">📋 상세 상담 예약</span>
+              </div>
               <a 
                 href="https://forms.gle/E9vj7iqAHeJGhJ549" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group block relative rounded-2xl overflow-hidden border border-slate-100 dark:border-zinc-800 shadow-xs hover:shadow-md transition-all duration-300"
+                className="group block relative rounded-2xl overflow-hidden border border-emerald-100 dark:border-emerald-950/20 bg-emerald-50/5 dark:bg-emerald-950/5 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <div className="relative aspect-video w-full overflow-hidden bg-emerald-50/20 dark:bg-zinc-800/20">
+                <div className="relative aspect-video w-full overflow-hidden bg-emerald-50/20 dark:bg-zinc-850/20">
                   <img 
                     src="/google_counsel.png" 
                     alt="구글 상담 신청" 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-3 bg-emerald-50/20 dark:bg-zinc-800/20 text-center border-t border-slate-100 dark:border-zinc-800">
-                  <span className="text-xs font-bold text-slate-850 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    구글 무료 상담신청서 작성
+                <div className="p-3 bg-emerald-50/30 dark:bg-emerald-950/10 text-center border-t border-emerald-100/50 dark:border-emerald-950/20">
+                  <span className="text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    상세 예약 설문서 작성
                   </span>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 font-medium">📑 맞춤형 보상분석 보고서 제공</p>
                 </div>
               </a>
             </div>
 
-
+            {/* 유튜브 채널 박스 */}
+            <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 flex flex-col overflow-hidden">
+              <div className="flex justify-center mb-3">
+                <span className="px-3 py-1 text-[11px] font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full tracking-wider">📺 보상스쿨 유튜브</span>
+              </div>
+              <a 
+                href="https://www.youtube.com/@bosangschool" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block relative rounded-2xl overflow-hidden border border-rose-100 dark:border-rose-950/20 bg-rose-50/5 dark:bg-rose-950/5 shadow-xs hover:shadow-md transition-all duration-300"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-rose-50/20 dark:bg-zinc-850/20">
+                  <img 
+                    src="/youtube_banner.png" 
+                    alt="보상스쿨 유튜브" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-3 bg-rose-50/30 dark:bg-rose-950/10 text-center border-t border-rose-100/50 dark:border-rose-950/20">
+                  <span className="text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                    유튜브 영상 강의 구독하기
+                  </span>
+                  <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1 font-medium">🎬 실전 보상 노하우 무료 시청</p>
+                </div>
+              </a>
+            </div>
 
             <RegionalCategories />
-            <DiagnosisCategories />
+            <InjuryCategories />
+            <DiseaseCategories />
 
             {/* 인기 태그 및 키워드 목록 */}
             <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
