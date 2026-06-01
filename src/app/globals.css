@@ -1,8 +1,17 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Tailwind v4 클래스 기반 다크모드 활성화 */
+@variant dark (.dark &);
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* 밝은 Slate 톤의 배경 */
+  --foreground: #0f172a; /* 깊은 남색 글씨 */
+}
+
+:root.dark {
+  --background: #090d16; /* 다크 블루-네이비 톤의 배경 */
+  --foreground: #f1f5f9;
 }
 
 @theme inline {
@@ -12,15 +21,85 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ==========================================
+   ✨ 프리미엄 가독성 및 포인트 디자인 시스템 
+   ========================================== */
+
+/* 1. 마크다운 본문 내 인용구(>) 디자인 개선 */
+.prose blockquote {
+  border-left: 4px solid #3b82f6 !important; /* 선명한 파란색 포인트 */
+  background-color: #f1f5f9;
+  padding: 1rem 1.25rem !important;
+  border-radius: 0 0.75rem 0.75rem 0;
+  color: #334155 !important;
+  font-style: normal !important;
+  quotes: none !important;
+  margin: 1.5rem 0 !important;
+}
+.dark .prose blockquote {
+  background-color: #1e293b/60 !important;
+  color: #cbd5e1 !important;
+}
+
+/* 2. 마크다운 표(Table) 시각적 입체감 및 가독성 개선 */
+.prose table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  margin: 2rem 0 !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+.dark .prose table {
+  border-color: #334155;
+}
+
+.prose th {
+  background-color: #eff6ff !important; /* 연한 파란색 헤더 */
+  color: #1e40af !important; /* 남색 글씨 */
+  padding: 0.85rem 1rem !important;
+  font-weight: 700 !important;
+  text-align: left;
+  border-bottom: 2px solid #dbeafe !important;
+}
+.dark .prose th {
+  background-color: #1e293b !important;
+  color: #60a5fa !important;
+  border-bottom: 2px solid #334155 !important;
+}
+
+.prose td {
+  padding: 0.85rem 1rem !important;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: #ffffff;
+}
+.dark .prose td {
+  background-color: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  color: #e2e8f0;
+}
+
+
+
+/* 마크다운 표의 행(Row)에 마우스 호버 효과 추가 */
+.prose tr:hover td {
+  background-color: #f8fafc !important;
+}
+.dark .prose tr:hover td {
+  background-color: #1e293b/40 !important;
+}
+
+/* 3. 본문 내 강조 단어(**굵게**)에 색상 포인트 적용 */
+.prose strong {
+  color: #2563eb !important; /* 신뢰감을 주는 미디엄 블루 */
+}
+.dark .prose strong {
+  color: #3b82f6 !important;
 }

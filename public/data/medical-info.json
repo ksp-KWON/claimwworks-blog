@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hosp-001",
+    "name": "강남바른척추정형외과의원",
+    "region": "서울 강남구",
+    "specialty": "정형외과",
+    "address": "서울특별시 강남구 테헤란로 123",
+    "treated": true
+  },
+  {
+    "id": "hosp-002",
+    "name": "부산튼튼신경외과의원",
+    "region": "부산 해운대구",
+    "specialty": "신경외과",
+    "address": "부산광역시 해운대구 해운대로 456",
+    "treated": true
+  },
+  {
+    "id": "hosp-003",
+    "name": "대구탑연합정형외과",
+    "region": "대구 중구",
+    "specialty": "정형외과",
+    "address": "대구광역시 중구 달구벌대로 789",
+    "treated": true
+  },
+  {
+    "id": "hosp-seoul-01",
+    "name": "서울강남정형외과의원",
+    "region": "서울 강남구",
+    "specialty": "정형외과",
+    "address": "서울특별시 강남구 강남대로 100",
+    "treated": true
+  },
+  {
+    "id": "hosp-busan-01",
+    "name": "부산서면신경외과의원",
+    "region": "부산 진구",
+    "specialty": "신경외과",
+    "address": "부산광역시 부산진구 중앙대로 200",
+    "treated": false
+  },
+  {
+    "id": "hosp-incheon-01",
+    "name": "인천웰니스정형외과",
+    "region": "인천 남동구",
+    "specialty": "정형외과",
+    "address": "인천광역시 남동구 예술로 300",
+    "treated": false
+  }
+]
