@@ -125,9 +125,9 @@ async function generatePost() {
 3. 시각적 요소: 본문 중간에 해당 병원의 진료 정보나, 교통사고 합의금 산정 기준 등을 요약한 **마크다운 표(Table)**를 최소 1개 이상 반드시 포함할 것. 숫자가 포함된 리스트(1. 2. 3.)와 글머리 기호(-)도 적극 활용할 것.
 4. 전문성과 독창성: 공공데이터를 나열하는 것에 그치지 말고, 실제 보상 실무(자동차보험 지불보증 절차, 후유장해 진단서 발급 꿀팁, 합의 요령)를 환자 눈높이에서 전문가적 통찰을 담아 길게 풀어낼 것.
 5. 문체: 환자에게 신뢰감을 주는 "~습니다", "~합니다" 체를 사용하고, 중요 키워드는 **볼드체**로 강조할 것.
-6. YAML 프론트매터 Title 따옴표 필수: YAML 상단의 title 값은 반드시 전체를 큰따옴표로 감싸서 출력할 것. (예: title: "인천 병원 : 합의금 꿀팁")
-7. 볼드체 마크다운 문법 오류 방지: 볼드체를 사용할 때, 닫는 별표(**) 바로 앞에 절대 공백이 들어가지 않도록 할 것. (올바른 예: **척추 질환 전문성:** 또는 **척추 질환 전문성**: / 잘못된 예: **척추 질환 전문성 : **)
-8. 본문 내 섹션 구분선(---) 삽입: 주요 섹션(## 중제목)이 끝나고 다음 섹션이 시작되기 전에는 반드시 마크다운 수평 구분선(---)을 넣어 시각적으로 영역을 명확히 분리할 것.
+6. YAML 프론트매터 Title 따옴표 필수: 제목에 콜론(:)이 포함되거나 어떠한 경우에도 빌드 에러를 방지하기 위해 YAML 상단의 title 값은 반드시 전체를 큰따옴표로 감싸서 출력할 것. (예: title: "인천 병원 : 합의금 꿀팁")
+7. 볼드체 마크다운 문법 오류 방지: 볼드체를 사용할 때, 닫는 별표(**) 바로 앞에 절대 공백이 들어가지 않도록 할 것. 닫는 별표 안에는 절대 공백이 없어야 렌더링 에러가 안 생기므로, 반드시 **척추 질환 전문성:** 또는 **척추 질환 전문성**: 형태로 띄어쓰기를 철저히 준수할 것. (잘못된 예: **척추 질환 전문성 : **)
+8. 본문 내 섹션 구분선(---) 삽입: 글의 가독성을 높이기 위해, 각 주요 섹션(## 중제목)이 끝나는 부분과 다음 섹션이 시작되는 사이(본문 중간중간 내용 전환 시)에 반드시 마크다운 수평 구분선(---)을 넣어 시각적으로 영역을 명확히 분리할 것.
 
 [내용 구조]
 - 도입부: 환자의 아픔에 공감하며 병원 소개 (${targetHospital.name})
@@ -280,8 +280,71 @@ FILENAME: 2026-05-29-seoul-gangnam-medical-compensation
     // 본문에서 FILENAME 줄 제거
     let finalContent = textOutput.replace(/FILENAME:\s*[^\s\n\r]+/gi, '').trim();
 
+    // 1. YAML 프론트매터 Title 따옴표 강제 보정 (콜론 포함 시 빌드 실패 방지)
+    let lines = finalContent.split('\n');
+    let inFrontmatter = false;
+    let frontmatterCount = 0;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line === '---') {
+        frontmatterCount++;
+        inFrontmatter = (frontmatterCount === 1);
+        continue;
+      }
+      if (inFrontmatter && lines[i].startsWith('title:')) {
+        let titleVal = lines[i].slice(6).trim();
+        // 앞뒤에 이미 큰따옴표가 있는지 확인하여 없으면 강제로 감싸줌
+        if (!titleVal.startsWith('"') || !titleVal.endsWith('"')) {
+          if ((titleVal.startsWith('"') && titleVal.endsWith('"')) || (titleVal.startsWith("'") && titleVal.endsWith("'"))) {
+            titleVal = titleVal.slice(1, -1);
+          }
+          titleVal = titleVal.replace(/"/g, '\\"');
+          lines[i] = `title: "${titleVal}"`;
+        }
+        break;
+      }
+      if (frontmatterCount >= 2) break;
+    }
+    finalContent = lines.join('\n');
+
+    // 2. 볼드체 마크다운 문법 오류 방지 (닫는 별표 직전 공백 제거 및 콜론 위치 보정)
+    finalContent = finalContent.replace(/\*\*([^\*]+?)\s*:\s*\*\*/g, '**$1:**');
+
     // 한글 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 등의 마크다운 종료 기호 ** 직전은 제외)
     finalContent = finalContent.replace(/([가-힣]+)\s*:\s*([^*]|$)/g, '$1 : $2');
+
+    // 3. 본문 내 섹션 구분선(---) 삽입 보정 (## H2 태그 시작 전 --- 확인 및 자동 삽입)
+    let bodyLines = finalContent.split('\n');
+    let newBodyLines = [];
+    let passedFrontmatter = false;
+    let frontmatterSeparatorCount = 0;
+    
+    for (let i = 0; i < bodyLines.length; i++) {
+      const line = bodyLines[i];
+      if (line.trim() === '---') {
+        frontmatterSeparatorCount++;
+        if (frontmatterSeparatorCount >= 2) {
+          passedFrontmatter = true;
+        }
+        newBodyLines.push(line);
+        continue;
+      }
+      
+      if (passedFrontmatter && line.trim().startsWith('## ')) {
+        let prevLineIndex = newBodyLines.length - 1;
+        while (prevLineIndex >= 0 && newBodyLines[prevLineIndex].trim() === '') {
+          prevLineIndex--;
+        }
+        
+        if (prevLineIndex >= 0 && newBodyLines[prevLineIndex].trim() !== '---') {
+          newBodyLines.push('');
+          newBodyLines.push('---');
+          newBodyLines.push('');
+        }
+      }
+      newBodyLines.push(line);
+    }
+    finalContent = newBodyLines.join('\n');
 
     const savePath = path.join(POSTS_DIR, fileName);
     fs.writeFileSync(savePath, finalContent, 'utf8');
