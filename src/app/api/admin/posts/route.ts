@@ -14,7 +14,7 @@ const verifyAuth = async () => {
 
 // 클라우드플레어 환경 대응: 메모리상에 가상의 포스트 DB를 유지합니다.
 // (실제 저장하려면 로컬에서 마크다운 파일을 만들고 git push 해야 합니다.)
-let posts = [...postsDataInitial];
+let posts: any[] = [...postsDataInitial];
 
 // 1. 블로그 포스트 조회 (전체 목록 or 단일 상세)
 export async function GET(request: Request) {

@@ -93,11 +93,62 @@ export default function RootLayout({
                 🧑‍⚖️
               </div>
               <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-150">
-                클레임웍스 손해사정사
+                보상스쿨 손해사정사
               </h3>
               <p className="text-xs text-slate-500 dark:text-zinc-400 mt-2.5 leading-relaxed font-medium">
-                "10년 차 독립손해사정사의 실전 보상 노하우를 바탕으로, 교통사고 및 상해 피해 환자의 정당한 치료와 보험금 보상 솔루션을 연구합니다."
+                신체손해사정사<br />
+                보험조사분석사<br />
+                개인보험심사역<br />
+                언더라이터
               </p>
+            </div>
+
+            {/* 카카오톡 상담신청 박스 */}
+            <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 flex flex-col overflow-hidden">
+              <span className="text-[11px] font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider block mb-3 text-center">💬 빠른 카톡 상담</span>
+              <a 
+                href="https://open.kakao.com/o/sWeszp7" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block relative rounded-2xl overflow-hidden border border-slate-100 dark:border-zinc-800 shadow-xs hover:shadow-md transition-all duration-300"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-amber-50 dark:bg-zinc-800/20">
+                  <img 
+                    src="/kakao_counsel.png" 
+                    alt="카카오 상담 신청" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-3 bg-amber-50/20 dark:bg-zinc-800/20 text-center border-t border-slate-100 dark:border-zinc-800">
+                  <span className="text-xs font-bold text-slate-850 dark:text-zinc-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                    실시간 카톡 보상상담 받기
+                  </span>
+                </div>
+              </a>
+            </div>
+
+            {/* 구글 설문지 상담신청 박스 */}
+            <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 flex flex-col overflow-hidden">
+              <span className="text-[11px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider block mb-3 text-center">📋 상세 상담 예약</span>
+              <a 
+                href="https://forms.gle/E9vj7iqAHeJGhJ549" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block relative rounded-2xl overflow-hidden border border-slate-100 dark:border-zinc-800 shadow-xs hover:shadow-md transition-all duration-300"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-emerald-50/20 dark:bg-zinc-800/20">
+                  <img 
+                    src="/google_counsel.png" 
+                    alt="구글 상담 신청" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-3 bg-emerald-50/20 dark:bg-zinc-800/20 text-center border-t border-slate-100 dark:border-zinc-800">
+                  <span className="text-xs font-bold text-slate-850 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    구글 무료 상담신청서 작성
+                  </span>
+                </div>
+              </a>
             </div>
 
             {/* 구글 애드센스 고정 배너 슬롯 */}

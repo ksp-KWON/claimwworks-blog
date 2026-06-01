@@ -5,7 +5,7 @@
     "region": "서울 강남구",
     "specialty": "정형외과",
     "address": "서울특별시 강남구 테헤란로 123",
-    "treated": true
+    "treated": false
   },
   {
     "id": "hosp-002",
@@ -13,7 +13,7 @@
     "region": "부산 해운대구",
     "specialty": "신경외과",
     "address": "부산광역시 해운대구 해운대로 456",
-    "treated": true
+    "treated": false
   },
   {
     "id": "hosp-003",
@@ -21,7 +21,7 @@
     "region": "대구 중구",
     "specialty": "정형외과",
     "address": "대구광역시 중구 달구벌대로 789",
-    "treated": true
+    "treated": false
   },
   {
     "id": "hosp-seoul-01",
@@ -29,7 +29,7 @@
     "region": "서울 강남구",
     "specialty": "정형외과",
     "address": "서울특별시 강남구 강남대로 100",
-    "treated": true
+    "treated": false
   },
   {
     "id": "hosp-busan-01",
@@ -37,7 +37,7 @@
     "region": "부산 진구",
     "specialty": "신경외과",
     "address": "부산광역시 부산진구 중앙대로 200",
-    "treated": true
+    "treated": false
   },
   {
     "id": "hosp-incheon-01",
@@ -45,6 +45,6 @@
     "region": "인천 남동구",
     "specialty": "정형외과",
     "address": "인천광역시 남동구 예술로 300",
-    "treated": true
+    "treated": false
   }
 ]

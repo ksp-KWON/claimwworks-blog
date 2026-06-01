@@ -35,7 +35,7 @@ function formatDate(dateVal: unknown): string {
 
 // 전체 블로그 목록을 날짜 최신순으로 가져오는 함수 (관리자용은 비공개 글 포함 가능)
 export function getSortedPostsData(includeUnpublished = false): Omit<PostData, 'content'>[] {
-  const allPostsData = postsData
+  const allPostsData = (postsData as any[])
     .map((post) => {
       return {
         slug: post.slug,
@@ -63,7 +63,7 @@ export function getSortedPostsData(includeUnpublished = false): Omit<PostData, '
 // 특정 블로그 글 하나를 가져오는 함수 (비공개 글은 관리자 권한 없이 조회 불가)
 export function getPostData(slug: string, includeUnpublished = false): PostData | null {
   try {
-    const post = postsData.find((p) => p.slug === slug);
+    const post = (postsData as any[]).find((p) => p.slug === slug);
     if (!post) {
       return null;
     }
