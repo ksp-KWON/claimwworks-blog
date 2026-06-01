@@ -8,20 +8,13 @@ export default function Home() {
   return (
     <div className="space-y-8">
       
-      {/* 1. 애드센스 최적화 상단 배너 */}
-      <div className="text-center text-xs text-slate-400 dark:text-zinc-600">
-        <div className="inline-block w-full py-4.5 border border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900/40">
-          ADVERTISEMENT (구글 애드센스 상단 반응형 광고 영역)
-        </div>
-      </div>
-
       {/* 2. 메인 페이지 인트로 헤더 */}
       <div className="border-b border-slate-200 dark:border-zinc-800/80 pb-5">
         <h2 className="text-lg sm:text-xl font-extrabold text-slate-800 dark:text-zinc-100 flex items-center gap-2">
-          <span>🩺</span> 최신 병원 & 보상 실무 가이드
+          <span>🩺</span> 지역별 병원추천 & 보상 실무 가이드
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
-          건강보험심사평가원의 공개 정보를 기반으로 독립손해사정사가 분석한 합의 노하우입니다.
+          건강보험심사평가원의 공개 정보를 기반으로 보상스쿨 손해사정사가 분석한 보상 노하우를 제공합니다.
         </p>
       </div>
 
@@ -72,12 +65,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 4. 애드센스 최적화 하단 광고 */}
-      <div className="text-center text-xs text-slate-400 dark:text-zinc-600 pt-4">
-        <div className="inline-block w-full py-4.5 border border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900/40">
-          ADVERTISEMENT (구글 애드센스 하단 일치형 광고 영역)
-        </div>
-      </div>
+
 
     </div>
   );

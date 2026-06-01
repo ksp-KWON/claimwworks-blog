@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "클레임웍스 헬스케어 보상 가이드",
-  description: "심평원 의료 빅데이터 분석과 10년 차 독립손해사정사의 실전 보상 가이드를 매칭한 프리미엄 헬스케어 플랫폼입니다.",
+  title: "보상스쿨 헬스케어 & 손해사정 보상가이드",
+  description: "건강보험심사평가원의 공개 정보를 기반으로 보상스쿨 손해사정사가 분석한 보상 노하우를 제공합니다.",
 };
 
 export default function RootLayout({
@@ -56,7 +56,7 @@ export default function RootLayout({
           <div className="mx-auto flex h-full w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5">
             <div className="overflow-hidden text-ellipsis whitespace-nowrap font-serif font-extrabold text-lg sm:text-xl flex-shrink-0 text-slate-900 dark:text-white">
               <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                <span role="img" aria-label="건강">🩺</span> 클레임웍스 헬스케어 보상 가이드
+                <span role="img" aria-label="건강">🩺</span> 보상스쿨 헬스케어 & 손해사정 보상가이드
               </Link>
             </div>
             
@@ -95,12 +95,13 @@ export default function RootLayout({
               <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-150">
                 보상스쿨 손해사정사
               </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-2.5 leading-relaxed font-medium">
-                신체손해사정사<br />
-                보험조사분석사<br />
-                개인보험심사역<br />
-                언더라이터
-              </p>
+              <div className="flex flex-wrap gap-1.5 justify-center mt-3.5">
+                {['신체손해사정사', '보험조사분석사', '개인보험심사역', '언더라이터'].map((cert) => (
+                  <span key={cert} className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-blue-50/80 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-100/30 dark:border-blue-900/30">
+                    {cert}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* 카카오톡 상담신청 박스 */}
@@ -151,43 +152,86 @@ export default function RootLayout({
               </a>
             </div>
 
-            {/* 구글 애드센스 고정 배너 슬롯 */}
-            <div className="bg-white dark:bg-zinc-900 p-5 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
-              <span className="text-[11px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider block mb-3 text-center">ADVERTISEMENT</span>
-              <div className="w-full h-[250px] bg-slate-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-zinc-700 flex flex-col items-center justify-center p-4">
-                <span className="text-2xl mb-1">📢</span>
-                <span className="text-[11px] text-slate-450 dark:text-zinc-450 text-center font-medium leading-relaxed">
-                  구글 애드센스 광고 슬롯<br />(300x250 PC/Mobile 배너 대응)
-                </span>
-              </div>
-            </div>
+
 
             {/* 카테고리 목록 */}
-            <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
-                📁 카테고리 분류
-              </h3>
-              <ul className="space-y-2.5 text-xs">
-                {Object.entries(
-                  getSortedPostsData().reduce((acc: { [key: string]: number }, post) => {
-                    const cat = post.category || '일반';
-                    acc[cat] = (acc[cat] || 0) + 1;
-                    return acc;
-                  }, {})
-                ).map(([catName, count]) => (
-                  <li key={catName} className="flex justify-between items-center">
-                    <Link
-                      href="/blog"
-                      className="hover:text-blue-600 dark:hover:text-blue-450 text-slate-700 dark:text-zinc-350 font-medium transition-colors"
-                    >
-                      • {catName}
-                    </Link>
-                    <span className="px-2 py-0.5 rounded-full bg-slate-50 dark:bg-zinc-800 text-slate-450 text-[10px] font-semibold border border-slate-100 dark:border-zinc-700">
-                      {count}개
-                    </span>
+            <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 space-y-6">
+              
+              {/* 지역별 의료기관 */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-850 dark:text-zinc-200 mb-3 pb-2 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-1">
+                  📁 지역별 의료기관
+                </h3>
+                <ul className="space-y-2 text-xs font-medium text-slate-700 dark:text-zinc-350">
+                  <li className="space-y-1">
+                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 서울특별시</span>
+                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
+                      <li><Link href="/blog?region=강남구" className="hover:text-blue-500">• 강남구</Link></li>
+                      <li><Link href="/blog?region=서초구" className="hover:text-blue-500">• 서초구</Link></li>
+                    </ul>
                   </li>
-                ))}
-              </ul>
+                  <li className="space-y-1">
+                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 부산광역시</span>
+                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
+                      <li><Link href="/blog?region=해운대구" className="hover:text-blue-500">• 해운대구</Link></li>
+                      <li><Link href="/blog?region=부산진구" className="hover:text-blue-500">• 부산진구</Link></li>
+                    </ul>
+                  </li>
+                  <li className="space-y-1">
+                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 인천광역시</span>
+                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
+                      <li><Link href="/blog?region=남동구" className="hover:text-blue-500">• 남동구</Link></li>
+                    </ul>
+                  </li>
+                  <li className="space-y-1">
+                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 대구광역시</span>
+                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
+                      <li><Link href="/blog?region=중구" className="hover:text-blue-500">• 중구</Link></li>
+                    </ul>
+                  </li>
+                  <li className="space-y-1">
+                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 경기도</span>
+                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
+                      <li><Link href="/blog?region=수원시" className="hover:text-blue-500">• 수원시</Link></li>
+                      <li><Link href="/blog?region=성남시" className="hover:text-blue-500">• 성남시</Link></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              {/* 진단명별 분류 */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-850 dark:text-zinc-200 mb-3 pb-2 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-1">
+                  📁 진단명별 분류
+                </h3>
+                <ul className="space-y-2 text-xs font-medium text-slate-700 dark:text-zinc-350">
+                  <li>
+                    <Link href="/blog?diag=척추" className="hover:text-blue-600 flex justify-between items-center">
+                      <span>🦴 척추/골절 질환</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">목/허리디스크</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/blog?diag=관절" className="hover:text-blue-600 flex justify-between items-center">
+                      <span>🦵 관절/연골 질환</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">인대파열/동요</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/blog?diag=신경" className="hover:text-blue-600 flex justify-between items-center">
+                      <span>🧠 뇌/신경 질환</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">뇌진탕/상해</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/blog?diag=염좌" className="hover:text-blue-600 flex justify-between items-center">
+                      <span>🩹 단순 염좌/기타</span>
+                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">일반상해</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
             </div>
 
             {/* 인기 태그 및 키워드 목록 */}
@@ -237,7 +281,7 @@ export default function RootLayout({
         <footer className="w-full bg-slate-900 dark:bg-zinc-950 text-slate-400 border-t border-slate-950 shadow-inner">
           <div className="mx-auto flex flex-col md:flex-row h-auto md:h-[70px] w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5 py-5 md:py-0 text-xs gap-3">
             <p className="copyright text-center md:text-left text-slate-400 dark:text-zinc-500 font-medium">
-              © {new Date().getFullYear()} 클레임웍스 헬스케어 보상 가이드. All rights reserved.
+              © {new Date().getFullYear()} 보상스쿨 헬스케어 & 손해사정 보상가이드. All rights reserved.
             </p>
             <p className="iagree text-center md:text-right text-slate-400">
               이용약관 | <span className="text-slate-400 hover:underline cursor-pointer font-medium">개인정보처리방침</span> | <Link href="/admin" className="text-blue-400 dark:text-blue-450 hover:underline font-medium">⚙️ 관리자</Link>

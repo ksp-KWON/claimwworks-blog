@@ -10,7 +10,7 @@ export default function AboutPage() {
           ℹ️ 플랫폼 소개
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight leading-snug">
-          클레임웍스 헬스케어 보상 가이드
+          보상스쿨 헬스케어 & 손해사정 보상가이드
         </h1>
         <p className="mt-3 text-sm sm:text-base text-slate-500 dark:text-zinc-400 leading-relaxed font-normal">
           환자의 올바른 의료 권리와 정당한 보험 보상을 수호하는 프리미엄 정보 플랫폼입니다.
@@ -29,14 +29,14 @@ export default function AboutPage() {
             우리는 건강보험심사평가원(HIRA)의 신뢰할 수 있는 <strong>병원별 비급여 통계 정보</strong>와 상해 보상 실무의 권위자인 <strong>10년 차 수석 독립손해사정사</strong>의 현장 노하우를 융합하여 탄생했습니다.
           </p>
           <p className="break-keep font-normal">
-            많은 사고 피해자분들이 전문적인 지식 부족으로 인하여 제대로 치료받지 못하거나, 대기업 보험회사의 일방적인 합의 조율에 이끌려 정당한 보상을 포기하곤 합니다. 클레임웍스는 이러한 정보의 비대칭성을 해소하고 환자분들께서 건강하게 일상으로 복귀할 수 있도록 가장 단순하고 정확한 가이드를 무료로 제공합니다.
+            많은 사고 피해자분들이 전문적인 지식 부족으로 인하여 제대로 치료받지 못하거나, 대기업 보험회사의 일방적인 합의 조율에 이끌려 정당한 보상을 포기하곤 합니다. 보상스쿨은 이러한 정보의 비대칭성을 해소하고 환자분들께서 건강하게 일상으로 복귀할 수 있도록 가장 단순하고 정확한 가이드를 무료로 제공합니다.
           </p>
         </section>
 
         {/* 섹션 2: 3대 핵심 가치 */}
         <section className="space-y-4">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
-            <span>🛡️</span> 클레임웍스의 3대 약속 (E-E-A-T)
+            <span>🛡️</span> 보상스쿨의 3대 약속 (E-E-A-T)
           </h2>
           
           <div className="grid gap-4 sm:grid-cols-3 pt-2">
@@ -71,7 +71,7 @@ export default function AboutPage() {
         <section className="p-5 bg-rose-50/55 dark:bg-rose-950/10 border border-rose-100/50 dark:border-rose-900/20 rounded-2xl">
           <strong className="text-rose-700 dark:text-rose-400 block mb-1.5 text-xs sm:text-sm">⚠️ 법적 고지 및 안내 사항</strong>
           <p className="text-xs text-rose-650 dark:text-rose-350 leading-relaxed font-medium break-keep">
-            클레임웍스 헬스케어 보상 가이드에서 제공하는 모든 포스팅 및 통계 정보는 일반적인 참고용 자료입니다. 당사는 어떠한 법률적 대리 행위나 의료 진단 행위를 직접 수행하지 않습니다. 개별 사고 사건의 정확한 장해 산정 및 합의 절차는 반드시 공인된 독립손해사정사나 법률 전문가와의 1:1 정식 상담을 통해 결정하시기 바랍니다.
+            보상스쿨 헬스케어 & 손해사정 보상가이드에서 제공하는 모든 포스팅 및 통계 정보는 일반적인 참고용 자료입니다. 당사는 어떠한 법률적 대리 행위나 의료 진단 행위를 직접 수행하지 않습니다. 개별 사고 사건의 정확한 장해 산정 및 합의 절차는 반드시 공인된 독립손해사정사나 법률 전문가와의 1:1 정식 상담을 통해 결정하시기 바랍니다.
           </p>
         </section>
 
