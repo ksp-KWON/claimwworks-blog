@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import { getSortedPostsData } from "@/lib/posts";
+import { RegionalCategories, DiagnosisCategories } from "@/components/SidebarCategories";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -154,92 +155,15 @@ export default function RootLayout({
 
 
 
-            {/* 카테고리 목록 */}
-            <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60 space-y-6">
-              
-              {/* 지역별 의료기관 */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-850 dark:text-zinc-200 mb-3 pb-2 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-1">
-                  📁 지역별 의료기관
-                </h3>
-                <ul className="space-y-2 text-xs font-medium text-slate-700 dark:text-zinc-350">
-                  <li className="space-y-1">
-                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 서울특별시</span>
-                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
-                      <li><Link href="/blog?region=강남구" className="hover:text-blue-500">• 강남구</Link></li>
-                      <li><Link href="/blog?region=서초구" className="hover:text-blue-500">• 서초구</Link></li>
-                    </ul>
-                  </li>
-                  <li className="space-y-1">
-                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 부산광역시</span>
-                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
-                      <li><Link href="/blog?region=해운대구" className="hover:text-blue-500">• 해운대구</Link></li>
-                      <li><Link href="/blog?region=부산진구" className="hover:text-blue-500">• 부산진구</Link></li>
-                    </ul>
-                  </li>
-                  <li className="space-y-1">
-                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 인천광역시</span>
-                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
-                      <li><Link href="/blog?region=남동구" className="hover:text-blue-500">• 남동구</Link></li>
-                    </ul>
-                  </li>
-                  <li className="space-y-1">
-                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 대구광역시</span>
-                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
-                      <li><Link href="/blog?region=중구" className="hover:text-blue-500">• 중구</Link></li>
-                    </ul>
-                  </li>
-                  <li className="space-y-1">
-                    <span className="cursor-pointer hover:text-blue-600 transition-colors">📍 경기도</span>
-                    <ul className="pl-4 border-l border-slate-100 dark:border-zinc-800 space-y-1 text-slate-500 dark:text-zinc-400 mt-1">
-                      <li><Link href="/blog?region=수원시" className="hover:text-blue-500">• 수원시</Link></li>
-                      <li><Link href="/blog?region=성남시" className="hover:text-blue-500">• 성남시</Link></li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-
-              {/* 진단명별 분류 */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-850 dark:text-zinc-200 mb-3 pb-2 border-b border-slate-100 dark:border-zinc-800 flex items-center gap-1">
-                  📁 진단명별 분류
-                </h3>
-                <ul className="space-y-2 text-xs font-medium text-slate-700 dark:text-zinc-350">
-                  <li>
-                    <Link href="/blog?diag=척추" className="hover:text-blue-600 flex justify-between items-center">
-                      <span>🦴 척추/골절 질환</span>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">목/허리디스크</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/blog?diag=관절" className="hover:text-blue-600 flex justify-between items-center">
-                      <span>🦵 관절/연골 질환</span>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">인대파열/동요</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/blog?diag=신경" className="hover:text-blue-600 flex justify-between items-center">
-                      <span>🧠 뇌/신경 질환</span>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">뇌진탕/상해</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/blog?diag=염좌" className="hover:text-blue-600 flex justify-between items-center">
-                      <span>🩹 단순 염좌/기타</span>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">일반상해</span>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-            </div>
+            <RegionalCategories />
+            <DiagnosisCategories />
 
             {/* 인기 태그 및 키워드 목록 */}
             <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
                 🏷️ 인기 키워드 태그
               </h3>
-              <div className="flex flex-wrap gap-1.5 text-[11px] font-medium">
+              <div className="flex flex-wrap gap-1.5 text-xs font-medium">
                 {['교통사고합의금', '지불보증', '후유장해', '비급여비용', '도수치료비', 'MRI검사비', '손해사정'].map((tag) => (
                   <span 
                     key={tag}
@@ -253,13 +177,13 @@ export default function RootLayout({
 
             {/* 최근 칼럼 리스트 */}
             <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
                 ✍️ 최근 보상 칼럼
               </h3>
               {recentPosts.length === 0 ? (
                 <p className="text-xs text-slate-400">등록된 칼럼이 없습니다.</p>
               ) : (
-                <ul className="space-y-3.5 text-xs">
+                <ul className="space-y-3.5 text-xs sm:text-sm">
                   {recentPosts.map((post) => (
                     <li key={post.slug} className="truncate">
                       <Link

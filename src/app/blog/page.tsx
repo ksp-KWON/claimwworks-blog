@@ -13,10 +13,10 @@ export default function BlogListPage() {
   return (
     <div className="space-y-8">
         <header className="mb-12 text-center sm:text-left">
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-50 sm:text-5xl">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-50">
             📰 건강·보상 블로그
           </h1>
-          <p className="mt-4 text-lg text-slate-600 dark:text-zinc-400">
+          <p className="mt-2 text-sm sm:text-base text-slate-500 dark:text-zinc-400 font-normal leading-relaxed">
             의료 빅데이터와 공공 질병 통계를 바탕으로 검증된 신뢰성 높은 건강 가이드를 제공합니다.
           </p>
         </header>
