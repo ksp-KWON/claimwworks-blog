@@ -61,13 +61,7 @@ export default function RootLayout({
                   <span role="img" aria-label="건강">🩺</span> 보상스쿨 헬스케어 & 손해사정 보상가이드
                 </Link>
               </div>
-              
-              {/* 헤더 설명글 삽입 (여백을 채울 정도로 균형감 있게 크기 상향 및 일반체로 조정) */}
-              <div className="hidden xl:block border-l border-slate-250 dark:border-zinc-800 pl-4 ml-2">
-                <p className="text-[13px] text-slate-500 dark:text-zinc-400 font-normal leading-none whitespace-nowrap">
-                  의료 빅데이터와 공공 질병 통계를 바탕으로 검증된 신뢰성 높은 손해사정 가이드를 제공합니다.
-                </p>
-              </div>
+
             </div>
             
             {/* 원래 자리에 메뉴 배치 */}
