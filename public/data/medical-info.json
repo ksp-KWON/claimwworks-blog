@@ -37,7 +37,7 @@
     "region": "부산 진구",
     "specialty": "신경외과",
     "address": "부산광역시 부산진구 중앙대로 200",
-    "treated": false
+    "treated": true
   },
   {
     "id": "hosp-incheon-01",
