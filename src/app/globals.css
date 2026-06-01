@@ -31,23 +31,24 @@ body {
    ✨ 프리미엄 가독성 및 포인트 디자인 시스템 
    ========================================== */
 
-/* 1. 마크다운 본문 내 인용구(>) 디자인 개선 */
+/* 1. 마크다운 본문 내 인용구(>) 디자인 개선 (오렌지 경고 톤) */
 .prose blockquote {
-  border-left: 4px solid #3b82f6 !important; /* 선명한 파란색 포인트 */
-  background-color: #f1f5f9;
+  border-left: 4px solid #f59e0b !important; /* 선명한 오렌지/골드 포인트 */
+  background-color: #fffbeb;
   padding: 1rem 1.25rem !important;
-  border-radius: 0 0.75rem 0.75rem 0;
-  color: #334155 !important;
+  border-radius: 0.75rem !important;
+  color: #78350f !important;
   font-style: normal !important;
   quotes: none !important;
   margin: 1.5rem 0 !important;
 }
 .dark .prose blockquote {
-  background-color: #1e293b/60 !important;
-  color: #cbd5e1 !important;
+  background-color: rgba(120, 53, 15, 0.2) !important;
+  color: #fef3c7 !important;
+  border-left-color: #f59e0b !important;
 }
 
-/* 2. 마크다운 표(Table) 시각적 입체감 및 가독성 개선 */
+/* 2. 마크다운 표(Table) 시각적 입체감 및 가독성 개선 (에메랄드/성공 톤) */
 .prose table {
   width: 100%;
   border-collapse: separate !important;
@@ -62,17 +63,17 @@ body {
 }
 
 .prose th {
-  background-color: #eff6ff !important; /* 연한 파란색 헤더 */
-  color: #1e40af !important; /* 남색 글씨 */
+  background-color: #ecfdf5 !important; /* 연한 초록색 헤더 */
+  color: #065f46 !important; /* 딥 그린 글씨 */
   padding: 0.85rem 1rem !important;
   font-weight: 700 !important;
   text-align: left;
-  border-bottom: 2px solid #dbeafe !important;
+  border-bottom: 2px solid #a7f3d0 !important;
 }
 .dark .prose th {
-  background-color: #1e293b !important;
-  color: #60a5fa !important;
-  border-bottom: 2px solid #334155 !important;
+  background-color: rgba(6, 78, 59, 0.4) !important;
+  color: #34d399 !important;
+  border-bottom: 2px solid #047857 !important;
 }
 
 .prose td {
@@ -96,10 +97,43 @@ body {
   background-color: #1e293b/40 !important;
 }
 
-/* 3. 본문 내 강조 단어(**굵게**)에 색상 포인트 적용 */
+/* 3. 본문 내 강조 단어(**굵게**)는 기본 글자색상을 유지하여 링크와 혼동되는 오류 방지 */
 .prose strong {
-  color: #2563eb !important; /* 신뢰감을 주는 미디엄 블루 */
+  font-weight: 800 !important;
 }
-.dark .prose strong {
-  color: #3b82f6 !important;
+
+/* 4. 본문 내 모든 목록(List: ul, ol, li)의 행간 높이를 본문과 일치시키고 간격 균일화 */
+.prose ul, 
+.prose ol {
+  line-height: 1.8 !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
 }
+
+.prose li {
+  line-height: 1.8 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.prose li p {
+  margin: 0 !important;
+  line-height: 1.8 !important;
+}
+
+/* 4. 흘러가는 대형 제목 (Marquee) 애니메이션 효과 */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}
+

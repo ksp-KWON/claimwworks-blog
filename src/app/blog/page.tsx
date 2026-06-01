@@ -12,19 +12,13 @@ export default function BlogListPage() {
 
   return (
     <div className="space-y-8">
-        <header className="mb-12 text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-50">
-            📰 건강·보상 블로그
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-slate-500 dark:text-zinc-400 font-normal leading-relaxed">
-            의료 빅데이터와 공공 질병 통계를 바탕으로 검증된 신뢰성 높은 건강 가이드를 제공합니다.
-          </p>
-        </header>
+
 
         {posts.length === 0 ? (
-          <div className="text-center py-12 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800">
-            <p className="text-slate-500 dark:text-zinc-400 text-lg">
-              등록된 블로그 포스팅이 없습니다.
+          <div className="text-center py-16 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200/60 dark:border-zinc-800/60 shadow-2xs">
+            <span className="text-4xl block mb-3 opacity-60">📂</span>
+            <p className="text-sm font-bold tracking-wide text-slate-400 dark:text-zinc-500 font-sans">
+              등록된 블로그 포스팅이 존재하지 않습니다.
             </p>
           </div>
         ) : (
@@ -41,9 +35,17 @@ export default function BlogListPage() {
                     </span>
                     <time className="text-slate-400 dark:text-zinc-500">{post.date}</time>
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-zinc-50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                  </h2>
+                  {/* 제목: 목록에서도 긴 제목이 잘리지 않고 한 줄로 흐르는 Marquee ticker 구현 */}
+                  <div className="relative w-full overflow-hidden bg-slate-50 dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 rounded-xl py-2.5 px-3 shadow-[inset_0_1px_2px_rgba(0,0,0,0.01)] select-none mb-3">
+                    <div className="animate-marquee hover:[animation-play-state:paused]">
+                      <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-zinc-50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors pr-12">
+                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                      </h2>
+                    </div>
+                    {/* 좌우 그라데이션 페이드 효과 */}
+                    <div className="absolute top-0 left-0 h-full w-6 bg-linear-to-r from-slate-50 to-transparent dark:from-zinc-950 pointer-events-none" />
+                    <div className="absolute top-0 right-0 h-full w-6 bg-linear-to-l from-slate-50 to-transparent dark:from-zinc-950 pointer-events-none" />
+                  </div>
                   <p className="mt-3 text-base text-slate-600 dark:text-zinc-400 line-clamp-3 leading-relaxed">
                     {post.summary}
                   </p>

@@ -44,10 +44,18 @@ export default function Home() {
                 </div>
 
                 {/* 중단: 제목 및 설명 */}
-                <div className="flex-1 space-y-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-zinc-100 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 break-keep">
-                    {post.title}
-                  </h3>
+                <div className="flex-1 space-y-2 min-w-0">
+                  {/* 제목: 홈 화면 카드 내에서도 한 줄로 부드럽게 흘러가도록 자막기(Marquee Ticker) 구현 */}
+                  <div className="relative w-full overflow-hidden bg-slate-50 dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 rounded-xl py-2 px-3 shadow-[inset_0_1px_2px_rgba(0,0,0,0.01)] select-none">
+                    <div className="animate-marquee hover:[animation-play-state:paused]">
+                      <h3 className="text-sm sm:text-base font-bold text-slate-800 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors pr-12">
+                        {post.title}
+                      </h3>
+                    </div>
+                    {/* 좌우 그라데이션 페이드 효과 */}
+                    <div className="absolute top-0 left-0 h-full w-5 bg-linear-to-r from-slate-50 to-transparent dark:from-zinc-950 pointer-events-none" />
+                    <div className="absolute top-0 right-0 h-full w-5 bg-linear-to-l from-slate-50 to-transparent dark:from-zinc-950 pointer-events-none" />
+                  </div>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 line-clamp-2 leading-relaxed font-normal break-keep">
                     {post.summary}
                   </p>

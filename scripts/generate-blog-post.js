@@ -307,11 +307,17 @@ FILENAME: 2026-05-29-seoul-gangnam-medical-compensation
     }
     finalContent = lines.join('\n');
 
-    // 2. 볼드체 마크다운 문법 오류 방지 (닫는 별표 직전 공백 제거 및 콜론 위치 보정)
-    finalContent = finalContent.replace(/\*\*([^\*]+?)\s*:\s*\*\*/g, '**$1:**');
+    // 2. 볼드체 마크다운 문법 오류 방지 및 한글/영문 괄호 포함 기호 정렬
+    finalContent = finalContent.replace(/\*\*([^\*]+?)\*\*/g, (match, p1) => {
+      if (p1.includes(':')) {
+        const cleaned = p1.replace(/\s*:\s*$/, ':').trim();
+        return `**${cleaned}**`;
+      }
+      return `**${p1.trim()}**`;
+    });
 
-    // 한글 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 등의 마크다운 종료 기호 ** 직전은 제외)
-    finalContent = finalContent.replace(/([가-힣]+)\s*:\s*([^*]|$)/g, '$1 : $2');
+    // 한글 및 영문 괄호 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 문법 종료 기호 ** 직전은 제외)
+    finalContent = finalContent.replace(/([가-힣a-zA-Z\(\)]+)\s*:\s*([^*]|$)/g, '$1 : $2');
 
     // 3. 본문 내 섹션 구분선(---) 삽입 보정 (## H2 태그 시작 전 --- 확인 및 자동 삽입)
     let bodyLines = finalContent.split('\n');

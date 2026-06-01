@@ -82,8 +82,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: '이미 존재하는 슬러그(파일명)입니다. 다른 슬러그를 지정해 주세요.' }, { status: 400 });
     }
 
-    // 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
-    content = content.replace(/([가-힣]+)\s*:\s*/g, '$1 : ');
+    // 볼드체 마크다운 문법 오류 방지 및 한글/영문 괄호 포함 기호 정렬
+    content = content.replace(/\*\*([^\*]+?)\*\*/g, (match: string, p1: string) => {
+      if (p1.includes(':')) {
+        const cleaned = p1.replace(/\s*:\s*$/, ':').trim();
+        return `**${cleaned}**`;
+      }
+      return `**${p1.trim()}**`;
+    });
+
+    // 한글 및 영문 괄호 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 문법 종료 기호 ** 직전은 제외)
+    content = content.replace(/([가-힣a-zA-Z\(\)]+)\s*:\s*([^*]|$)/g, '$1 : $2');
 
     const newPost = {
       slug,
@@ -130,8 +139,17 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, message: '수정하려는 슬러그명이 이미 존재합니다.' }, { status: 400 });
     }
 
-    // 한글 기호 정렬 적용 (요약 : 서, 대응 : 자 등)
-    content = content.replace(/([가-힣]+)\s*:\s*/g, '$1 : ');
+    // 볼드체 마크다운 문법 오류 방지 및 한글/영문 괄호 포함 기호 정렬
+    content = content.replace(/\*\*([^\*]+?)\*\*/g, (match: string, p1: string) => {
+      if (p1.includes(':')) {
+        const cleaned = p1.replace(/\s*:\s*$/, ':').trim();
+        return `**${cleaned}**`;
+      }
+      return `**${p1.trim()}**`;
+    });
+
+    // 한글 및 영문 괄호 뒤의 콜론(:) 기호 앞뒤에 항상 공백이 오도록 보정 (단, 볼드체 문법 종료 기호 ** 직전은 제외)
+    content = content.replace(/([가-힣a-zA-Z\(\)]+)\s*:\s*([^*]|$)/g, '$1 : $2');
 
     posts[index] = {
       slug,
