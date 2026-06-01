@@ -96,9 +96,9 @@ export default function RootLayout({
               <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-150">
                 보상스쿨 손해사정사
               </h3>
-              <div className="flex flex-wrap gap-1.5 justify-center mt-3.5">
+              <div className="grid grid-cols-2 gap-2 mt-3.5 w-full">
                 {['신체손해사정사', '보험조사분석사', '개인보험심사역', '언더라이터'].map((cert) => (
-                  <span key={cert} className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-blue-50/80 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-100/30 dark:border-blue-900/30">
+                  <span key={cert} className="px-2 py-1.5 text-[10px] font-bold rounded-lg bg-blue-50/80 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-100/30 dark:border-blue-900/30 text-center block truncate">
                     {cert}
                   </span>
                 ))}
