@@ -52,15 +52,17 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300">
         
-        {/* 1. 프리미엄 글래스모피즘 헤더 */}
-        <header className="sticky top-0 z-50 w-full h-[60px] border-b border-slate-200/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md text-slate-800 dark:text-zinc-100 shadow-xs transition-colors">
+        {/* 1. 안드로이드 머티리얼 스타일 App Bar */}
+        <header className="sticky top-0 z-50 w-full h-[64px] border-b border-[var(--google-border)] bg-white dark:bg-[#202124] text-[#202124] dark:text-[#e8eaed] shadow-sm transition-colors">
           <div className="mx-auto flex h-full w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5">
-            {/* 로고/제목 영역 - 모바일에서 nav를 위해 충분한 공간 확보 */}
+
+            {/* 로고/제목 영역 */}
             <div className="flex items-center min-w-0 flex-1 mr-2">
-              <div className="font-serif font-extrabold text-sm sm:text-base lg:text-lg text-slate-900 dark:text-white min-w-0">
-                <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                  <span role="img" aria-label="건강" className="shrink-0">🩺</span>
-                  {/* 모바일에서는 짧은 제목, 태블릿부터 전체 제목 */}
+              <div className="font-sans font-bold text-base sm:text-lg lg:text-xl text-[#202124] dark:text-white min-w-0 tracking-tight">
+                <Link href="/" className="hover:text-[var(--google-blue)] transition-colors flex items-center gap-2 whitespace-nowrap overflow-hidden">
+                  <svg className="w-6 h-6 text-[var(--google-blue)] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                  </svg>
                   <span className="hidden sm:inline truncate">보상스쿨 헬스케어 &amp; 손해사정 보상가이드</span>
                   <span className="sm:hidden">보상스쿨</span>
                 </Link>
@@ -69,19 +71,18 @@ export default function RootLayout({
 
             {/* 우측 메뉴 영역 */}
             <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-              <nav className="flex items-center gap-1 sm:gap-3 text-sm font-semibold text-slate-650 dark:text-zinc-300">
-                {/* 모바일: 아이콘만 표시 / 태블릿+: 아이콘+텍스트 표시 */}
-                <Link href="/" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  <span>🏠</span>
-                  <span className="hidden md:inline text-xs">홈</span>
+              <nav className="flex items-center gap-1 sm:gap-2 text-sm font-medium text-[#5f6368] dark:text-[#9aa0a6]">
+                <Link href="/" className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-[var(--google-surface-variant)] hover:text-[var(--google-blue)] transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                  <span className="hidden md:inline">홈</span>
                 </Link>
-                <Link href="/blog" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  <span>✍️</span>
-                  <span className="hidden md:inline text-xs">블로그</span>
+                <Link href="/blog" className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-[var(--google-surface-variant)] hover:text-[var(--google-blue)] transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 19h6"></path><path d="M10 15h8"></path><path d="M10 19h8"></path></svg>
+                  <span className="hidden md:inline">블로그</span>
                 </Link>
-                <Link href="/about" className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  <span>ℹ️</span>
-                  <span className="hidden md:inline text-xs">소개</span>
+                <Link href="/about" className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-[var(--google-surface-variant)] hover:text-[var(--google-blue)] transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  <span className="hidden md:inline">소개</span>
                 </Link>
               </nav>
               <ThemeToggle />
@@ -89,59 +90,51 @@ export default function RootLayout({
           </div>
         </header>
 
-        {/* 2. 균형있게 배치된 고정식 4단 정보 및 링크 박스 (상징적인 아이콘형 단추로 슬림하게 개선) */}
-        <section className="lg:sticky lg:top-[60px] z-30 w-full bg-slate-100/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 py-2.5 transition-colors">
-          <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-3 px-2 sm:px-5">
+        {/* 2. 구글 스타일 4단 정보 카드 영역 */}
+        <section className="lg:sticky lg:top-[60px] z-30 w-full bg-[var(--background)] border-b border-[var(--google-border)] py-3 transition-colors">
+          <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-5">
             
             {/* 링크 1: 보상스쿨 손해사정사 프로필 */}
-            <Link href="/about" className="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 hover:bg-blue-50/30 dark:hover:bg-blue-950/10 hover:border-blue-400 dark:hover:border-blue-800 shadow-[0_2px_8px_rgba(59,130,246,0.06)] hover:shadow-[0_4px_12px_rgba(59,130,246,0.12)] hover:-translate-y-0.5 active:scale-98 transition-all duration-300 group">
-              <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
-                ⚖️
+            <Link href="/about" className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 group">
+              <div className="w-10 h-10 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6] flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-[var(--google-blue)] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
               </div>
-              <div className="min-w-0 overflow-hidden">
-                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  보상스쿨 손해사정사
-                </span>
-                <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">신체손해사정사 소개</span>
+              <div className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-blue)] transition-colors">보상스쿨 전문가</span>
+                <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">신체손해사정사 소개</span>
               </div>
             </Link>
 
             {/* 링크 2: 실시간 카톡 상담 */}
-            <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 hover:bg-amber-50/30 dark:hover:bg-amber-950/10 hover:border-amber-450 dark:hover:border-amber-800 shadow-[0_2px_8px_rgba(245,158,11,0.06)] hover:shadow-[0_4px_12px_rgba(245,158,11,0.12)] hover:-translate-y-0.5 active:scale-98 transition-all duration-300 group">
-              <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
-                💬
+            <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-yellow)] hover:shadow-md transition-all duration-200 group">
+              <div className="w-10 h-10 rounded-full bg-[#fef7e0] dark:bg-[#e37400] flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-[#f29900] dark:text-[#fde293]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
               </div>
-              <div className="min-w-0 overflow-hidden">
-                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                  실시간 카톡 상담
-                </span>
-                <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">평균 5분 이내 답변 완료</span>
+              <div className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">실시간 카톡 상담</span>
+                <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">평균 5분 이내 답변</span>
               </div>
             </a>
 
             {/* 링크 3: 구글 상담 신청 */}
-            <a href="https://forms.gle/E9vj7iqAHeJGhJ549" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 hover:bg-emerald-50/30 dark:hover:bg-emerald-950/10 hover:border-emerald-450 dark:hover:border-emerald-800 shadow-[0_2px_8px_rgba(16,185,129,0.06)] hover:shadow-[0_4px_12px_rgba(16,185,129,0.12)] hover:-translate-y-0.5 active:scale-98 transition-all duration-300 group">
-              <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
-                📋
+            <a href="https://forms.gle/E9vj7iqAHeJGhJ549" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-green)] hover:shadow-md transition-all duration-200 group">
+              <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d] flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-[var(--google-green)] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
               </div>
-              <div className="min-w-0 overflow-hidden">
-                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                  구글 상담신청 양식
-                </span>
-                <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">상세 예약 밀착 분석</span>
+              <div className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-green)] transition-colors">구글 폼 예약접수</span>
+                <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">상세 예약 밀착 분석</span>
               </div>
             </a>
 
             {/* 링크 4: 유튜브 채널 */}
-            <a href="https://www.youtube.com/@bosangschool" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 hover:bg-rose-50/30 dark:hover:bg-rose-950/10 hover:border-rose-450 dark:hover:border-rose-800 shadow-[0_2px_8px_rgba(244,63,94,0.06)] hover:shadow-[0_4px_12px_rgba(244,63,94,0.12)] hover:-translate-y-0.5 active:scale-98 transition-all duration-300 group">
-              <div className="w-8.5 h-8.5 rounded-lg bg-linear-to-br from-rose-500 to-red-600 text-white flex items-center justify-center text-lg shadow-sm font-bold shrink-0">
-                📺
+            <a href="https://www.youtube.com/@bosangschool" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-red)] hover:shadow-md transition-all duration-200 group">
+              <div className="w-10 h-10 rounded-full bg-[#fce8e6] dark:bg-[#c5221f] flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-[var(--google-red)] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
               </div>
-              <div className="min-w-0 overflow-hidden">
-                <span className="animate-marquee-sm text-sm font-extrabold text-slate-800 dark:text-zinc-150 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
-                  보상스쿨 유튜브
-                </span>
-                <span className="block text-[9px] text-slate-400 dark:text-zinc-550 truncate mt-0.5">실전 보상 노하우 무료구독</span>
+              <div className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-red)] transition-colors">보상스쿨 유튜브</span>
+                <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">보상 노하우 무료구독</span>
               </div>
             </a>
 
@@ -156,27 +149,29 @@ export default function RootLayout({
             {children}
           </main>
 
-          {/* 사이드바 영역 (우측 25%) - 상단 sticky를 슬림해진 4단 박스 높이에 맞추어 top-[140px]로 조정 */}
-          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[140px] self-start space-y-6">
+          {/* 사이드바 영역 (우측 25%) - 상단 sticky를 슬림해진 4단 박스 높이에 맞추어 top-[148px]로 조정 */}
+          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[148px] self-start space-y-6">
             
+            {/* 진료과목 및 다빈도 질환 카테고리 - 진료과목을 위로 */}
+             <SpecialtyDiseaseCategories />
+
             {/* 지역별 의료기관 카테고리 */}
             <RegionalCategories />
 
-             {/* 진료과목 및 다빈도 질환 카테고리 */}
-             <SpecialtyDiseaseCategories />
-
-            {/* 인기 태그 및 키워드 목록 */}
-            <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xs border border-slate-200/60 dark:border-zinc-800/60">
-              <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 mb-4 pb-2 border-b border-slate-100 dark:border-zinc-800">
-                🏷️ 인기 키워드 태그
+            {/* 인기 키워드 태그 목록 */}
+            <div className="bg-[var(--background)] p-5 rounded-2xl border border-[var(--google-border)]">
+              <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 pb-2 border-b border-[var(--google-border)] flex items-center gap-2">
+                <svg className="w-4 h-4 text-[var(--google-yellow)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                인기 키워드 태그
               </h3>
-              <div className="flex flex-wrap gap-1.5 text-xs font-medium">
+              <div className="flex flex-wrap gap-2 text-xs font-bold">
                 {['교통사고합의금', '지불보증', '후유장해', '비급여비용', '도수치료비', 'MRI검사비', '손해사정'].map((tag) => (
                   <span 
                     key={tag}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-55 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-450 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors cursor-pointer"
                   >
-                    #{tag}
+                    <svg className="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    {tag}
                   </span>
                 ))}
               </div>
@@ -184,14 +179,17 @@ export default function RootLayout({
           </aside>
         </div>
 
-        {/* 4. 프리미엄 다크 네이비/슬레이트 푸터 */}
-        <footer className="w-full bg-slate-900 dark:bg-zinc-950 text-slate-400 border-t border-slate-950 shadow-inner">
-          <div className="mx-auto flex flex-col md:flex-row h-auto md:h-[70px] w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5 py-5 md:py-0 text-xs gap-3">
-            <p className="copyright text-center md:text-left text-slate-400 dark:text-zinc-500 font-medium">
+        {/* 4. 구글 표면 색상 푸터 */}
+        <footer className="w-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border-t border-[var(--google-border)]">
+          <div className="mx-auto flex flex-col md:flex-row h-auto md:h-[70px] w-[92vw] xl:w-[85vw] max-w-7xl items-center justify-between px-2 sm:px-5 py-5 md:py-0 text-[11px] font-bold gap-3">
+            <p className="copyright text-center md:text-left flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               © {new Date().getFullYear()} 보상스쿨 헬스케어 & 손해사정 보상가이드. All rights reserved.
             </p>
-            <p className="iagree text-center md:text-right text-slate-400">
-              이용약관 | <span className="text-slate-400 hover:underline cursor-pointer font-medium">개인정보처리방침</span> | <Link href="/admin" className="text-blue-400 dark:text-blue-450 hover:underline font-medium">⚙️ 관리자</Link>
+            <p className="iagree text-center md:text-right flex items-center gap-2">
+              <span className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">이용약관</span>
+              <span className="w-1 h-1 rounded-full bg-[#dadce0] dark:bg-[#5f6368]"></span>
+              <span className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">개인정보처리방침</span>
             </p>
           </div>
         </footer>

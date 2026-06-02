@@ -4,6 +4,8 @@ const matter = require('gray-matter');
 
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
 const outputPath = path.join(process.cwd(), 'src/lib/posts-data.json');
+// 클라이언트 fetch용 public 경로에도 동시 출력
+const publicOutputPath = path.join(process.cwd(), 'public/data/posts-data.json');
 
 function formatDate(dateVal) {
   if (!dateVal) return '';
@@ -50,8 +52,16 @@ function run() {
       };
     });
 
+  // src/lib 경로 (서버 import용)
   fs.writeFileSync(outputPath, JSON.stringify(posts, null, 2), 'utf8');
   console.log(`Successfully generated ${posts.length} posts to ${outputPath}`);
+
+  // public/data 경로 (클라이언트 fetch용)
+  const publicDir = path.dirname(publicOutputPath);
+  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+  fs.writeFileSync(publicOutputPath, JSON.stringify(posts, null, 2), 'utf8');
+  console.log(`Also copied to ${publicOutputPath}`);
 }
 
 run();
+

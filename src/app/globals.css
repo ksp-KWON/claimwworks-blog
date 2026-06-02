@@ -5,18 +5,40 @@
 @variant dark (.dark &);
 
 :root {
-  --background: #f8fafc; /* 밝은 Slate 톤의 배경 */
-  --foreground: #0f172a; /* 깊은 남색 글씨 */
+  --background: #ffffff; /* 순백색 배경 */
+  --foreground: #202124; /* 구글 특유의 짙은 회색 글씨 */
+  
+  /* Google Material Colors */
+  --google-blue: #1a73e8;
+  --google-red: #ea4335;
+  --google-yellow: #fbbc04;
+  --google-green: #34a853;
+  --google-surface-variant: #f1f3f4;
+  --google-border: #dadce0;
 }
 
 :root.dark {
-  --background: #090d16; /* 다크 블루-네이비 톤의 배경 */
-  --foreground: #f1f5f9;
+  --background: #202124; /* 구글 다크모드 배경 */
+  --foreground: #e8eaed; /* 다크모드 글씨 */
+  
+  /* Google Material Colors Dark */
+  --google-blue: #8ab4f8;
+  --google-red: #f28b82;
+  --google-yellow: #fde293;
+  --google-green: #81c995;
+  --google-surface-variant: #303134;
+  --google-border: #5f6368;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-google-blue: var(--google-blue);
+  --color-google-red: var(--google-red);
+  --color-google-yellow: var(--google-yellow);
+  --color-google-green: var(--google-green);
+  --color-google-surface: var(--google-surface-variant);
+  --color-google-border: var(--google-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -24,7 +46,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 /* ==========================================
@@ -121,25 +144,56 @@ body {
   line-height: 1.8 !important;
 }
 
-/* 4. 흘러가는 대형 제목 (Marquee) 애니메이션 효과 */
-/* 시작점: 첫 글자가 컨테이너 맨 왼쪽에서 시작 → 왼쪽으로 흘러감 */
-@keyframes marquee {
-  0%   { transform: translateX(0); }         /* 쳉 바로 첫 글자가 왼쪽에 위치 */
-  10%  { transform: translateX(0); }         /* 10% 구간 동안 시작점 정지 (읽어볼 수 있도록) */
-  90%  { transform: translateX(-100%); }     /* 텍스트가 왼쪽으로 완전히 사라짐 */
-  100% { transform: translateX(-100%); }     /* 끝점에서 잠시 대기 후 다시 시작 */
+/* 4. 마퀴 (Marquee Ticker) - 끊김없는 무한루프
+ *
+ * 원리: 텍스트를 2번 나란히 배치하고 정확히 -50%만 이동
+ * → 리셋 시 두 번째 복사본이 첫 번째와 정확히 같은 자리 → 이음새 없음
+ * → 0%에서 바로 시작, 정지 구간 없음
+ *
+ * 구조:
+ *   <div class="overflow-hidden">          ← 컨테이너 (클리핑)
+ *     <div class="animate-marquee">        ← 트랙 (display:flex, 애니메이션)
+ *       <span class="shrink-0 pr-16">텍스트</span>              ← 원본
+ *       <span class="shrink-0 pr-16" aria-hidden>텍스트</span>  ← 복사본
+ *     </div>
+ *   </div>
+ */
+@keyframes marquee-loop {
+  0%, 8%    { transform: translateX(0); }       /* 처음 잠깐 정지 */
+  92%, 100% { transform: translateX(-50%); }    /* 끝 정지 → 리셋 (seamless) */
 }
 
+/* 블로그 카드 제목용 (긴 텍스트, 느린 속도) */
 .animate-marquee {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 20s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: marquee-loop 18s linear infinite;
 }
 
-/* 배너 버튼 제목용 마퀴 (짧은 텍스트에 최적화된 빠른 속도) */
+/* 배너 버튼 제목용 (짧은 텍스트, 빠른 속도) */
 .animate-marquee-sm {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 8s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: marquee-loop 8s linear infinite;
+}
+
+/* ── 보상스쿨tv 로고: 다크모드 외곽선 색상 전환 ── */
+/* 라이트모드: 흰 외곽선 (원본 로고 스타일 그대로) */
+.logo-main-text {
+  -webkit-text-stroke: 3px white;
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+}
+.logo-tv-text {
+  -webkit-text-stroke: 2px white;
+  paint-order: stroke fill;
+}
+/* 다크모드: 외곽선을 어두운 색으로 변경하여 가독성 확보 */
+.dark .logo-main-text {
+  -webkit-text-stroke: 3px #18181b;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.05);
+}
+.dark .logo-tv-text {
+  -webkit-text-stroke: 2px #18181b;
 }
 
