@@ -4,52 +4,84 @@ on:
   schedule:
     # 한국 시간(KST) 매일 아침 07:00 실행 (UTC 기준 전날 22:00)
     - cron: '0 22 * * *'
-  workflow_dispatch: # GitHub 웹 화면에서 수동 실행 가능
+  workflow_dispatch:
 
-# Node.js 24를 기본으로 사용 (Deprecated 경고 해결)
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   auto-generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      # 1. 소스 코드 체크아웃
-      - name: Checkout repository
+      # ── STEP 1: 코드 체크아웃 ──
+      - name: "[1/6] Checkout repository"
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. Node.js 24 환경 설정
-      - name: Setup Node.js 24
+      # ── STEP 2: Node.js 설정 ──
+      - name: "[2/6] Setup Node.js 24"
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: 'npm'
 
-      # 3. 의존성 패키지 설치 (npm install: lock 파일 불일치 상황에도 안전)
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      # 4. 환경 변수 및 API 키 확인
-      - name: Check environment
-        run: |
-          node --version
-          echo "GEMINI_API_KEY 설정 여부: ${{ secrets.GEMINI_API_KEY != '' && '✅ 설정됨' || '❌ 없음' }}"
-
-      # 5. Gemini AI를 활용한 블로그 글 자동 집필 실행
-      - name: Generate Blog Post with Gemini AI
+      # ── STEP 3: 환경 진단 (어디서 오류나는지 파악용) ──
+      - name: "[3/6] Diagnose environment"
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate-blog-post.js
+        run: |
+          echo "=== 환경 진단 시작 ==="
+          echo "Node 버전: $(node --version)"
+          echo "npm 버전: $(npm --version)"
+          echo "작업 디렉토리: $(pwd)"
+          echo "파일 목록:"
+          ls -la
+          echo ""
+          echo "scripts 폴더:"
+          ls -la scripts/
+          echo ""
+          echo "posts 폴더:"
+          ls -la src/content/posts/ || echo "(폴더 없음)"
+          echo ""
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "❌ GEMINI_API_KEY 상태: 설정 안됨!"
+          else
+            KEY_LEN=${#GEMINI_API_KEY}
+            echo "✅ GEMINI_API_KEY 상태: 설정됨 (길이: ${KEY_LEN}자)"
+          fi
+          echo "=== 환경 진단 완료 ==="
 
-      # 6. prebuild: .md 파일들을 posts-data.json으로 변환
-      - name: Run prebuild (convert .md to JSON)
-        run: node scripts/prebuild.js
+      # ── STEP 4: 의존성 설치 ──
+      - name: "[4/6] Install dependencies"
+        run: |
+          echo "=== npm 설치 시작 ==="
+          npm install
+          echo "=== npm 설치 완료 ==="
+          echo "설치된 패키지 확인:"
+          node -e "require('gray-matter'); console.log('gray-matter: OK')"
 
-      # 7. 변경된 파일 자동 커밋 & 푸시
-      - name: Commit and push new blog post
+      # ── STEP 5: 블로그 글 자동 생성 ──
+      - name: "[5/6] Generate Blog Post with Gemini AI"
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "=== 자동글쓰기 시작 ==="
+          node scripts/generate-blog-post.js
+          echo "=== 자동글쓰기 완료 ==="
+          echo "생성된 파일 확인:"
+          ls -la src/content/posts/
+
+      # ── STEP 5b: prebuild (posts-data.json 갱신) ──
+      - name: "[5b/6] Run prebuild"
+        run: |
+          echo "=== prebuild 시작 ==="
+          node scripts/prebuild.js
+          echo "=== prebuild 완료 ==="
+
+      # ── STEP 6: Git 커밋 & 푸시 ──
+      - name: "[6/6] Commit and push"
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -57,6 +89,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: auto-generate daily blog post [$(date +'%Y-%m-%d')]"
             git push
+            echo "✅ 커밋 & 푸시 완료"
           else
             echo "변경사항 없음 - 커밋 생략"
           fi
