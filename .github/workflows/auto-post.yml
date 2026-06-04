@@ -6,6 +6,10 @@ on:
     - cron: '0 22 * * *'
   workflow_dispatch: # GitHub 웹 화면에서 수동 실행 가능
 
+# Node.js 24를 기본으로 사용 (Deprecated 경고 해결)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   auto-generate:
     runs-on: ubuntu-latest
@@ -15,37 +19,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # 전체 히스토리를 가져와야 push가 정상 작동합니다
           fetch-depth: 0
 
-      # 2. Node.js 환경 설정 (fetch API 내장된 버전 필요)
-      - name: Setup Node.js
+      # 2. Node.js 24 환경 설정
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
-      # 3. 의존성 패키지 설치
+      # 3. 의존성 패키지 설치 (npm install: lock 파일 불일치 상황에도 안전)
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
-      # 4. Gemini AI를 활용한 블로그 글 자동 집필 실행
+      # 4. 환경 변수 및 API 키 확인
+      - name: Check environment
+        run: |
+          node --version
+          echo "GEMINI_API_KEY 설정 여부: ${{ secrets.GEMINI_API_KEY != '' && '✅ 설정됨' || '❌ 없음' }}"
+
+      # 5. Gemini AI를 활용한 블로그 글 자동 집필 실행
       - name: Generate Blog Post with Gemini AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate-blog-post.js
 
-      # 5. prebuild: .md 파일들을 posts-data.json으로 변환
+      # 6. prebuild: .md 파일들을 posts-data.json으로 변환
       - name: Run prebuild (convert .md to JSON)
         run: node scripts/prebuild.js
 
-      # 6. 변경된 파일 자동 커밋 & 푸시
+      # 7. 변경된 파일 자동 커밋 & 푸시
       - name: Commit and push new blog post
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          # 변경사항이 있을 때만 커밋 (없으면 그냥 통과)
           if ! git diff --cached --quiet; then
             git commit -m "chore: auto-generate daily blog post [$(date +'%Y-%m-%d')]"
             git push

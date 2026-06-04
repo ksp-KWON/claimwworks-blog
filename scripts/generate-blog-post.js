@@ -254,14 +254,6 @@ const TOPIC_POOL = [
     keywords: '맘모톰 절제술 실손보험, 유방 비급여 보험금',
   },
   {
-    slug: 'scar-laser-pinhole-insurance',
-    title: '흉터 레이저·핀홀 시술 실손보험 청구: 인정 기준과 거절 대응법',
-    category: '실손보험 분쟁 가이드',
-    specialtyCategory: '피부과 (DER) / 성형외과 (PS)',
-    tags: ['흉터레이저', '핀홀시술', '실손보험', '비급여', '피부과'],
-    keywords: '흉터 레이저 실손보험, 피부과 비급여 청구',
-  },
-  {
     slug: 'urinary-stone-lithotripsy-guide',
     title: '요로결석 쇄석술 실손보험 청구: 입원·외래 구분과 청구 전략',
     category: '실손보험 분쟁 가이드',
@@ -282,43 +274,59 @@ const TOPIC_POOL = [
 // ── Gemini API 호출 함수 ──
 async function callGemini(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
+  
+  // API 키 상태 확인
   if (!apiKey || apiKey === '여기에_입력') {
     throw new Error('GEMINI_API_KEY가 설정되지 않았습니다.');
   }
+  console.log(`🔑 API 키 확인: ${apiKey.slice(0, 8)}...${apiKey.slice(-4)} (전체 ${apiKey.length}자)`);
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  // gemini-2.0-flash 모델 사용
+  const model = 'gemini-2.0-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  console.log(`🌐 API 엔드포인트: ${url.replace(apiKey, 'API_KEY_HIDDEN')}`);
   
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.75,
-        maxOutputTokens: 8192,
-        topP: 0.9,
-      },
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
-      ],
-    }),
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.75,
+          maxOutputTokens: 8192,
+          topP: 0.9,
+        },
+      }),
+    });
+  } catch (fetchErr) {
+    throw new Error(`네트워크 연결 실패: ${fetchErr.message}`);
+  }
+
+  console.log(`📊 API 응답 상태: HTTP ${response.status}`);
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Gemini API 오류 (${response.status}): ${errorText}`);
+    console.error('❌ API 오류 응답 전체 내용:');
+    console.error(errorText);
+    throw new Error(`Gemini API 오류 (HTTP ${response.status})`);
   }
 
   const data = await response.json();
   
   if (!data.candidates || data.candidates.length === 0) {
+    console.error('❌ 빈 응답 데이터:', JSON.stringify(data, null, 2));
     throw new Error('Gemini API가 빈 응답을 반환했습니다.');
   }
 
-  return data.candidates[0].content.parts[0].text;
+  const text = data.candidates[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    console.error('❌ 응답 구조 이상:', JSON.stringify(data.candidates[0], null, 2));
+    throw new Error('응답에서 텍스트를 추출할 수 없습니다.');
+  }
+
+  return text;
 }
 
 // ── 오늘 작성할 토픽 선택 함수 ──
