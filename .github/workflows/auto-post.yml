@@ -2,8 +2,7 @@ name: Auto Generate Daily Blog Post
 
 on:
   schedule:
-    # 한국 시간(KST) 매일 아침 07:00 실행 (UTC 기준 전날 22:00)
-    - cron: '0 22 * * *'
+    - cron: '0 22 * * *'   # KST 07:00 매일 실행
   workflow_dispatch:
 
 env:
@@ -12,76 +11,47 @@ env:
 jobs:
   auto-generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
-      # ── STEP 1: 코드 체크아웃 ──
-      - name: "[1/6] Checkout repository"
+      # ── 1. 코드 체크아웃 ──
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # ── STEP 2: Node.js 설정 ──
-      - name: "[2/6] Setup Node.js 24"
+      # ── 2. Node.js 24 설정 (npm install 없음 - 내장 모듈만 사용) ──
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      # ── STEP 3: 환경 진단 (어디서 오류나는지 파악용) ──
-      - name: "[3/6] Diagnose environment"
+      # ── 3. API 키 확인 ──
+      - name: Verify GEMINI_API_KEY
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          echo "=== 환경 진단 시작 ==="
-          echo "Node 버전: $(node --version)"
-          echo "npm 버전: $(npm --version)"
-          echo "작업 디렉토리: $(pwd)"
-          echo "파일 목록:"
-          ls -la
-          echo ""
-          echo "scripts 폴더:"
-          ls -la scripts/
-          echo ""
-          echo "posts 폴더:"
-          ls -la src/content/posts/ || echo "(폴더 없음)"
-          echo ""
           if [ -z "$GEMINI_API_KEY" ]; then
-            echo "❌ GEMINI_API_KEY 상태: 설정 안됨!"
-          else
-            KEY_LEN=${#GEMINI_API_KEY}
-            echo "✅ GEMINI_API_KEY 상태: 설정됨 (길이: ${KEY_LEN}자)"
+            echo "❌ 오류: GEMINI_API_KEY Secret이 설정되지 않았습니다!"
+            echo "GitHub 저장소 → Settings → Secrets → GEMINI_API_KEY 를 확인하세요."
+            exit 1
           fi
-          echo "=== 환경 진단 완료 ==="
+          echo "✅ GEMINI_API_KEY 확인 완료 (길이: ${#GEMINI_API_KEY}자)"
 
-      # ── STEP 4: 의존성 설치 ──
-      - name: "[4/6] Install dependencies"
-        run: |
-          echo "=== npm 설치 시작 ==="
-          npm install
-          echo "=== npm 설치 완료 ==="
-          echo "설치된 패키지 확인:"
-          node -e "require('gray-matter'); console.log('gray-matter: OK')"
-
-      # ── STEP 5: 블로그 글 자동 생성 ──
-      - name: "[5/6] Generate Blog Post with Gemini AI"
+      # ── 4. Gemini AI 블로그 글 생성 (npm install 불필요 - Node 내장 모듈만 사용) ──
+      - name: Generate Blog Post
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          echo "=== 자동글쓰기 시작 ==="
-          node scripts/generate-blog-post.js
-          echo "=== 자동글쓰기 완료 ==="
-          echo "생성된 파일 확인:"
-          ls -la src/content/posts/
+        run: node scripts/generate-blog-post.js
 
-      # ── STEP 5b: prebuild (posts-data.json 갱신) ──
-      - name: "[5b/6] Run prebuild"
+      # ── 5. prebuild: gray-matter만 설치 후 JSON 변환 ──
+      - name: Install gray-matter and run prebuild
         run: |
-          echo "=== prebuild 시작 ==="
+          npm install gray-matter --no-save --legacy-peer-deps
           node scripts/prebuild.js
-          echo "=== prebuild 완료 ==="
 
-      # ── STEP 6: Git 커밋 & 푸시 ──
-      - name: "[6/6] Commit and push"
+      # ── 6. 커밋 & 푸시 ──
+      - name: Commit and push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -89,7 +59,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: auto-generate daily blog post [$(date +'%Y-%m-%d')]"
             git push
-            echo "✅ 커밋 & 푸시 완료"
+            echo "✅ 새 포스트 발행 완료!"
           else
             echo "변경사항 없음 - 커밋 생략"
           fi
