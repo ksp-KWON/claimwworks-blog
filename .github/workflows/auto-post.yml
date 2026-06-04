@@ -11,7 +11,7 @@ env:
 jobs:
   auto-generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: 'npm'
 
       - name: Run prebuild
         if: always()
@@ -48,3 +49,21 @@ jobs:
           else
             echo "변경사항 없음"
           fi
+
+      - name: Install dependencies for build
+        if: success()
+        run: npm install --legacy-peer-deps
+
+      - name: Build static site
+        if: success()
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to Cloudflare Pages
+        if: success()
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=claimworks-blog --branch=main
