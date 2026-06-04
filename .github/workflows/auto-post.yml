@@ -2,7 +2,7 @@ name: Auto Generate Daily Blog Post
 
 on:
   schedule:
-    - cron: '0 22 * * *'   # KST 07:00 매일 실행
+    - cron: '0 22 * * *'   # KST 매일 07:00
   workflow_dispatch:
 
 env:
@@ -14,43 +14,45 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      # ── 1. 코드 체크아웃 ──
-      - name: Checkout repository
+      # 1. 코드 체크아웃
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # ── 2. Node.js 24 설정 (npm install 없음 - 내장 모듈만 사용) ──
-      - name: Setup Node.js 24
+      # 2. 환경 확인 (Python은 ubuntu에 기본 설치됨 - 별도 설치 불필요)
+      - name: Check environment
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "Python: $(python3 --version)"
+          echo "Node: $(node --version)"
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "ERROR: GEMINI_API_KEY Secret이 비어있습니다!"
+            echo "GitHub 저장소 > Settings > Secrets > Actions > GEMINI_API_KEY 확인 필요"
+            exit 1
+          fi
+          echo "GEMINI_API_KEY: ${#GEMINI_API_KEY}자 확인됨"
+
+      # 3. Python으로 블로그 글 생성 (pip install 불필요 - 내장 urllib 사용)
+      - name: Generate blog post (Python)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 scripts/generate-blog-post.py
+
+      # 4. Node.js 설정 (prebuild용)
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      # ── 3. API 키 확인 ──
-      - name: Verify GEMINI_API_KEY
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      # 5. gray-matter만 설치 후 prebuild 실행
+      - name: Run prebuild
         run: |
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo "❌ 오류: GEMINI_API_KEY Secret이 설정되지 않았습니다!"
-            echo "GitHub 저장소 → Settings → Secrets → GEMINI_API_KEY 를 확인하세요."
-            exit 1
-          fi
-          echo "✅ GEMINI_API_KEY 확인 완료 (길이: ${#GEMINI_API_KEY}자)"
-
-      # ── 4. Gemini AI 블로그 글 생성 (npm install 불필요 - Node 내장 모듈만 사용) ──
-      - name: Generate Blog Post
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate-blog-post.js
-
-      # ── 5. prebuild: gray-matter만 설치 후 JSON 변환 ──
-      - name: Install gray-matter and run prebuild
-        run: |
-          npm install gray-matter --no-save --legacy-peer-deps
+          npm install gray-matter --no-save
           node scripts/prebuild.js
 
-      # ── 6. 커밋 & 푸시 ──
+      # 6. 커밋 & 푸시
       - name: Commit and push
         run: |
           git config --global user.name "github-actions[bot]"
@@ -59,7 +61,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: auto-generate daily blog post [$(date +'%Y-%m-%d')]"
             git push
-            echo "✅ 새 포스트 발행 완료!"
+            echo "새 포스트 발행 완료!"
           else
-            echo "변경사항 없음 - 커밋 생략"
+            echo "변경사항 없음"
           fi
