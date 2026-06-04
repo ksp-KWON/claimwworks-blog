@@ -67,25 +67,61 @@ def call_gemini(api_key, topic):
         '출력: 마크다운 본문만 (H1, 프론트매터 제외)'
     )
 
-    url = (
-        "https://generativelanguage.googleapis.com"
-        "/v1beta/models/gemini-1.5-flash:generateContent"
-        f"?key={api_key}"
-    )
-    body = json.dumps({
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.75, "maxOutputTokens": 8192}
-    }).encode("utf-8")
+    models_to_try = [
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-flash-lite-latest",
+        "gemini-2.0-flash-lite-001",
+        "gemini-3.5-flash",
+        "gemini-pro-latest"
+    ]
 
-    req = urllib.request.Request(
-        url, data=body,
-        headers={"Content-Type": "application/json"},
-        method="POST"
-    )
-    with urllib.request.urlopen(req, timeout=120) as r:
-        data = json.loads(r.read().decode("utf-8"))
+    last_error = None
+    last_body = None
 
-    return data["candidates"][0]["content"]["parts"][0]["text"]
+    for model_name in models_to_try:
+        print(f"  [{model_name}] 모델 시도 중...")
+        url = (
+            "https://generativelanguage.googleapis.com"
+            f"/v1beta/models/{model_name}:generateContent"
+            f"?key={api_key}"
+        )
+        body = json.dumps({
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.75, "maxOutputTokens": 8192}
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            url, data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                data = json.loads(r.read().decode("utf-8"))
+                print(f"  -> 성공! ({model_name} 사용)")
+                return data["candidates"][0]["content"]["parts"][0]["text"]
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="replace")
+            print(f"  -> 실패: HTTP {e.code}")
+            last_error = e
+            last_body = err_body
+            if e.code in (404, 429):
+                continue
+            else:
+                break
+        except Exception as e:
+            print(f"  -> 실패: {e}")
+            last_error = e
+            continue
+
+    # 모든 모델이 실패한 경우
+    if isinstance(last_error, urllib.error.HTTPError):
+        raise Exception(f"모든 모델 시도 실패. 마지막 HTTP {last_error.code}\n응답: {last_body[:1000]}")
+    else:
+        raise Exception(f"모든 모델 시도 실패. 마지막 오류: {last_error}")
+
 
 
 def save_post(topic, content):
