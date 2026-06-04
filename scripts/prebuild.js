@@ -46,8 +46,9 @@ function run() {
         date: formatDate(data.date),
         summary: data.summary || '',
         category: data.category || '',
-        tags: Array.isArray(data.tags) ? data.tags : [],
+        regionCategory: data.regionCategory || '',
         specialtyCategory: data.specialtyCategory || '',
+        tags: Array.isArray(data.tags) ? data.tags : [],
         published: data.published !== false,
         content: content,
       };

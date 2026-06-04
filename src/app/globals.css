@@ -117,7 +117,7 @@ body {
   background-color: #f8fafc !important;
 }
 .dark .prose tr:hover td {
-  background-color: #1e293b/40 !important;
+  background-color: rgba(30, 41, 59, 0.4) !important;
 }
 
 /* 3. 본문 내 강조 단어(**굵게**)는 기본 글자색상을 유지하여 링크와 혼동되는 오류 방지 */

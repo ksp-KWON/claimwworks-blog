@@ -2,9 +2,9 @@ name: Auto Generate Daily Blog Post
 
 on:
   schedule:
-    # 한국 시간(KST) 매일 아침 06:00 실행 (UTC 시간 기준 전날 21:00)
-    - cron: '0 21 * * *'
-  workflow_dispatch: # 깃허브 웹 화면에서 수동 실행 가능하도록 설정
+    # 한국 시간(KST) 매일 아침 07:00 실행 (UTC 기준 전날 22:00)
+    - cron: '0 22 * * *'
+  workflow_dispatch: # GitHub 웹 화면에서 수동 실행 가능
 
 jobs:
   auto-generate:
@@ -14,8 +14,11 @@ jobs:
       # 1. 소스 코드 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # 전체 히스토리를 가져와야 push가 정상 작동합니다
+          fetch-depth: 0
 
-      # 2. Node.js 환경 설정
+      # 2. Node.js 환경 설정 (fetch API 내장된 버전 필요)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,30 +27,28 @@ jobs:
 
       # 3. 의존성 패키지 설치
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # 4. 공공데이터 기반 정보 수집 실행
-      - name: Fetch Medical Data
-        env:
-          PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
-        run: node scripts/fetch-medical-data.js
-
-      # 5. Gemini AI를 활용한 블로그 글 자동 집필 실행
-      - name: Generate Blog Post
+      # 4. Gemini AI를 활용한 블로그 글 자동 집필 실행
+      - name: Generate Blog Post with Gemini AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate-blog-post.js
 
-      # 6. 새로 작성된 블로그 파일(.md) 및 변경된 데이터(.json) 자동 커밋 & 푸시
-      - name: Commit and push changes
+      # 5. prebuild: .md 파일들을 posts-data.json으로 변환
+      - name: Run prebuild (convert .md to JSON)
+        run: node scripts/prebuild.js
+
+      # 6. 변경된 파일 자동 커밋 & 푸시
+      - name: Commit and push new blog post
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          # 변경사항이 있는지 체크 후 커밋 진행 (변경사항이 없으면 통과)
+          # 변경사항이 있을 때만 커밋 (없으면 그냥 통과)
           if ! git diff --cached --quiet; then
-            git commit -m "chore: auto-generate daily blog post"
+            git commit -m "chore: auto-generate daily blog post [$(date +'%Y-%m-%d')]"
             git push
           else
-            echo "No changes to commit"
+            echo "변경사항 없음 - 커밋 생략"
           fi

@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
-import { getSortedPostsData } from "@/lib/posts";
-import { RegionalCategories, SpecialtyDiseaseCategories } from "@/components/SidebarCategories";
+import SidebarContent from "@/components/SidebarContent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 사이드바에 연동할 최근 보상 포스트 목록
-  const recentPosts = getSortedPostsData().slice(0, 5);
-
   return (
     <html
       lang="ko"
@@ -149,33 +145,9 @@ export default function RootLayout({
             {children}
           </main>
 
-          {/* 사이드바 영역 (우측 25%) - 상단 sticky를 슬림해진 4단 박스 높이에 맞추어 top-[148px]로 조정 */}
-          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[148px] self-start space-y-6">
-            
-            {/* 진료과목 및 다빈도 질환 카테고리 - 진료과목을 위로 */}
-             <SpecialtyDiseaseCategories />
-
-            {/* 지역별 의료기관 카테고리 */}
-            <RegionalCategories />
-
-            {/* 인기 키워드 태그 목록 */}
-            <div className="bg-[var(--background)] p-5 rounded-2xl border border-[var(--google-border)]">
-              <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 pb-2 border-b border-[var(--google-border)] flex items-center gap-2">
-                <svg className="w-4 h-4 text-[var(--google-yellow)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-                인기 키워드 태그
-              </h3>
-              <div className="flex flex-wrap gap-2 text-xs font-bold">
-                {['교통사고합의금', '지불보증', '후유장해', '비급여비용', '도수치료비', 'MRI검사비', '손해사정'].map((tag) => (
-                  <span 
-                    key={tag}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors cursor-pointer"
-                  >
-                    <svg className="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+          {/* 사이드바 영역 (우측 27%) — 데스크탑: sticky, 모바일: 접기/펴기 토글 */}
+          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[148px] self-start space-y-4">
+            <SidebarContent />
           </aside>
         </div>
 

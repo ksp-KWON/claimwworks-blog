@@ -30,7 +30,7 @@ export default function Home() {
           {posts.map((post) => (
             <article 
               key={post.slug}
-              className="group bg-[var(--background)] dark:bg-[#202124] rounded-2xl overflow-hidden border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 flex flex-col h-[260px]"
+              className="group bg-[var(--background)] dark:bg-[#202124] rounded-2xl overflow-hidden border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 flex flex-col min-h-[220px]"
             >
               <Link href={`/blog/${post.slug}`} className="p-5 flex flex-col justify-between h-full flex-1">
                 
