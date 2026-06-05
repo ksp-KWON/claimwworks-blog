@@ -112,13 +112,12 @@ export const REGIONS_DATA = [
 ];
 
 // 1. 대한민국 전체 행정구역 카테고리 (대분류 17개 시/도, 중분류 226개 시/군/구 전수조사 반영)
-// 누락된 대한민국 행정구역이 전혀 없도록 전국의 모든 시/군/구를 공식 편제 기준으로 전수 수록
 export function RegionalCategories() {
 
   return (
     <div className="bg-[var(--background)] p-5 rounded-2xl border border-[var(--google-border)]">
-      <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 flex items-center gap-2">
-        <svg className="w-4 h-4 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 flex items-center gap-2 border-l-4 border-[var(--google-green)] pl-2.5">
+        <svg className="w-4 h-4 text-[var(--google-green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
         지역별 의료기관
       </h3>
       <ul className="space-y-1 text-sm font-medium text-[#202124] dark:text-[#e8eaed]">
@@ -235,7 +234,7 @@ export function SpecialtyDiseaseCategories() {
 
   return (
     <div className="bg-[var(--background)] p-5 rounded-2xl border border-[var(--google-border)]">
-      <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 flex items-center gap-2">
+      <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-4 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
         <svg className="w-4 h-4 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6h16M4 12h16M4 18h7"></path></svg>
         진료과목별 분쟁 가이드
       </h3>

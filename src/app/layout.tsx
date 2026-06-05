@@ -87,7 +87,7 @@ export default function RootLayout({
         </header>
 
         {/* 2. 구글 스타일 4단 정보 카드 영역 */}
-        <section className="lg:sticky lg:top-[60px] z-30 w-full bg-[var(--background)] border-b border-[var(--google-border)] py-3 transition-colors">
+        <section className="w-full bg-[var(--background)] border-b border-[var(--google-border)] py-3 transition-colors">
           <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-5">
             
             {/* 링크 1: 보상스쿨 소개 */}
@@ -146,7 +146,7 @@ export default function RootLayout({
           </main>
 
           {/* 사이드바 영역 (우측 27%) — 데스크탑: sticky, 모바일: 접기/펴기 토글 */}
-          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[148px] self-start space-y-4">
+          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[80px] self-start space-y-4">
             <SidebarContent />
           </aside>
         </div>

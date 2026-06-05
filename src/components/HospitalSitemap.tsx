@@ -14,9 +14,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
-// 진료과목 스타일 제거 및 단일 컴포넌트화
-const DEFAULT_COLOR = { bg: 'bg-white', text: 'text-[#202124]', border: 'border-[var(--google-border)]', darkBg: 'dark:bg-[#202124]' };
-
 interface SpecialtyData {
   count: number;
   diseases: string[];
@@ -39,10 +36,13 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
   const [open, setOpen] = useState(false);
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const color = DEFAULT_COLOR;
-  
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+
+  const changeDisease = (disease: string | null) => {
+    setSelectedDisease(disease);
+    setPage(1);
+  };
 
   // 바깥 클릭 시 팝업 닫기
   useEffect(() => {
@@ -55,11 +55,6 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open]);
 
-  // 병명 필터 변경 시 첫 페이지로
-  useEffect(() => {
-    setPage(1);
-  }, [selectedDisease]);
-
   // 현재 보여줄 병원 목록 계산
   const filteredHospitals = data.hospitals;
   const totalPages = Math.ceil(filteredHospitals.length / ITEMS_PER_PAGE);
@@ -69,7 +64,7 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
     <div ref={cardRef} className={`relative ${open ? 'z-50' : 'z-10'}`}>
       {/* 진료과목 카드 버튼 */}
       <button
-        onClick={() => { setOpen(prev => !prev); setSelectedDisease(null); }}
+        onClick={() => { setOpen(prev => !prev); changeDisease(null); }}
         className={`
           w-full flex items-center justify-between gap-3 p-4 rounded-xl border transition-all duration-200 bg-[var(--background)] dark:bg-[#202124] border-[var(--google-border)]
           hover:shadow-sm hover:border-[var(--google-blue)] hover:-translate-y-0.5
@@ -122,7 +117,7 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
             <div className="flex flex-wrap gap-2 mb-4">
               {/* 전체 버튼 */}
               <button
-                onClick={() => setSelectedDisease(null)}
+                onClick={() => changeDisease(null)}
                 className={`px-3 py-1.5 text-xs font-bold rounded-full border transition-all ${
                   selectedDisease === null
                     ? `bg-[var(--google-blue)] text-white border-[var(--google-blue)] shadow-sm`
@@ -135,7 +130,7 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
               {data.diseases.map((disease) => (
                 <button
                   key={disease}
-                  onClick={() => setSelectedDisease(disease === selectedDisease ? null : disease)}
+                  onClick={() => changeDisease(disease === selectedDisease ? null : disease)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-full border transition-all ${
                     selectedDisease === disease
                       ? `bg-[var(--google-blue)] text-white border-[var(--google-blue)] shadow-sm`
@@ -236,7 +231,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
     <article className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200/60 dark:border-zinc-800/60 shadow-sm relative">
 
       {/* 상단 헤더 */}
-      <div className="px-6 py-5 border-b border-slate-100 dark:border-zinc-800/80 bg-gradient-to-r from-blue-50/80 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/10">
+      <div className="px-4 py-5 sm:px-6 border-b border-slate-100 dark:border-zinc-800/80 bg-gradient-to-r from-blue-50/80 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/10">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-bold mb-1.5">
@@ -262,7 +257,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
       </div>
 
       {/* 안내 배너 */}
-      <div className="mx-6 mt-5 p-3.5 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/30 rounded-xl flex items-start gap-2.5">
+      <div className="mx-4 sm:mx-6 mt-5 p-3.5 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/30 rounded-xl flex items-start gap-2.5">
         <span className="text-base shrink-0 mt-0.5">⚠️</span>
         <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed font-medium">
           본 의료기관 정보는 건강보험심사평가원(HIRA) 공개 데이터 기반입니다. 
@@ -271,7 +266,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
       </div>
 
       {/* 진료과목별 카드 그리드 */}
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wide mb-4">
           📋 진료과목별 의료기관 현황
         </div>
@@ -289,7 +284,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
       </div>
 
       {/* 하단 SEO 텍스트 */}
-      <div className="px-6 pb-6">
+      <div className="px-4 pb-4 sm:px-6 sm:pb-6">
         <div className="p-4 bg-slate-50 dark:bg-zinc-800/40 rounded-2xl border border-slate-100 dark:border-zinc-800">
           <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed break-keep">
             <strong className="text-slate-700 dark:text-zinc-300">{region}</strong>에서 교통사고·상해 치료를 받으셨거나, 
