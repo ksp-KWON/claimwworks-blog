@@ -146,35 +146,20 @@ body {
 
 /* 4. 마퀴 (Marquee Ticker) - 끊김없는 무한루프
  *
- * 원리: 텍스트를 2번 나란히 배치하고 정확히 -50%만 이동
- * → 리셋 시 두 번째 복사본이 첫 번째와 정확히 같은 자리 → 이음새 없음
- * → 0%에서 바로 시작, 정지 구간 없음
- *
- * 구조:
- *   <div class="overflow-hidden">          ← 컨테이너 (클리핑)
- *     <div class="animate-marquee">        ← 트랙 (display:flex, 애니메이션)
- *       <span class="shrink-0 pr-16">텍스트</span>              ← 원본
- *       <span class="shrink-0 pr-16" aria-hidden>텍스트</span>  ← 복사본
- *     </div>
- *   </div>
+ * 원리: 텍스트를 2번 나란히 배치하고 0% → 100% 연속 이동(-50%)
+ * → 리셋 시 두 번째 복사본이 첫 번째와 같은 자리 → 이음새 없음
+ * → 정지 구간 없이 일정 속도로 계속 흐름
  */
 @keyframes marquee-loop {
-  0%, 8%    { transform: translateX(0); }       /* 처음 잠깐 정지 */
-  92%, 100% { transform: translateX(-50%); }    /* 끝 정지 → 리셋 (seamless) */
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* 블로그 카드 제목용 (긴 텍스트, 느린 속도) */
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee-loop 18s linear infinite;
-}
-
-/* 배너 버튼 제목용 (짧은 텍스트, 빠른 속도) */
-.animate-marquee-sm {
-  display: flex;
-  width: max-content;
-  animation: marquee-loop 8s linear infinite;
+  animation: marquee-loop 16s linear infinite;
 }
 
 /* ── 보상스쿨tv 로고: 다크모드 외곽선 색상 전환 ── */
