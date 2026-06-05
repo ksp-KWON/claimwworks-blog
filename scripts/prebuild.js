@@ -54,6 +54,9 @@ function run() {
       };
     });
 
+  // 날짜 최신순 정렬 (내림차순)
+  posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
   // src/lib 경로 (서버 import용)
   fs.writeFileSync(outputPath, JSON.stringify(posts, null, 2), 'utf8');
   console.log(`Successfully generated ${posts.length} posts to ${outputPath}`);

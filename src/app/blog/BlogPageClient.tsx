@@ -189,7 +189,12 @@ export default function BlogPageClient() {
   useEffect(() => {
     fetch('/data/posts-data.json')
       .then(r => r.ok ? r.json() : [])
-      .then(data => setPosts(Array.isArray(data) ? data : []))
+      .then(data => {
+        const list = Array.isArray(data) ? data : [];
+        // 날짜 최신순 정렬
+        list.sort((a: Post, b: Post) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+        setPosts(list);
+      })
       .catch(() => setPosts([]));
   }, []);
 
