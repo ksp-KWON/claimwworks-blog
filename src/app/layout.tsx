@@ -98,7 +98,7 @@ export default function RootLayout({
               </div>
               <div className="min-w-0 flex-1">
                 <BannerMarquee text="보상스쿨 소개" className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-blue)] transition-colors" />
-                <BannerMarquee text="신체손해사정사 자격 및 이력" className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5" />
+                <BannerMarquee text="보상스쿨 프로필 : 자격 &amp; 경력 소개" className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5" />
               </div>
             </Link>
 
@@ -130,8 +130,8 @@ export default function RootLayout({
                 <svg className="w-5 h-5 text-[var(--google-red)] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
               </div>
               <div className="min-w-0 flex-1">
-                <BannerMarquee text="보상스쿨 유튜브" className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-red)] transition-colors" />
-                <BannerMarquee text="보상 노하우 무료구독" className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5" />
+                <BannerMarquee text="보상스쿨TV" className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-red)] transition-colors" />
+                <BannerMarquee text="유튜브 바로가기" className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5" />
               </div>
             </a>
 
