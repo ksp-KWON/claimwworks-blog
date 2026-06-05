@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import postsData from '@/lib/posts-data.json';
 import { SpecialtyDiseaseCategories, RegionalCategories } from '@/components/SidebarCategories';
 
 /**
@@ -57,17 +59,22 @@ export default function SidebarContent() {
             인기 키워드 태그
           </h3>
           <div className="flex flex-wrap gap-2 text-xs font-bold">
-            {['교통사고합의금', '지불보증', '후유장해', '비급여비용', '도수치료비', 'MRI검사비', '손해사정'].map((tag) => (
-              <span
+            {Array.from(
+              new Set(
+                (postsData as any[]).flatMap((p: any) => Array.isArray(p.tags) ? p.tags : [])
+              )
+            ).map((tag: string) => (
+              <Link
                 key={tag}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors cursor-pointer"
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors"
               >
                 <svg className="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
         </div>

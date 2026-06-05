@@ -180,6 +180,7 @@ export default function BlogPageClient() {
   const region = searchParams.get('region');
   const sido = searchParams.get('sido');
   const specialty = searchParams.get('specialty');
+  const tagFilter = searchParams.get('tag');
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [hiraData, setHiraData] = useState<HiraData | null>(null);
@@ -447,19 +448,47 @@ export default function BlogPageClient() {
     );
   }
 
+  // 태그 필터링
+  const displayPosts = tagFilter
+    ? posts.filter(p => Array.isArray(p.tags) && p.tags.some(t => t === tagFilter))
+    : posts;
+
   // ─── 기본 블로그 목록 ───
   return (
-    <div className="space-y-8">
-      {posts.length === 0 ? (
+    <div className="space-y-6">
+      {/* 태그 필터 활성 표시 */}
+      {tagFilter && (
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#e8f0fe] dark:bg-[#174ea6]/30 rounded-xl border border-[var(--google-blue)]/30">
+            <svg className="w-4 h-4 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+              <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            <span className="text-sm font-bold text-[var(--google-blue)]">#{tagFilter}</span>
+            <span className="text-xs text-[#5f6368] dark:text-[#9aa0a6]">{displayPosts.length}개 게시글</span>
+          </div>
+          <Link
+            href="/blog"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-[#5f6368] dark:text-[#9aa0a6] bg-[var(--google-surface-variant)] dark:bg-[#303134] rounded-xl hover:text-[var(--google-blue)] hover:border-[var(--google-blue)] border border-transparent transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            필터 해제
+          </Link>
+        </div>
+      )}
+      {displayPosts.length === 0 ? (
         <div className="text-center py-16 bg-[var(--background)] dark:bg-[#202124] rounded-2xl border border-[var(--google-border)] shadow-sm">
           <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 19h6"></path><path d="M10 15h8"></path><path d="M10 19h8"></path></svg>
           <p className="text-sm font-bold tracking-wide text-[#5f6368] dark:text-[#9aa0a6]">
-            등록된 블로그 포스팅이 존재하지 않습니다.
+            {tagFilter ? `'#${tagFilter}' 태그에 해당하는 게시글이 없습니다.` : '등록된 블로그 포스팅이 존재하지 않습니다.'}
           </p>
         </div>
       ) : (
         <div className="space-y-4">
-          {posts.map((post) => (
+          {displayPosts.map((post) => (
             <article
               key={post.slug}
               className="bg-[var(--background)] dark:bg-[#202124] p-5 sm:p-6 rounded-xl border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 flex flex-col justify-between"
@@ -474,31 +503,34 @@ export default function BlogPageClient() {
                     {post.date}
                   </time>
                 </div>
-                <div className="relative w-full overflow-hidden mb-2 select-none">
-                  <div className="animate-marquee hover:[animation-play-state:paused]">
-                    <h2 className="text-base sm:text-lg font-bold text-[#202124] dark:text-[#e8eaed] hover:text-[var(--google-blue)] transition-colors pr-12 line-clamp-2">
-                      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                    </h2>
-                  </div>
+                <div className="relative w-full overflow-hidden mb-2">
+                  <h2 className="text-base sm:text-lg font-bold text-[#202124] dark:text-[#e8eaed] hover:text-[var(--google-blue)] transition-colors leading-snug">
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h2>
                 </div>
                 <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6] line-clamp-2 leading-relaxed font-normal">
                   {post.summary}
                 </p>
               </div>
-              <div className="mt-4 pt-4 border-t border-[var(--google-border)] flex items-center justify-between">
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-4 pt-4 border-t border-[var(--google-border)] flex items-center justify-between gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {(post.tags || []).map((tag) => (
-                    <span
+                    <Link
                       key={tag}
-                      className="text-xs font-bold text-[#5f6368] dark:text-[#9aa0a6] bg-[var(--google-surface-variant)] dark:bg-[#303134] px-2 py-0.5 rounded-md border border-transparent"
+                      href={`/blog?tag=${encodeURIComponent(tag)}`}
+                      className={`text-xs font-bold px-2 py-0.5 rounded-md border transition-colors ${
+                        tagFilter === tag
+                          ? 'bg-[var(--google-blue)] text-white border-[var(--google-blue)]'
+                          : 'text-[#5f6368] dark:text-[#9aa0a6] bg-[var(--google-surface-variant)] dark:bg-[#303134] border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)]'
+                      }`}
                     >
                       #{tag}
-                    </span>
+                    </Link>
                   ))}
                 </div>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="text-sm font-bold text-[var(--google-blue)] hover:underline transition-colors flex items-center gap-1"
+                  className="shrink-0 text-sm font-bold text-[var(--google-blue)] hover:underline transition-colors flex items-center gap-1"
                 >
                   자세히 보기
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
