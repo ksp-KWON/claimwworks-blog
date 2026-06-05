@@ -2,40 +2,45 @@
 
 /**
  * BannerMarquee
- *
- * 배너 카드 내 제목을 위한 마퀴(흘러가는 텍스트) 컴포넌트.
- * - 항상 마퀴 애니메이션 실행 (overflow 감지 없음)
- * - 다크모드에서 가독성 좋은 흰색 텍스트 적용
+ * 텍스트가 컨테이너 너비를 넘칠 때만 무한 슬라이드(marquee) 실행.
+ * 평소에는 고정 텍스트로 보이고, 넘칠 때만 우→좌 방향으로 흐릅니다.
  */
 
+import { useRef, useEffect, useState } from "react";
+
 interface BannerMarqueeProps {
-  /** 배너에 표시할 텍스트 */
   text: string;
-  /** 호버 시 적용할 색상 Tailwind 클래스 */
-  hoverColorClass?: string;
+  className?: string;
 }
 
-export default function BannerMarquee({
-  text,
-  hoverColorClass = "group-hover:text-[var(--google-blue)]",
-}: BannerMarqueeProps) {
+export default function BannerMarquee({ text, className = "" }: BannerMarqueeProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [overflow, setOverflow] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      if (containerRef.current && textRef.current) {
+        setOverflow(textRef.current.scrollWidth > containerRef.current.clientWidth);
+      }
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [text]);
+
   return (
-    <div className="min-w-0 overflow-hidden">
-      <div className="animate-marquee-sm">
-        {/* 원본 텍스트 */}
-        <span
-          className={`text-sm font-bold text-[#202124] dark:text-[#e8eaed] ${hoverColorClass} transition-colors whitespace-nowrap pr-8 shrink-0`}
-        >
-          {text}
-        </span>
-        {/* 끊김 없는 루프를 위한 복사본 (스크린리더에서 숨김) */}
-        <span
-          className={`text-sm font-bold text-[#202124] dark:text-[#e8eaed] ${hoverColorClass} transition-colors whitespace-nowrap pr-8 shrink-0`}
-          aria-hidden="true"
-        >
-          {text}
-        </span>
-      </div>
+    <div ref={containerRef} className="min-w-0 overflow-hidden">
+      {overflow ? (
+        /* 넘칠 때: 무한 슬라이드 */
+        <div className="animate-marquee-sm">
+          <span className={`whitespace-nowrap pr-8 shrink-0 ${className}`}>{text}</span>
+          <span className={`whitespace-nowrap pr-8 shrink-0 ${className}`} aria-hidden="true">{text}</span>
+        </div>
+      ) : (
+        /* 평소: 고정 */
+        <span ref={textRef} className={`block whitespace-nowrap truncate ${className}`}>{text}</span>
+      )}
     </div>
   );
 }
