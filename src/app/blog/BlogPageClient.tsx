@@ -504,7 +504,7 @@ export default function BlogPageClient() {
                   </time>
                 </div>
                 <div className="relative w-full overflow-hidden mb-2">
-                  <h2 className="text-base sm:text-lg font-bold text-[#202124] dark:text-[#e8eaed] hover:text-[var(--google-blue)] transition-colors leading-snug">
+                  <h2 className="text-base sm:text-lg font-bold text-[#202124] dark:text-[#e8eaed] hover:text-[var(--google-blue)] transition-colors line-clamp-2 leading-snug">
                     <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                   </h2>
                 </div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getSortedPostsData } from "@/lib/posts";
-import CardTitleMarquee from "@/components/CardTitleMarquee";
 
 export default function Home() {
   // 전체 최신 보상 가이드 블로그 목록 로드
@@ -48,11 +47,8 @@ export default function Home() {
 
                 {/* 중단: 제목 및 설명 */}
                 <div className="flex-1 space-y-2 min-w-0">
-                  <h3 className="text-base font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-blue)] transition-colors leading-snug">
-                    <CardTitleMarquee
-                      title={post.title}
-                      className="text-base font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-blue)] transition-colors"
-                    />
+                  <h3 className="text-base font-bold text-[#202124] dark:text-[#e8eaed] group-hover:text-[var(--google-blue)] transition-colors line-clamp-2 leading-snug">
+                    {post.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5f6368] dark:text-[#9aa0a6] line-clamp-2 leading-relaxed font-normal break-keep">
                     {post.summary}

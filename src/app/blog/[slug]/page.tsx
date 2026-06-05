@@ -71,17 +71,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </time>
         </div>
         
-        {/* 제목: 긴 제목도 끊김 없이 한 줄로 흐르게 하는 흐르는 제목(Marquee) ticker 컨테이너 */}
-        <div className="relative w-full overflow-hidden bg-white dark:bg-[#202124] border border-[var(--google-border)] rounded-xl py-3.5 px-4 select-none">
-          <div className="animate-marquee hover:[animation-play-state:paused] cursor-pointer">
-            <h1 className="text-base sm:text-lg md:text-xl font-bold text-[#202124] dark:text-[#e8eaed] tracking-tight pr-12">
-              {post.title}
-            </h1>
-          </div>
-          {/* 좌우 사이드 그라데이션 페이드 효과로 고급스러움 극대화 */}
-          <div className="absolute top-0 left-0 h-full w-8 bg-linear-to-r from-white to-transparent dark:from-[#202124] pointer-events-none" />
-          <div className="absolute top-0 right-0 h-full w-8 bg-linear-to-l from-white to-transparent dark:from-[#202124] pointer-events-none" />
-        </div>
+        {/* 제목 */}
+        <h1 className="text-base sm:text-lg md:text-xl font-bold text-[#202124] dark:text-[#e8eaed] tracking-tight leading-snug">
+          {post.title}
+        </h1>
 
         
         {/* 요약 박스: 제목과 명확히 구분되는 세련된 구글 스타일 콜아웃 */}
