@@ -61,6 +61,25 @@ export default function ExpertMedicalForm() {
               </div>
             </div>
             
+            {data.treatmentType === 'outpatient' && (
+              <div className="sm:col-span-2 mt-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">통원(방문) 일수 (공제금액 계산용)</label>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <input 
+                      type="number" 
+                      value={data.outpatientDays || 1} 
+                      onChange={e => handleChange('outpatientDays', Math.max(1, Number(e.target.value)))} 
+                      className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-green-500" 
+                      min="1" 
+                    />
+                    <span className="absolute right-4 top-3.5 text-gray-400">일</span>
+                  </div>
+                  <button onClick={() => handleChange('outpatientDays', Math.max(1, data.outpatientDays - 1))} className="w-12 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-200">-</button>
+                  <button onClick={() => handleChange('outpatientDays', data.outpatientDays + 1)} className="w-12 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-200">+</button>
+                </div>
+              </div>
+            )}
             {data.treatmentType === 'outpatient' && data.generation > 1 && (
               <div className="sm:col-span-2 mt-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">병원 규모 (통원 공제금액 계산용)</label>

@@ -6,6 +6,7 @@ export interface MedicalInsuranceData {
   generation: MedicalGeneration;
   treatmentType: TreatmentType;
   clinicType: ClinicType; // 통원 시 병원 규모
+  outpatientDays: number; // 통원 일수
   
   // 영수증 비용
   coveredCost: number; // 급여 본인부담금
@@ -21,6 +22,7 @@ export const initialMedicalData: MedicalInsuranceData = {
   generation: 4,
   treatmentType: 'outpatient',
   clinicType: 'clinic',
+  outpatientDays: 1,
   coveredCost: 0,
   nonCoveredCost: 0,
   manualTherapyCost: 0,

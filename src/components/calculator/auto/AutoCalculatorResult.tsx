@@ -9,8 +9,19 @@ interface Props {
 export default function AutoCalculatorResult({ data }: Props) {
   // 간단한 약관/호프만계수 시연용 계산 로직 (실제 실무 로직은 매우 복잡하므로 시연용 추정치만 산출)
   
+  let formulas: string[] = [];
+
+  // 호프만 계수 산출 함수 (월 5/12% 단리 할인 방식 누적합, 판례 한도 240)
+  const getHoffmanCoefficient = (months: number) => {
+    let sum = 0;
+    for (let i = 1; i <= months; i++) {
+      sum += 1 / (1 + 0.05 * (i / 12));
+    }
+    return Math.min(sum, 240);
+  };
+
   // 1. 위자료 (부상, 장해, 사망 중 가장 큰 금액 적용이 원칙)
-  const deathAlimony = data.hasDeath ? 80000000 : 0; // 약관상 8천만원 (나이 무관 시연용)
+  const deathAlimony = data.hasDeath ? (data.ageAtAccident >= 65 ? 50000000 : 80000000) : 0;
   const disabilityAlimony = data.hasDisability ? 80000000 * (data.disabilityRate / 100) * 0.7 : 0; // 대략적 산식
   const injuryAlimony = data.hasInjury ? (INJURY_ALIMONY_TABLE[data.injuryGrade] || 150000) : 0;
 
@@ -22,30 +33,42 @@ export default function AutoCalculatorResult({ data }: Props) {
   if (alimony > 0) {
     if (alimony === deathAlimony && data.hasDeath) {
       appliedAlimonyLabel = "사망 위자료";
+      formulas.push(`사망 위자료: ${data.ageAtAccident >= 65 ? '65세 이상(5,000만 원)' : '65세 미만(8,000만 원)'}`);
     } else if (alimony === disabilityAlimony && data.hasDisability) {
       appliedAlimonyLabel = `후유장해 위자료 (${data.disabilityRate}%)`;
+      formulas.push(`후유장해 위자료: 장해율에 따른 기준액 산출`);
     } else if (alimony === injuryAlimony && data.hasInjury) {
       appliedAlimonyLabel = `부상 위자료 (${data.injuryGrade}급)`;
+      formulas.push(`부상 위자료: 상해 ${data.injuryGrade}급 기준액 적용`);
     }
   }
 
   // 2. 휴업손해 (입원일수 * 일소득 * 85%)
   const dailyIncome = data.income / 30;
   const lostIncome = data.hasInjury ? Math.floor(dailyIncome * data.hospitalDays * 0.85) : 0;
+  if (lostIncome > 0) formulas.push(`휴업손해: (월소득/30) × ${data.hospitalDays}일 × 85% = ${lostIncome.toLocaleString()}원`);
 
   // 3. 기타손배금 (통원일수 * 8000원)
   const otherDamages = data.hasInjury ? data.outpatientDays * 8000 : 0;
+  if (otherDamages > 0) formulas.push(`기타손배금: 통원 ${data.outpatientDays}일 × 8,000원 = ${otherDamages.toLocaleString()}원`);
 
-  // 4. 상실수익액 (소득 * 장해율 * 호프만계수) - 시연용 가라 호프만 계수(240 한도 적용)
+  // 4. 상실수익액 (소득 * 장해율 * 호프만계수)
   let lostEarnings = 0;
+  const maxMonths = Math.max((65 - data.ageAtAccident) * 12, 0);
+
   if (data.hasDeath) {
-    // 사망 상실수익액: 소득 * 2/3 * 취업가능월수(호프만계수 대체)
-    const months = Math.min(Math.max((65 - data.ageAtAccident) * 12, 0), 240);
-    lostEarnings = Math.floor(data.income * (2/3) * months);
+    formulas.push(`사망 장례비: 약관 기준 500만 원 기본 적용`);
+    
+    // 사망 상실수익액: 소득 * 2/3 * 취업가능월수(호프만계수)
+    const hoffman = getHoffmanCoefficient(maxMonths);
+    lostEarnings = Math.floor(data.income * (2/3) * hoffman);
+    formulas.push(`사망 상실수익액: 소득 × 2/3 × 호프만계수(${hoffman.toFixed(4)}) = ${lostEarnings.toLocaleString()}원`);
   } else if (data.hasDisability && data.disabilityRate > 0) {
     // 장해 상실수익액
-    const months = data.disabilityYears === 0 ? 240 : Math.min(data.disabilityYears * 12, 240);
-    lostEarnings = Math.floor(data.income * (data.disabilityRate / 100) * months * 0.8);
+    const months = data.disabilityYears === 0 ? maxMonths : Math.min(data.disabilityYears * 12, maxMonths);
+    const hoffman = getHoffmanCoefficient(months);
+    lostEarnings = Math.floor(data.income * (data.disabilityRate / 100) * hoffman);
+    formulas.push(`장해 상실수익액: 소득 × 장해율(${data.disabilityRate}%) × 호프만계수(${hoffman.toFixed(4)}) = ${lostEarnings.toLocaleString()}원`);
   }
 
   // 5. 합의 조율 항목, 실제 지출 및 장례비
@@ -128,6 +151,17 @@ export default function AutoCalculatorResult({ data }: Props) {
           <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700 text-red-500">
             <span className="font-medium">과실 상계 ({data.faultRatio}%)</span>
             <span className="font-bold">-{Math.floor(totalBeforeFault * (data.faultRatio / 100)).toLocaleString()} 원</span>
+          </div>
+        )}
+
+        {formulas.length > 0 && (
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl space-y-2 mt-4 text-sm border border-blue-100 dark:border-blue-900/30">
+            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2">적용된 산출 계산식</h4>
+            <ul className="list-disc list-inside text-blue-700 dark:text-blue-400 space-y-1 text-xs">
+              {formulas.map((formula, idx) => (
+                <li key={idx}>{formula}</li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
