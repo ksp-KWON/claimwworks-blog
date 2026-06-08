@@ -74,22 +74,6 @@ export default function ExpertModeForm() {
                 <button onClick={() => addValue('faultRatio', 10, 100)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+10%</button>
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">사고 당시 만 나이 (사망/장해 상실수익액 계산용)</label>
-              <div className="relative mb-2">
-                <input
-                  type="number"
-                  value={data.ageAtAccident || ''}
-                  onChange={e => handleChange('ageAtAccident', Number(e.target.value))}
-                  className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold"
-                />
-                <span className="absolute right-4 top-3.5 text-gray-400">세</span>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={() => addValue('ageAtAccident', -1)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">-1살</button>
-                <button onClick={() => addValue('ageAtAccident', 1)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+1살</button>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -195,6 +179,38 @@ export default function ExpertModeForm() {
                   <button onClick={() => handleChange('disabilityYears', 3)} className="flex-1 py-1.5 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded text-sm font-bold border border-purple-200 dark:border-purple-800">한시 3년</button>
                   <button onClick={() => handleChange('disabilityYears', 0)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 rounded text-sm font-bold hover:bg-gray-300 text-gray-800 dark:text-white">영구장해(0년)</button>
                 </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 사망 상세 입력 */}
+        {data.hasDeath && (
+          <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-red-200 dark:border-red-900/30">
+            <h3 className="font-bold text-lg mb-4 text-red-800 dark:text-red-400">사망 상세 입력</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">사고 당시 만 나이 (상실수익액 계산용)</label>
+                <div className="relative mb-2">
+                  <input
+                    type="number"
+                    value={data.ageAtAccident || ''}
+                    onChange={e => handleChange('ageAtAccident', Number(e.target.value))}
+                    className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 font-bold"
+                  />
+                  <span className="absolute right-4 top-3.5 text-gray-400">세</span>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => addValue('ageAtAccident', -1)} className="flex-1 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg text-sm font-bold border border-red-200 dark:border-red-800">-1살</button>
+                  <button onClick={() => addValue('ageAtAccident', 1)} className="flex-1 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg text-sm font-bold border border-red-200 dark:border-red-800">+1살</button>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center bg-red-50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-900/30">
+                <p className="text-sm text-red-800 dark:text-red-300 font-medium leading-relaxed">
+                  <span className="font-bold">※ 자동 반영 안내</span><br/>
+                  약관 기준에 따라 <strong>위자료(최대 8,000만 원)</strong>와 <strong>장례비(500만 원)</strong>가 기본 적용됩니다.<br/>
+                  입력하신 <strong>만 나이</strong>와 <strong>소득</strong>을 바탕으로 남은 기대수익(상실수익액)이 정밀하게 산출됩니다.
+                </p>
               </div>
             </div>
           </section>
