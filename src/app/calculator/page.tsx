@@ -8,9 +8,9 @@ export const metadata = {
 
 export default function CalculatorPage() {
   return (
-    <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl pt-8 pb-20 px-2 sm:px-5">
+    <>
       {/* 포스팅 박스 (Blog Post 스타일 컨테이너) */}
-      <article className="w-full max-w-4xl mx-auto bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 lg:p-12 border border-[var(--google-border)] shadow-sm">
+      <article className="w-full bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 lg:p-12 border border-[var(--google-border)] shadow-sm">
         
         {/* 1. 페이지 헤더 */}
         <header className="border-b border-[var(--google-border)] pb-8 mb-10">
@@ -52,6 +52,6 @@ export default function CalculatorPage() {
         </section>
 
       </article>
-    </div>
+    </>
   );
 }
