@@ -23,7 +23,10 @@ export default function AutoCalculatorResult({ data }: Props) {
   // 1. 위자료 (부상, 장해, 사망 중 가장 큰 금액 적용이 원칙)
   const deathAlimony = data.hasDeath ? (data.ageAtAccident >= 65 ? 50000000 : 80000000) : 0;
   const disabilityAlimony = data.hasDisability ? 80000000 * (data.disabilityRate / 100) * 0.7 : 0; // 대략적 산식
-  const injuryAlimony = data.hasInjury ? (INJURY_ALIMONY_TABLE[data.injuryGrade] || 150000) : 0;
+  
+  // 병급 적용된 상해 급수 계산
+  const appliedInjuryGrade = (data.hasMultipleInjuries && data.injuryGrade <= 13) ? Math.max(1, data.injuryGrade - 1) : data.injuryGrade;
+  const injuryAlimony = data.hasInjury ? (INJURY_ALIMONY_TABLE[appliedInjuryGrade] || 150000) : 0;
 
   // 세 가지 위자료 중 최대값 하나만 적용
   const alimony = Math.max(deathAlimony, disabilityAlimony, injuryAlimony, 0);
@@ -38,15 +41,27 @@ export default function AutoCalculatorResult({ data }: Props) {
       appliedAlimonyLabel = `후유장해 위자료 (${data.disabilityRate}%)`;
       formulas.push(`후유장해 위자료: 장해율에 따른 기준액 산출`);
     } else if (alimony === injuryAlimony && data.hasInjury) {
-      appliedAlimonyLabel = `부상 위자료 (${data.injuryGrade}급)`;
-      formulas.push(`부상 위자료: 상해 ${data.injuryGrade}급 기준액 적용`);
+      appliedAlimonyLabel = `부상 위자료 (${appliedInjuryGrade}급)`;
+      if (data.hasMultipleInjuries && data.injuryGrade <= 13) {
+        formulas.push(`부상 위자료: ${data.injuryGrade}급에서 병급(상향) 적용된 ${appliedInjuryGrade}급 기준액`);
+      } else {
+        formulas.push(`부상 위자료: 상해 ${appliedInjuryGrade}급 기준액 적용`);
+      }
     }
   }
 
   // 2. 휴업손해 (입원일수 * 일소득 * 85%)
+  const canClaimLostIncome = data.ageAtAccident < 65 || data.isIncomeProven;
   const dailyIncome = data.income / 30;
-  const lostIncome = data.hasInjury ? Math.floor(dailyIncome * data.hospitalDays * 0.85) : 0;
-  if (lostIncome > 0) formulas.push(`휴업손해: (월소득/30) × ${data.hospitalDays}일 × 85% = ${lostIncome.toLocaleString()}원`);
+  const lostIncome = (data.hasInjury && canClaimLostIncome) ? Math.floor(dailyIncome * data.hospitalDays * 0.85) : 0;
+  
+  if (data.hasInjury) {
+    if (!canClaimLostIncome && data.hospitalDays > 0) {
+      formulas.push(`휴업손해: 65세 이상 및 소득 미입증으로 휴업일수 산정 배제 (0원)`);
+    } else if (lostIncome > 0) {
+      formulas.push(`휴업손해: (월소득/30) × ${data.hospitalDays}일 × 85% = ${lostIncome.toLocaleString()}원`);
+    }
+  }
 
   // 3. 기타손배금 (통원일수 * 8000원)
   const otherDamages = data.hasInjury ? data.outpatientDays * 8000 : 0;
@@ -54,21 +69,65 @@ export default function AutoCalculatorResult({ data }: Props) {
 
   // 4. 상실수익액 (소득 * 장해율 * 호프만계수)
   let lostEarnings = 0;
-  const maxMonths = Math.max((65 - data.ageAtAccident) * 12, 0);
+  const DAILY_WORKER_WAGE = 3284525;
+  const actualIncome = data.isIncomeProven ? data.income : DAILY_WORKER_WAGE;
+  
+  // 62세 이상 취업가능월수 규칙 적용
+  let totalMonths = 0;
+  if (data.ageAtAccident < 62) {
+    totalMonths = Math.max((65 - data.ageAtAccident) * 12, 0);
+  } else if (data.ageAtAccident < 67) {
+    totalMonths = 36;
+  } else if (data.ageAtAccident < 76) {
+    totalMonths = 24;
+  } else {
+    totalMonths = 12;
+  }
+
+  const monthsUntil65 = Math.max((65 - data.ageAtAccident) * 12, 0);
+  const segment1Months = Math.min(totalMonths, monthsUntil65);
+  const segment2Months = totalMonths - segment1Months;
+  
+  const hoffman1 = getHoffmanCoefficient(segment1Months);
+  const hoffman2 = segment2Months > 0 ? (getHoffmanCoefficient(totalMonths) - hoffman1) : 0;
 
   if (data.hasDeath) {
     formulas.push(`사망 장례비: 약관 기준 500만 원 기본 적용`);
     
-    // 사망 상실수익액: 소득 * 2/3 * 취업가능월수(호프만계수)
-    const hoffman = getHoffmanCoefficient(maxMonths);
-    lostEarnings = Math.floor(data.income * (2/3) * hoffman);
-    formulas.push(`사망 상실수익액: 소득 × 2/3 × 호프만계수(${hoffman.toFixed(4)}) = ${lostEarnings.toLocaleString()}원`);
+    if (data.ageAtAccident >= 65 && !data.isIncomeProven) {
+      formulas.push(`사망 상실수익액: 65세 이상 및 소득 미입증으로 상실수익액 인정 배제 (0원)`);
+    } else {
+      const earning1 = Math.floor(actualIncome * (2/3) * hoffman1);
+      const earning2 = Math.floor(DAILY_WORKER_WAGE * (2/3) * hoffman2);
+      lostEarnings = earning1 + earning2;
+      
+      let formulaText = `사망 상실수익액(생활비 1/3 공제 반영): `;
+      if (segment1Months > 0) formulaText += `[${segment1Months}개월분: 소득 × 2/3 × 호프만(${hoffman1.toFixed(4)})]`;
+      if (segment2Months > 0) formulaText += `${segment1Months > 0 ? ' + ' : ''}[정년후 ${segment2Months}개월분: 일용임금 × 2/3 × 호프만(${hoffman2.toFixed(4)})]`;
+      formulaText += ` = ${lostEarnings.toLocaleString()}원`;
+      formulas.push(formulaText);
+    }
   } else if (data.hasDisability && data.disabilityRate > 0) {
-    // 장해 상실수익액
-    const months = data.disabilityYears === 0 ? maxMonths : Math.min(data.disabilityYears * 12, maxMonths);
-    const hoffman = getHoffmanCoefficient(months);
-    lostEarnings = Math.floor(data.income * (data.disabilityRate / 100) * hoffman);
-    formulas.push(`장해 상실수익액: 소득 × 장해율(${data.disabilityRate}%) × 호프만계수(${hoffman.toFixed(4)}) = ${lostEarnings.toLocaleString()}원`);
+    const limitedTotalMonths = data.disabilityYears === 0 ? totalMonths : Math.min(data.disabilityYears * 12, totalMonths);
+    const limitedSeg1 = Math.min(limitedTotalMonths, segment1Months);
+    const limitedSeg2 = limitedTotalMonths - limitedSeg1;
+    
+    const h1 = getHoffmanCoefficient(limitedSeg1);
+    const h2 = limitedSeg2 > 0 ? (getHoffmanCoefficient(limitedTotalMonths) - h1) : 0;
+
+    if (data.ageAtAccident >= 65 && !data.isIncomeProven) {
+      formulas.push(`장해 상실수익액: 65세 이상 및 소득 미입증으로 상실수익액 인정 배제 (0원)`);
+    } else {
+      const earning1 = Math.floor(actualIncome * (data.disabilityRate / 100) * h1);
+      const earning2 = Math.floor(DAILY_WORKER_WAGE * (data.disabilityRate / 100) * h2);
+      lostEarnings = earning1 + earning2;
+      
+      let formulaText = `장해 상실수익액(${data.disabilityRate}%): `;
+      if (limitedSeg1 > 0) formulaText += `[${limitedSeg1}개월분: 소득 × 장해율 × 호프만(${h1.toFixed(4)})]`;
+      if (limitedSeg2 > 0) formulaText += `${limitedSeg1 > 0 ? ' + ' : ''}[정년후 ${limitedSeg2}개월분: 일용임금 × 장해율 × 호프만(${h2.toFixed(4)})]`;
+      formulaText += ` = ${lostEarnings.toLocaleString()}원`;
+      formulas.push(formulaText);
+    }
   }
 
   // 5. 합의 조율 항목, 실제 지출 및 장례비

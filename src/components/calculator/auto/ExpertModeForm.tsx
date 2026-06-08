@@ -49,11 +49,27 @@ export default function ExpertModeForm() {
                 <span className="absolute right-4 top-3.5 text-gray-400">원</span>
               </div>
               <button 
-                onClick={() => handleChange('income', 3284525)} 
+                onClick={() => {
+                  handleChange('income', 3284525);
+                  handleChange('isIncomeProven', false); // 일용근로자 임금은 기본적으로 소득입증 안됨 처리
+                }} 
                 className="w-full py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-sm font-bold rounded-lg border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition-colors"
               >
                 도시일용근로자 임금 적용 (3,284,525원)
               </button>
+              <div className="mt-3 flex items-start gap-2">
+                <input 
+                  type="checkbox" 
+                  id="isIncomeProven" 
+                  checked={data.isIncomeProven} 
+                  onChange={e => handleChange('isIncomeProven', e.target.checked)} 
+                  className="mt-0.5 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="isIncomeProven" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-tight">
+                  <span className="font-bold text-gray-800 dark:text-gray-200">세법상 실제 소득 입증 가능</span><br/>
+                  (65세 이상 피해자의 휴업손해 및 상실수익액 인정 필수 조건)
+                </label>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">본인 과실 비율</label>
@@ -122,6 +138,21 @@ export default function ExpertModeForm() {
                     <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
+                {data.injuryGrade <= 13 && (
+                  <div className="mt-3 flex items-start gap-2 bg-blue-50/50 dark:bg-blue-900/10 p-2 rounded-lg border border-blue-100 dark:border-blue-900/30">
+                    <input 
+                      type="checkbox" 
+                      id="hasMultipleInjuries" 
+                      checked={data.hasMultipleInjuries} 
+                      onChange={e => handleChange('hasMultipleInjuries', e.target.checked)} 
+                      className="mt-0.5 w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="hasMultipleInjuries" className="text-xs sm:text-sm text-blue-800 dark:text-blue-300 leading-tight cursor-pointer">
+                      <span className="font-bold">진단명(1~13급) 2개 이상 복합 상해</span><br/>
+                      약관에 따라 최고 상해등급에서 1급수 병급(상향) 적용
+                    </label>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">입원 일수</label>

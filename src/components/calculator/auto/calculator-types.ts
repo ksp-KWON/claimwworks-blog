@@ -1,5 +1,6 @@
 export interface AutoInsuranceData {
   income: number;
+  isIncomeProven: boolean;
   faultRatio: number;
   
   // 피해 유형 (다중 선택 가능)
@@ -9,6 +10,7 @@ export interface AutoInsuranceData {
 
   // 부상(상해) 관련
   injuryGrade: number; // 1~14급
+  hasMultipleInjuries: boolean;
   hospitalDays: number;
   outpatientDays: number;
 
@@ -26,6 +28,7 @@ export interface AutoInsuranceData {
 
 export const initialAutoData: AutoInsuranceData = {
   income: 3500000,
+  isIncomeProven: true,
   faultRatio: 0,
   
   hasInjury: true,
@@ -33,6 +36,7 @@ export const initialAutoData: AutoInsuranceData = {
   hasDeath: false,
 
   injuryGrade: 12,
+  hasMultipleInjuries: false,
   hospitalDays: 0,
   outpatientDays: 0,
   disabilityRate: 0,
