@@ -186,7 +186,7 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
                 <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  진단명을 검색하여 모두 추가하세요
+                  부상 진단명
                 </label>
                 
                 {/* 스마트 검색창 - 구글 스타일 */}
@@ -206,7 +206,7 @@ export default function ExpertModeForm() {
                       }}
                       onFocus={() => setIsSearchFocused(true)}
                       placeholder="진단명 검색창"
-                      className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-full py-3 pl-11 pr-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm hover:shadow-md transition-shadow outline-none placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
+                      className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-11 pr-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
                     />
                   </div>
                   
@@ -252,7 +252,7 @@ export default function ExpertModeForm() {
 
                 {/* 선택된 태그 영역 (오른쪽 버튼들과 높이 맞춤) */}
                 <div className="min-h-[32px]">
-                  {data.selectedDiagnoses.length > 0 ? (
+                  {data.selectedDiagnoses.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {INJURY_DB.filter(i => data.selectedDiagnoses.includes(i.id)).map(i => (
                         <div key={i.id} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1.5 rounded text-xs font-bold border border-blue-200 dark:border-blue-800 shadow-sm">
@@ -262,18 +262,6 @@ export default function ExpertModeForm() {
                           </button>
                         </div>
                       ))}
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      <button onClick={() => handleToggleDiagnosis('12-3')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
-                        척추 염좌
-                      </button>
-                      <button onClick={() => handleToggleDiagnosis('12-4')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
-                        팔다리 염좌
-                      </button>
-                      <button onClick={() => handleToggleDiagnosis('11-1')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
-                        뇌진탕
-                      </button>
                     </div>
                   )}
                 </div>
