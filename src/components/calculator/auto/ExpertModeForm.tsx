@@ -37,13 +37,13 @@ export default function ExpertModeForm() {
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">공통 기준 입력</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세법상 입증 가능한 세후 소득 기준)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세후 기준)</label>
               <div className="relative mb-2">
                 <input
                   type="text"
                   value={data.income ? formatCurrency(data.income) : ''}
                   onChange={e => handleChange('income', parseCurrency(e.target.value))}
-                  placeholder="직접입력 (세법상 입증가능 신고소득)"
+                  placeholder="입증가능 신고소득 직접입력"
                   className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold"
                 />
                 <span className="absolute right-4 top-3.5 text-gray-400">원</span>
@@ -66,8 +66,7 @@ export default function ExpertModeForm() {
                   className="mt-0.5 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <label htmlFor="isIncomeProven" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-tight">
-                  <span className="font-bold text-gray-800 dark:text-gray-200">세법상 실제 소득 입증 가능</span><br/>
-                  (65세 이상 피해자의 휴업손해 및 상실수익액 인정 필수 조건)
+                  <span className="font-bold text-gray-800 dark:text-gray-200">세법상 소득 입증 가능</span> (65세 이상 보상 인정 필수)
                 </label>
               </div>
             </div>
@@ -138,8 +137,8 @@ export default function ExpertModeForm() {
                     <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                {data.injuryGrade <= 13 && (
-                  <div className="mt-3 flex items-start gap-2 bg-blue-50/50 dark:bg-blue-900/10 p-2 rounded-lg border border-blue-100 dark:border-blue-900/30">
+                {data.injuryGrade >= 2 && data.injuryGrade <= 11 && (
+                  <div className="mt-3 flex items-start gap-2 bg-blue-50/50 dark:bg-blue-900/10 p-2.5 rounded-xl border border-blue-100 dark:border-blue-900/30">
                     <input 
                       type="checkbox" 
                       id="hasMultipleInjuries" 
@@ -148,8 +147,8 @@ export default function ExpertModeForm() {
                       className="mt-0.5 w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
                     />
                     <label htmlFor="hasMultipleInjuries" className="text-xs sm:text-sm text-blue-800 dark:text-blue-300 leading-tight cursor-pointer">
-                      <span className="font-bold">진단명(1~13급) 2개 이상 복합 상해</span><br/>
-                      약관에 따라 최고 상해등급에서 1급수 병급(상향) 적용
+                      <span className="font-bold">복합 상해 (2~11급 진단 2개 이상)</span><br/>
+                      최고 등급에서 1급수 병급(상향) 적용
                     </label>
                   </div>
                 )}

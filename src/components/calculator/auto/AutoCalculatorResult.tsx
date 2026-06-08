@@ -25,7 +25,7 @@ export default function AutoCalculatorResult({ data }: Props) {
   const disabilityAlimony = data.hasDisability ? 80000000 * (data.disabilityRate / 100) * 0.7 : 0; // 대략적 산식
   
   // 병급 적용된 상해 급수 계산
-  const appliedInjuryGrade = (data.hasMultipleInjuries && data.injuryGrade <= 13) ? Math.max(1, data.injuryGrade - 1) : data.injuryGrade;
+  const appliedInjuryGrade = (data.hasMultipleInjuries && data.injuryGrade >= 2 && data.injuryGrade <= 11) ? Math.max(1, data.injuryGrade - 1) : data.injuryGrade;
   const injuryAlimony = data.hasInjury ? (INJURY_ALIMONY_TABLE[appliedInjuryGrade] || 150000) : 0;
 
   // 세 가지 위자료 중 최대값 하나만 적용
@@ -42,7 +42,7 @@ export default function AutoCalculatorResult({ data }: Props) {
       formulas.push(`후유장해 위자료: 장해율에 따른 기준액 산출`);
     } else if (alimony === injuryAlimony && data.hasInjury) {
       appliedAlimonyLabel = `부상 위자료 (${appliedInjuryGrade}급)`;
-      if (data.hasMultipleInjuries && data.injuryGrade <= 13) {
+      if (data.hasMultipleInjuries && data.injuryGrade >= 2 && data.injuryGrade <= 11) {
         formulas.push(`부상 위자료: ${data.injuryGrade}급에서 병급(상향) 적용된 ${appliedInjuryGrade}급 기준액`);
       } else {
         formulas.push(`부상 위자료: 상해 ${appliedInjuryGrade}급 기준액 적용`);
