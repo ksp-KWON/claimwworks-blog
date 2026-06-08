@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { AutoInsuranceData, initialAutoData } from './calculator-types';
 import AutoCalculatorResult from './AutoCalculatorResult';
-import { INJURY_DB, getHintsForGrade, InjuryDiagnosis } from './injury-db';
+import { INJURY_DB, InjuryDiagnosis } from './injury-db';
 
 export default function ExpertModeForm() {
   const [data, setData] = useState<AutoInsuranceData>(initialAutoData);
