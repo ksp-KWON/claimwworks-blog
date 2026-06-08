@@ -4,12 +4,11 @@ import { getPostData, getSortedPostsData } from '@/lib/posts';
 import type { Metadata } from 'next';
 import BlogPostContent from '@/components/BlogPostContent';
 
+export const dynamicParams = false;
+
 // 빌드 시 모든 블로그 글을 미리 생성 (정적 사이트 배포용)
 export async function generateStaticParams() {
   const posts = getSortedPostsData(false);
-  if (posts.length === 0) {
-    return [{ slug: '_empty' }];
-  }
   return posts.map((post) => ({ slug: post.slug }));
 }
 
