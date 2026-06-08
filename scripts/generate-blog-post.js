@@ -90,7 +90,8 @@ function buildPrompt(topic, existingPosts) {
 
 ## 1. System Safety & Output Format
 - 대화형 응답("네, 작성하겠습니다" 등) 금지. 프론트매터(Frontmatter)나 H1 제목('# 제목') 금지. 
-- 오직 순수 마크다운(Markdown) 문법으로 바로 본문부터 출력. HTML/JSX 태그 절대 금지.
+- 오직 순수 마크다운(Markdown) 문법으로 바로 본문부터 출력.
+- 특별 허용 사항: 본문 중간에 보상금 계산기 위젯을 띄울 수 있습니다. 주제가 교통사고/합의금 관련이라면 본문 적절한 곳에 \`<calculator type="auto" />\` 태그를, 실손의료비/병원비 관련이라면 \`<calculator type="medical" />\` 태그를 단 한 번 삽입하세요. (다른 HTML/JSX 태그는 금지)
 
 ## 2. 전문성 및 경험 (Anti-Plagiarism)
 - 원론적이고 사전적인 정의 지양. 

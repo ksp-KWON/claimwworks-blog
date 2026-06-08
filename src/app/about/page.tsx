@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CalculatorTabs from "@/components/calculator/CalculatorTabs";
 
 export default function AboutPage() {
   return (
@@ -8,17 +9,18 @@ export default function AboutPage() {
       <header className="border-b border-[var(--google-border)] pb-6 mb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--google-surface-variant)] text-[#5f6368] dark:bg-[#303134] dark:text-[#9aa0a6] text-xs font-bold mb-4">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          플랫폼 소개
+          보상스쿨 종합 보상 센터
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-[#202124] dark:text-[#e8eaed] tracking-tight leading-snug">
-          보상스쿨 헬스케어 & 손해사정 보상가이드
+          예상 보상금 계산기 & 플랫폼 소개
         </h1>
         <p className="mt-3 text-sm sm:text-base text-[#5f6368] dark:text-[#9aa0a6] leading-relaxed font-normal">
-          환자의 올바른 의료 권리와 정당한 보험 보상을 수호하는 프리미엄 정보 플랫폼입니다.
+          교통사고 합의금, 실손보험금 등 숨은 보상금을 직접 진단해 보고 전문가의 조력을 받아보세요.
         </p>
       </header>
 
-      {/* 2. 본문 내용 */}
+      {/* 2. 탭 기반 본문/계산기 렌더링 */}
+      <CalculatorTabs>
       <div className="space-y-10 text-[#202124] dark:text-[#e8eaed] text-sm sm:text-base leading-relaxed">
         
         {/* 섹션 1: 플랫폼 소개 */}
@@ -82,6 +84,7 @@ export default function AboutPage() {
         </section>
 
       </div>
+      </CalculatorTabs>
 
       {/* 3. 하단 네비게이션 */}
       <footer className="mt-10 pt-6 border-t border-[var(--google-border)] text-center">

@@ -18,6 +18,8 @@ import rehypeSlug from 'rehype-slug';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Components } from 'react-markdown';
+import AutoCalculator from './calculator/AutoCalculator';
+import MedicalCalculator from './calculator/MedicalCalculator';
 
 // ─── 스크롤 오프셋: header(64) + sticky banner(52) + 버퍼(20) = 136px ───
 const SCROLL_OFFSET = 140;
@@ -224,6 +226,19 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     ),
   };
 
+  const finalComponents: any = {
+    ...components,
+    calculator: ({ ...props }: any) => {
+      if (props.type === 'auto') {
+        return <div className="my-8"><AutoCalculator /></div>;
+      }
+      if (props.type === 'medical') {
+        return <div className="my-8"><MedicalCalculator /></div>;
+      }
+      return null;
+    },
+  };
+
   return (
     <div>
       {/* 1. Key Points (최상단) */}
@@ -239,7 +254,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeSlug]}
-          components={components}
+          components={finalComponents}
         >
           {bodyContent}
         </ReactMarkdown>
