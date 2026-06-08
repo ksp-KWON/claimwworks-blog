@@ -254,11 +254,16 @@ export default function ExpertModeForm() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex flex-wrap items-center gap-1.5 h-[32px]">
-                      <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500 mr-1">빠른 추가:</span>
-                      <button onClick={() => handleToggleDiagnosis('12-1')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#경추 염좌</button>
-                      <button onClick={() => handleToggleDiagnosis('12-2')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#요추 염좌</button>
-                      <button onClick={() => handleToggleDiagnosis('11-1')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#뇌진탕</button>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleToggleDiagnosis('12-3')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
+                        척추 염좌
+                      </button>
+                      <button onClick={() => handleToggleDiagnosis('12-4')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
+                        팔다리 염좌
+                      </button>
+                      <button onClick={() => handleToggleDiagnosis('11-1')} className="flex-1 bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 py-1.5 rounded-lg text-sm transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">
+                        뇌진탕
+                      </button>
                     </div>
                   )}
                 </div>
