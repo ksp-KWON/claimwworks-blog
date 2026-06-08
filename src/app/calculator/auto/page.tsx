@@ -26,7 +26,7 @@ export default function AutoCalculatorPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#e8f0fe] dark:bg-[#8ab4f8]/20 text-[var(--google-blue)] dark:text-[#8ab4f8] mb-6">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-tight mb-4">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-tight mb-4">
             자동차보험 합의금 계산기
           </h1>
           <p className="text-[#5f6368] dark:text-[#9aa0a6] max-w-2xl mx-auto leading-relaxed">

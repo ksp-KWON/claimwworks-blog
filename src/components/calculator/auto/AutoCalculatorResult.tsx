@@ -9,18 +9,32 @@ interface Props {
 export default function AutoCalculatorResult({ data }: Props) {
   // 간단한 약관/호프만계수 시연용 계산 로직 (실제 실무 로직은 매우 복잡하므로 시연용 추정치만 산출)
   
-  // 1. 위자료 (부상, 장해, 사망 중 가장 큰 금액 적용이 원칙이나, 여기서는 단순 합산 시연)
-  let alimony = 0;
-  if (data.hasDeath) alimony = 80000000; // 약관상 8천만원 (나이 무관 시연용)
-  else if (data.hasDisability) alimony = 80000000 * (data.disabilityRate / 100) * 0.7; // 대략적 산식
-  else if (data.hasInjury) alimony = INJURY_ALIMONY_TABLE[data.injuryGrade] || 150000;
+  // 1. 위자료 (부상, 장해, 사망 중 가장 큰 금액 적용이 원칙)
+  const deathAlimony = data.hasDeath ? 80000000 : 0; // 약관상 8천만원 (나이 무관 시연용)
+  const disabilityAlimony = data.hasDisability ? 80000000 * (data.disabilityRate / 100) * 0.7 : 0; // 대략적 산식
+  const injuryAlimony = data.hasInjury ? (INJURY_ALIMONY_TABLE[data.injuryGrade] || 150000) : 0;
+
+  // 세 가지 위자료 중 최대값 하나만 적용
+  const alimony = Math.max(deathAlimony, disabilityAlimony, injuryAlimony, 0);
+
+  // 어떤 위자료가 적용되었는지 판별 (명세서 표시용)
+  let appliedAlimonyLabel = "위자료 (미해당)";
+  if (alimony > 0) {
+    if (alimony === deathAlimony && data.hasDeath) {
+      appliedAlimonyLabel = "사망 위자료";
+    } else if (alimony === disabilityAlimony && data.hasDisability) {
+      appliedAlimonyLabel = `후유장해 위자료 (${data.disabilityRate}%)`;
+    } else if (alimony === injuryAlimony && data.hasInjury) {
+      appliedAlimonyLabel = `부상 위자료 (${data.injuryGrade}급)`;
+    }
+  }
 
   // 2. 휴업손해 (입원일수 * 일소득 * 85%)
   const dailyIncome = data.income / 30;
-  const lostIncome = Math.floor(dailyIncome * data.hospitalDays * 0.85);
+  const lostIncome = data.hasInjury ? Math.floor(dailyIncome * data.hospitalDays * 0.85) : 0;
 
   // 3. 기타손배금 (통원일수 * 8000원)
-  const otherDamages = data.outpatientDays * 8000;
+  const otherDamages = data.hasInjury ? data.outpatientDays * 8000 : 0;
 
   // 4. 상실수익액 (소득 * 장해율 * 호프만계수) - 시연용 가라 호프만 계수(240 한도 적용)
   let lostEarnings = 0;
@@ -49,12 +63,15 @@ export default function AutoCalculatorResult({ data }: Props) {
       </h3>
 
       <div className="space-y-4 text-sm mb-8">
+        {alimony > 0 && (
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 dark:text-gray-400 font-medium">{appliedAlimonyLabel} <span className="text-xs text-blue-500 ml-1">(최대치 적용)</span></span>
+            <span className="font-bold text-gray-900 dark:text-white">{alimony.toLocaleString()} 원</span>
+          </div>
+        )}
+        
         {data.hasInjury && (
           <>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark:text-gray-400">부상 위자료 ({data.injuryGrade}급)</span>
-              <span className="font-bold text-gray-900 dark:text-white">{alimony.toLocaleString()} 원</span>
-            </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600 dark:text-gray-400">휴업손해 (입원 {data.hospitalDays}일)</span>
               <span className="font-bold text-gray-900 dark:text-white">{lostIncome.toLocaleString()} 원</span>
