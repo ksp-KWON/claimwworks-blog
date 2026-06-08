@@ -186,7 +186,7 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
                 <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  진단명을 검색하여 모두 추가하세요
+                  부상 진단명 (다중 선택 가능)
                 </label>
                 
                 {/* 스마트 검색창 */}
@@ -203,7 +203,17 @@ export default function ExpertModeForm() {
                       placeholder="진단명 검색창"
                       className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-12 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
                     />
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" fill="none" stroke="url(#googleColors)" viewBox="0 0 24 24">
+                      <defs>
+                        <linearGradient id="googleColors" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#4285F4" />
+                          <stop offset="33%" stopColor="#EA4335" />
+                          <stop offset="66%" stopColor="#FBBC05" />
+                          <stop offset="100%" stopColor="#34A853" />
+                        </linearGradient>
+                      </defs>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
                   </div>
                   
                   {/* 자동완성 드롭다운 */}
@@ -244,7 +254,12 @@ export default function ExpertModeForm() {
                       ))}
                     </div>
                   ) : (
-                    <div className="h-[32px]"></div>
+                    <div className="flex flex-wrap items-center gap-1.5 h-[32px]">
+                      <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500 mr-1">빠른 추가:</span>
+                      <button onClick={() => handleToggleDiagnosis('12-1')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#경추 염좌</button>
+                      <button onClick={() => handleToggleDiagnosis('12-2')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#요추 염좌</button>
+                      <button onClick={() => handleToggleDiagnosis('11-1')} className="text-[11px] bg-gray-100 dark:bg-[#303134] hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md transition-colors border border-gray-200 dark:border-gray-700 shadow-sm">#뇌진탕</button>
+                    </div>
                   )}
                 </div>
               </div>
