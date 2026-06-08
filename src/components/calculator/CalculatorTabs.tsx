@@ -4,49 +4,54 @@ import { useState } from 'react';
 import AutoCalculator from './AutoCalculator';
 import MedicalCalculator from './MedicalCalculator';
 
-export default function CalculatorTabs({ children }: { children: React.ReactNode }) {
-  const [activeTab, setActiveTab] = useState<'intro' | 'auto' | 'medical'>('intro');
+export default function CalculatorTabs() {
+  const [activeTab, setActiveTab] = useState<'auto' | 'medical'>('auto');
 
   return (
     <div className="w-full mt-4">
-      {/* 탭 네비게이션 */}
-      <div className="flex flex-wrap gap-2 mb-8 border-b border-[var(--google-border)] pb-4">
-        <button
-          onClick={() => setActiveTab('intro')}
-          className={`px-4 py-2 text-sm sm:text-base font-bold rounded-full transition-colors border ${
-            activeTab === 'intro'
-              ? 'bg-[var(--google-surface-variant)] text-[#202124] dark:bg-[#303134] dark:text-[#e8eaed] border-transparent'
-              : 'bg-transparent text-[#5f6368] dark:text-[#9aa0a6] border-transparent hover:bg-[#f1f3f4] dark:hover:bg-[#3c4043]'
-          }`}
-        >
-          플랫폼 소개
-        </button>
+      {/* Material Design 3 스타일 탭 네비게이션 */}
+      <div className="flex bg-[#f8f9fa] dark:bg-[#303134] rounded-2xl p-1.5 mb-8 shadow-inner border border-[var(--google-border)]">
         <button
           onClick={() => setActiveTab('auto')}
-          className={`px-4 py-2 text-sm sm:text-base font-bold rounded-full transition-colors border ${
+          className={`relative flex-1 py-3 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 ${
             activeTab === 'auto'
-              ? 'bg-[#e8f0fe] text-[var(--google-blue)] dark:bg-[#1A73E8]/20 dark:text-[#8ab4f8] border-[var(--google-blue)]/20'
-              : 'bg-transparent text-[#5f6368] dark:text-[#9aa0a6] border-transparent hover:bg-[#f1f3f4] dark:hover:bg-[#3c4043]'
+              ? 'bg-white text-[var(--google-blue)] dark:bg-[#202124] dark:text-[#8ab4f8] shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+              : 'text-[#5f6368] dark:text-[#9aa0a6] hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          🚗 교통사고 합의금 계산기
+          🚗 자동차보험 합의금
+          {activeTab === 'auto' && (
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--google-blue)] dark:bg-[#8ab4f8] rounded-full" />
+          )}
         </button>
         <button
           onClick={() => setActiveTab('medical')}
-          className={`px-4 py-2 text-sm sm:text-base font-bold rounded-full transition-colors border ${
+          className={`relative flex-1 py-3 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 ${
             activeTab === 'medical'
-              ? 'bg-[#e6f4ea] text-[var(--google-green)] dark:bg-[#34A853]/20 dark:text-[#81c995] border-[var(--google-green)]/20'
-              : 'bg-transparent text-[#5f6368] dark:text-[#9aa0a6] border-transparent hover:bg-[#f1f3f4] dark:hover:bg-[#3c4043]'
+              ? 'bg-white text-[var(--google-green)] dark:bg-[#202124] dark:text-[#81c995] shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+              : 'text-[#5f6368] dark:text-[#9aa0a6] hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          🏥 실손의료비 계산기
+          🏥 실손의료비
+          {activeTab === 'medical' && (
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--google-green)] dark:bg-[#81c995] rounded-full" />
+          )}
         </button>
       </div>
 
       {/* 탭 콘텐츠 렌더링 영역 */}
-      {activeTab === 'intro' && <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">{children}</div>}
-      {activeTab === 'auto' && <div className="animate-in fade-in slide-in-from-bottom-2 duration-500"><AutoCalculator /></div>}
-      {activeTab === 'medical' && <div className="animate-in fade-in slide-in-from-bottom-2 duration-500"><MedicalCalculator /></div>}
+      <div className="relative">
+        {activeTab === 'auto' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <AutoCalculator />
+          </div>
+        )}
+        {activeTab === 'medical' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <MedicalCalculator />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

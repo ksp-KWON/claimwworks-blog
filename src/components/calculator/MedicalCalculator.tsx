@@ -35,8 +35,10 @@ export default function MedicalCalculator() {
     returnAmount = Math.max(0, medicalBill - deductible);
   }
 
+  const finalAmount = returnAmount;
+
   return (
-    <div className="bg-white dark:bg-[#202124] rounded-2xl border border-[var(--google-border)] shadow-sm p-6 max-w-2xl mx-auto">
+    <div className="bg-white dark:bg-[#202124] rounded-3xl border border-black/5 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] p-6 sm:p-8 max-w-2xl mx-auto transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#34A853]/20 flex items-center justify-center text-[var(--google-green)] dark:text-[#81c995]">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -109,8 +111,13 @@ export default function MedicalCalculator() {
       </div>
 
       {/* 결과 출력 카드 */}
-      <div className="mt-8 bg-[#f8f9fa] dark:bg-[#303134]/50 border border-[var(--google-border)] rounded-2xl p-5 shadow-sm">
-        <h4 className="text-[13px] font-extrabold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-4 border-b border-[var(--google-border)] pb-2">예상 실손 보상액</h4>
+      <div className="bg-gradient-to-br from-[#f8f9fa] to-white dark:from-[#303134] dark:to-[#202124] border border-black/5 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm mt-8">
+        <div className="flex justify-between items-center mb-6 border-b border-black/5 dark:border-white/10 pb-4">
+          <h4 className="text-sm font-extrabold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            산출 명세서
+          </h4>
+        </div>
         
         <div className="space-y-3 mb-6">
           <div className="flex justify-between text-[14px]">
@@ -123,11 +130,16 @@ export default function MedicalCalculator() {
           </div>
         </div>
 
-        <div className="flex items-end justify-between bg-[#e6f4ea] dark:bg-[#34A853]/10 -mx-5 -mb-5 p-5 rounded-b-2xl border-t border-[var(--google-green)]/20">
-          <span className="text-sm font-bold text-[var(--google-green)] dark:text-[#81c995]">예상 수령액</span>
-          <span className="text-2xl sm:text-3xl font-extrabold text-[var(--google-green)] dark:text-[#81c995]">
-            {Math.round(returnAmount).toLocaleString()}<span className="text-lg font-bold ml-1">원</span>
-          </span>
+        <div className="flex items-end justify-between bg-[var(--google-green)] text-white -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 p-6 sm:p-8 rounded-b-3xl shadow-inner relative overflow-hidden">
+          <div className="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+            <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          </div>
+          <div className="flex flex-col relative z-10">
+            <span className="text-xs sm:text-sm font-bold text-white/80 mb-1">예상 수령액 (추정치)</span>
+            <span className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              {Math.round(finalAmount).toLocaleString()}<span className="text-xl sm:text-2xl font-bold ml-1.5 text-white/90">원</span>
+            </span>
+          </div>
         </div>
       </div>
 
