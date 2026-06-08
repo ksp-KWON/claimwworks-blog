@@ -186,12 +186,17 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
                 <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  부상 진단명 (다중 선택 가능)
+                  진단명을 검색하여 모두 추가하세요
                 </label>
                 
-                {/* 스마트 검색창 */}
+                {/* 스마트 검색창 - 구글 스타일 */}
                 <div className="relative mb-2" ref={searchRef}>
                   <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                      </svg>
+                    </div>
                     <input 
                       type="text" 
                       value={searchTerm}
@@ -201,28 +206,33 @@ export default function ExpertModeForm() {
                       }}
                       onFocus={() => setIsSearchFocused(true)}
                       placeholder="진단명 검색창"
-                      className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-12 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
+                      className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-full py-3 pl-11 pr-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm hover:shadow-md transition-shadow outline-none placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
                     />
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" fill="none" stroke="url(#googleColors)" viewBox="0 0 24 24">
-                      <defs>
-                        <linearGradient id="googleColors" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#4285F4" />
-                          <stop offset="33%" stopColor="#EA4335" />
-                          <stop offset="66%" stopColor="#FBBC05" />
-                          <stop offset="100%" stopColor="#34A853" />
-                        </linearGradient>
-                      </defs>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
                   </div>
                   
                   {/* 자동완성 드롭다운 */}
                   {isSearchFocused && searchTerm && (
                     <div className="absolute z-50 w-full mt-1 bg-white dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                      {INJURY_DB.filter(i => i.name.includes(searchTerm)).map(i => (
+                      {INJURY_DB.filter(i => {
+                        const t = searchTerm.replace(/\s+/g, '').toLowerCase();
+                        const n = i.name.replace(/\s+/g, '').toLowerCase();
+                        if (n.includes(t)) return true;
+                        // 흔한 동의어(Alias) 매칭 처리
+                        if (t.includes('경추염좌') || t.includes('요추염좌') || t.includes('목염좌') || t.includes('허리염좌')) {
+                          if (n.includes('척추염좌')) return true;
+                        }
+                        if (t === '경추' || t === '요추') {
+                          if (n.includes('척추')) return true;
+                        }
+                        if (t.includes('디스크')) {
+                          if (n.includes('추간판탈출증')) return true;
+                        }
+                        return false;
+                      }).map(i => (
                         <div 
                           key={i.id} 
-                          onClick={() => {
+                          onMouseDown={(e) => {
+                            e.preventDefault(); // onBlur 방지
                             handleToggleDiagnosis(i.id);
                             setSearchTerm('');
                             setIsSearchFocused(false);
