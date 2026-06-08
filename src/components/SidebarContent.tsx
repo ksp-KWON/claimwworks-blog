@@ -64,6 +64,27 @@ export default function SidebarContent() {
         id="sidebar-content"
         className={`space-y-6 ${isOpen ? 'block' : 'hidden'} lg:block`}
       >
+        {/* 예상 보상금 계산기 (우측 메뉴 최상단 강조) */}
+        <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-blue)] transition-all duration-300 group">
+          <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
+            <svg className="w-4 h-4 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect>
+              <line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line>
+              <line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line>
+              <line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line>
+              <line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line>
+            </svg>
+            스마트 보상금 계산기
+          </h3>
+          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed">
+            교통사고 합의금, 실손보험금 등 숨은 보상금을 약관 기준으로 정확하게 산출해 보세요.
+          </p>
+          <Link href="/calculator" className="flex items-center justify-center gap-2 w-full bg-[var(--google-blue)] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#174ea6] transition-colors shadow-sm">
+            계산기 바로가기
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </Link>
+        </div>
+
         {/* 진료과목별 분쟁 가이드 */}
         <SpecialtyDiseaseCategories />
 

@@ -145,9 +145,9 @@ export default function AutoCalculator() {
               <input 
                 type="number" step="100000"
                 value={monthlyIncome} onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-                className="w-full bg-white dark:bg-[#202124] border border-[var(--google-border)] rounded-lg py-2.5 pl-3 pr-10 text-sm text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[var(--google-blue)] focus:outline-none"
+                className="w-full bg-transparent border-2 border-[#dadce0] dark:border-[#5f6368] rounded-xl py-3 px-4 text-sm font-medium text-[#202124] dark:text-[#e8eaed] focus:border-[var(--google-blue)] focus:ring-0 transition-colors outline-none"
               />
-              <span className="absolute right-3 top-2.5 text-[#5f6368] text-sm">원</span>
+              <span className="absolute right-3 top-3.5 text-[#5f6368] text-sm">원</span>
             </div>
             <p className="text-[10.5px] text-[#5f6368] mt-1.5">* 입증 불가 시 도시일용근로자 임금 적용</p>
           </div>
