@@ -185,7 +185,7 @@ export default function ExpertModeForm() {
             <h3 className="font-bold text-lg mb-4 text-blue-800 dark:text-blue-400">부상 상세 입력</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   본인진단명을 모두 검색하여 추가하세요
                 </label>
                 
@@ -201,9 +201,8 @@ export default function ExpertModeForm() {
                       }}
                       onFocus={() => setIsSearchFocused(true)}
                       placeholder="진단명 검색창"
-                      className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500"
+                      className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500"
                     />
-                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                   
                   {/* 자동완성 드롭다운 */}
@@ -251,7 +250,7 @@ export default function ExpertModeForm() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">입원 일수</label>
+                <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">입원 일수</label>
                 <div className="relative mb-2">
                   <input type="number" value={data.hospitalDays === 0 ? '0' : (data.hospitalDays || '')} onChange={e => handleChange('hospitalDays', Number(e.target.value))} className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-8 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500" />
                   <span className="absolute right-4 top-3.5 text-gray-400">일</span>
@@ -263,7 +262,7 @@ export default function ExpertModeForm() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">통원 일수</label>
+                <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">통원 일수</label>
                 <div className="relative mb-2">
                   <input type="number" value={data.outpatientDays === 0 ? '0' : (data.outpatientDays || '')} onChange={e => handleChange('outpatientDays', Number(e.target.value))} className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-8 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500" />
                   <span className="absolute right-4 top-3.5 text-gray-400">일</span>
