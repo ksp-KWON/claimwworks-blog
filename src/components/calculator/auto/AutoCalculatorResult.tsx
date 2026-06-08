@@ -42,7 +42,7 @@ export default function AutoCalculatorResult({ data }: Props) {
   const finalTotal = Math.floor(totalBeforeFault * ((100 - data.faultRatio) / 100));
 
   return (
-    <div className="bg-blue-50 dark:bg-[#303134]/50 rounded-3xl p-6 sm:p-8 border border-blue-100 dark:border-gray-800 shadow-sm sticky top-6">
+    <div className="bg-blue-50 dark:bg-[#303134]/50 rounded-3xl p-5 sm:p-8 border border-blue-100 dark:border-gray-800 shadow-sm sticky top-6">
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <span className="w-1.5 h-6 bg-blue-600 rounded-full inline-block shrink-0" />
         산출 명세서 (추정치)
@@ -98,7 +98,7 @@ export default function AutoCalculatorResult({ data }: Props) {
         )}
       </div>
 
-      <div className="bg-white dark:bg-[#202124] rounded-2xl p-6 border border-blue-100 dark:border-gray-800 text-center shadow-sm">
+      <div className="bg-white dark:bg-[#202124] rounded-2xl p-5 sm:p-6 border border-blue-100 dark:border-gray-800 text-center shadow-sm">
         <h4 className="text-gray-500 dark:text-gray-400 font-bold mb-2">최종 합의금 (추정치)</h4>
         <div className="text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tighter">
           {finalTotal.toLocaleString()}<span className="text-2xl ml-1 text-gray-900 dark:text-white">원</span>

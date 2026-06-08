@@ -23,7 +23,7 @@ export default function CalculatorIndexPage() {
         </nav>
       </div>
 
-      <article className="bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 shadow-sm border border-[var(--google-border)]">
+      <article className="bg-white dark:bg-[#202124] rounded-3xl p-5 sm:p-10 shadow-sm border border-[var(--google-border)]">
         <header className="mb-10 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#f8f9fa] dark:bg-[#303134] border border-[var(--google-border)] text-gray-700 dark:text-gray-300 mb-6 shadow-sm">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -36,10 +36,10 @@ export default function CalculatorIndexPage() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
           {/* 자동차보험 링크 */}
-          <Link href="/calculator/auto" className="group flex flex-col items-center justify-center p-8 bg-white dark:bg-[#202124] border-2 border-[var(--google-border)] rounded-3xl hover:border-[var(--google-blue)] hover:shadow-lg transition-all duration-300">
-            <div className="w-20 h-20 bg-[#e8f0fe] dark:bg-[#8ab4f8]/20 rounded-full flex items-center justify-center text-4xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+          <Link href="/calculator/auto" className="group flex flex-col items-center justify-center p-6 sm:p-8 bg-white dark:bg-[#202124] border-2 border-[var(--google-border)] rounded-3xl hover:border-[var(--google-blue)] hover:shadow-lg transition-all duration-300">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#e8f0fe] dark:bg-[#8ab4f8]/20 rounded-full flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 shadow-sm group-hover:scale-110 transition-transform">
               🚗
             </div>
             <h2 className="text-2xl font-bold text-[#202124] dark:text-[#e8eaed] mb-2 group-hover:text-[var(--google-blue)] transition-colors">자동차보험 합의금</h2>
@@ -52,8 +52,8 @@ export default function CalculatorIndexPage() {
           </Link>
 
           {/* 실손의료비 링크 */}
-          <Link href="/calculator/medical" className="group flex flex-col items-center justify-center p-8 bg-white dark:bg-[#202124] border-2 border-[var(--google-border)] rounded-3xl hover:border-[var(--google-green)] hover:shadow-lg transition-all duration-300">
-            <div className="w-20 h-20 bg-[#e6f4ea] dark:bg-[#1e8e3e]/20 rounded-full flex items-center justify-center text-4xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+          <Link href="/calculator/medical" className="group flex flex-col items-center justify-center p-6 sm:p-8 bg-white dark:bg-[#202124] border-2 border-[var(--google-border)] rounded-3xl hover:border-[var(--google-green)] hover:shadow-lg transition-all duration-300">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#e6f4ea] dark:bg-[#1e8e3e]/20 rounded-full flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 shadow-sm group-hover:scale-110 transition-transform">
               🏥
             </div>
             <h2 className="text-2xl font-bold text-[#202124] dark:text-[#e8eaed] mb-2 group-hover:text-[var(--google-green)] transition-colors">실손의료비 보상</h2>

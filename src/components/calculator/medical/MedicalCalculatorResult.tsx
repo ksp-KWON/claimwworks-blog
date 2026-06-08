@@ -116,16 +116,16 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
 
   return (
     <div className="bg-white dark:bg-[#202124] rounded-2xl shadow-sm border border-green-200 dark:border-green-900 overflow-hidden">
-      <div className="bg-green-600 dark:bg-green-800 p-6 text-white text-center">
+      <div className="bg-green-600 dark:bg-green-800 p-5 sm:p-6 text-white text-center">
         <h3 className="text-xl font-bold mb-2">실손의료비 예상 보상금</h3>
         <p className="text-green-100 text-sm">※ 가입 시기와 약관에 따라 실제 지급액과 다를 수 있습니다.</p>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-5 sm:p-6 space-y-6">
         <div className="flex justify-between items-end border-b border-gray-100 dark:border-gray-800 pb-6">
           <div>
             <span className="block text-sm font-bold text-gray-500 dark:text-gray-400 mb-1">고객님께서 받으실 금액</span>
-            <span className="text-4xl font-extrabold text-green-600 dark:text-green-400">{result.totalPayout.toLocaleString()}원</span>
+            <span className="text-3xl sm:text-4xl font-extrabold text-green-600 dark:text-green-400">{result.totalPayout.toLocaleString()}원</span>
           </div>
         </div>
 

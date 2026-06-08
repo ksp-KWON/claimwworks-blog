@@ -23,7 +23,7 @@ export default function ExpertMedicalForm() {
       <div className="space-y-8">
         
         {/* 가입 정보 입력 */}
-        <section className="bg-green-50 dark:bg-green-900/10 p-6 rounded-2xl border border-green-100 dark:border-green-900/30">
+        <section className="bg-green-50 dark:bg-green-900/10 p-5 sm:p-6 rounded-2xl border border-green-100 dark:border-green-900/30">
           <h3 className="font-bold text-lg mb-4 text-green-900 dark:text-green-400">가입 정보</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -54,10 +54,10 @@ export default function ExpertMedicalForm() {
             {data.treatmentType === 'outpatient' && (
               <div className="sm:col-span-2 mt-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">병원 규모 (통원 공제금액 계산용)</label>
-                <div className="grid grid-cols-3 gap-2">
-                  <button onClick={() => handleChange('clinicType', 'clinic')} className={`py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'clinic' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>의원 (최소 1만원)</button>
-                  <button onClick={() => handleChange('clinicType', 'hospital')} className={`py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'hospital' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>병원 (최소 1.5만원)</button>
-                  <button onClick={() => handleChange('clinicType', 'general')} className={`py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'general' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>종합병원 (최소 2만원)</button>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <button onClick={() => handleChange('clinicType', 'clinic')} className={`py-3 sm:py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'clinic' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>의원 (최소 1만원)</button>
+                  <button onClick={() => handleChange('clinicType', 'hospital')} className={`py-3 sm:py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'hospital' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>병원 (최소 1.5만원)</button>
+                  <button onClick={() => handleChange('clinicType', 'general')} className={`py-3 sm:py-2 rounded-xl font-bold text-sm border-2 transition-all ${data.clinicType === 'general' ? 'bg-green-50 border-green-500 text-green-700' : 'bg-white border-gray-200 text-gray-600 hover:border-green-300'}`}>종합병원 (최소 2만원)</button>
                 </div>
               </div>
             )}
@@ -65,7 +65,7 @@ export default function ExpertMedicalForm() {
         </section>
 
         {/* 기본 병원비 영수증 입력 */}
-        <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+        <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">기본 병원비 영수증</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -99,7 +99,7 @@ export default function ExpertMedicalForm() {
 
         {/* 3대 비급여 입력 (3, 4세대 전용) */}
         {(data.generation === 3 || data.generation === 4) && (
-          <section className="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-100 dark:border-red-900/30">
+          <section className="bg-red-50 dark:bg-red-900/10 p-5 sm:p-6 rounded-2xl border border-red-100 dark:border-red-900/30">
             <h3 className="font-bold text-lg mb-1 text-red-900 dark:text-red-400">3대 비급여 특약 병원비</h3>
             <p className="text-sm text-red-500 dark:text-red-400 mb-4">위의 일반 비급여 항목과 중복 입력하지 마세요.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

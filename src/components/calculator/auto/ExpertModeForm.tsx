@@ -23,7 +23,7 @@ export default function ExpertModeForm() {
       <div className="space-y-8">
         
         {/* 공통 기준 입력 */}
-        <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+        <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">공통 기준 입력</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -62,9 +62,9 @@ export default function ExpertModeForm() {
         </section>
 
         {/* 피해 상황 다중 선택 */}
-        <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+        <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">피해 상황 (다중 선택 가능)</h3>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={data.hasInjury} onChange={e => handleChange('hasInjury', e.target.checked)} className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
               <span className="font-medium text-gray-900 dark:text-white">부상 (상해)</span>
@@ -82,7 +82,7 @@ export default function ExpertModeForm() {
 
         {/* 부상 상세 입력 */}
         {data.hasInjury && (
-          <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-blue-200 dark:border-blue-900/30">
+          <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-blue-200 dark:border-blue-900/30">
             <h3 className="font-bold text-lg mb-4 text-blue-800 dark:text-blue-400">부상 상세 입력</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
@@ -113,7 +113,7 @@ export default function ExpertModeForm() {
 
         {/* 후유장해 상세 입력 */}
         {data.hasDisability && (
-          <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-purple-200 dark:border-purple-900/30">
+          <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-purple-200 dark:border-purple-900/30">
             <h3 className="font-bold text-lg mb-4 text-purple-800 dark:text-purple-400">후유장해 상세 입력</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -135,7 +135,7 @@ export default function ExpertModeForm() {
         )}
 
         {/* 추가 지출 (직불영수증 / 향후치료비) */}
-        <section className="bg-gray-50 dark:bg-[#303134]/30 p-6 rounded-2xl border border-green-200 dark:border-green-900/30">
+        <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-green-200 dark:border-green-900/30">
           <h3 className="font-bold text-lg mb-4 text-green-800 dark:text-green-400">직불 치료비 및 향후치료비</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
