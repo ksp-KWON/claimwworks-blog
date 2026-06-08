@@ -230,39 +230,24 @@ export default function ExpertModeForm() {
                   )}
                 </div>
 
-                {/* 선택된 태그 영역 */}
-                <div className="flex flex-col gap-2">
-                  {data.selectedDiagnoses.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-2">
+                {/* 선택된 태그 영역 (오른쪽 버튼들과 높이 맞춤) */}
+                <div className="min-h-[32px]">
+                  {data.selectedDiagnoses.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5">
                       {INJURY_DB.filter(i => data.selectedDiagnoses.includes(i.id)).map(i => (
-                        <div key={i.id} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-lg text-xs font-bold border border-blue-200 dark:border-blue-800">
+                        <div key={i.id} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1.5 rounded text-xs font-bold border border-blue-200 dark:border-blue-800 shadow-sm">
                           <span>[{i.grade}급] {i.name}</span>
-                          <button onClick={() => handleToggleDiagnosis(i.id)} className="ml-1 hover:text-red-500">
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                          <button onClick={() => handleToggleDiagnosis(i.id)} className="ml-1 hover:text-red-500 transition-colors">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           </button>
                         </div>
                       ))}
                     </div>
+                  ) : (
+                    <div className="h-[32px] flex items-center text-xs text-gray-400">
+                      진단명을 검색하여 추가해주세요.
+                    </div>
                   )}
-                  
-                  {/* 기존 수동 급수 선택 (검색 안할 때 보조용) */}
-                  <div className="relative">
-                    <select 
-                      value={data.injuryGrade} 
-                      onChange={e => {
-                        handleChange('injuryGrade', Number(e.target.value));
-                        handleChange('selectedDiagnoses', []);
-                      }} 
-                      className={`appearance-none [&::-ms-expand]:hidden w-full ${data.isAutoGrade ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-[#202124] border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white'} border rounded-xl py-2 pl-3 pr-8 text-sm font-bold focus:ring-2 focus:ring-blue-500`}
-                    >
-                      {Array.from({length: 14}, (_, i) => i + 1).map(g => (
-                        <option key={g} value={g}>{g}급 {data.isAutoGrade && data.injuryGrade === g ? '(최종 적용)' : ''}</option>
-                      ))}
-                    </select>
-                    <svg className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 ${data.isAutoGrade ? 'text-blue-500' : 'text-gray-400'} pointer-events-none`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
                 </div>
               </div>
               <div>
