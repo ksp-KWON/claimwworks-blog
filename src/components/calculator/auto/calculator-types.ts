@@ -16,9 +16,7 @@ export interface AutoInsuranceData {
   disabilityRate: number; // 맥브라이드 장해율 (%)
   disabilityYears: number; // 한시장해 기간(년) (0이면 영구장해)
 
-  // 사망 관련
-  ageAtAccident: number;
-  dependentsCount: number;
+  // 사망 관련 (현재는 나이 무관하게 고정 위자료 처리 중이므로 제거)
 
   // 추가/기타 지출
   directReceipts: number; // 직불영수증
@@ -36,12 +34,8 @@ export const initialAutoData: AutoInsuranceData = {
   injuryGrade: 12,
   hospitalDays: 0,
   outpatientDays: 0,
-
   disabilityRate: 0,
   disabilityYears: 0,
-
-  ageAtAccident: 40,
-  dependentsCount: 0,
 
   directReceipts: 0,
   futureTreatmentCost: 0,
