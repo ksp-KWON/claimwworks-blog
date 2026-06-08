@@ -37,6 +37,36 @@ export default function SidebarContent() {
 
   return (
     <>
+      {/* 🚗 자동차보험 합의금 계산기 (항상 표시) */}
+      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-blue)] transition-all duration-300 group mb-6">
+        <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
+          <span className="text-[var(--google-blue)] text-lg leading-none">🚗</span>
+          자동차보험 합의금 계산기
+        </h3>
+        <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed">
+          약관 지급기준(부상, 장해, 사망) 및 호프만계수를 적용한 정확한 예상 합의금을 확인하세요.
+        </p>
+        <Link href="/calculator/auto" className="flex items-center justify-center gap-2 w-full bg-[var(--google-blue)] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#174ea6] transition-colors shadow-sm">
+          자동차보험 계산하기
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </Link>
+      </div>
+
+      {/* 🏥 실손의료비 보상 계산기 (항상 표시) */}
+      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-green)] transition-all duration-300 group mb-6">
+        <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-green)] pl-2.5">
+          <span className="text-[var(--google-green)] text-lg leading-none">🏥</span>
+          실손의료비 계산기
+        </h3>
+        <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed">
+          급여/비급여 병원비, 약제비 본인부담금을 공제한 예상 실손 보상금을 산출해 보세요.
+        </p>
+        <Link href="/calculator/medical" className="flex items-center justify-center gap-2 w-full bg-[var(--google-green)] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#0d652d] transition-colors shadow-sm">
+          실손의료비 계산하기
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </Link>
+      </div>
+
       {/* ── 모바일 전용 토글 버튼 (lg 이상에서는 숨김) ── */}
       <button
         onClick={() => setIsOpen(prev => !prev)}
@@ -62,37 +92,9 @@ export default function SidebarContent() {
       {/* ── 사이드바 본문 (모바일: 토글 / 데스크탑: 항상 표시) ── */}
       <div
         id="sidebar-content"
-        className={`space-y-6 ${isOpen ? 'block' : 'hidden'} lg:block`}
+        className={`space-y-6 ${isOpen ? 'block' : 'hidden'} lg:block lg:mt-6 mt-6`}
       >
-        {/* 🚗 자동차보험 합의금 계산기 (우측 메뉴) */}
-        <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-blue)] transition-all duration-300 group">
-          <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
-            <span className="text-[var(--google-blue)] text-lg leading-none">🚗</span>
-            자동차보험 합의금 계산기
-          </h3>
-          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed">
-            약관 지급기준(부상, 장해, 사망) 및 호프만계수를 적용한 정확한 예상 합의금을 확인하세요.
-          </p>
-          <Link href="/calculator/auto" className="flex items-center justify-center gap-2 w-full bg-[var(--google-blue)] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#174ea6] transition-colors shadow-sm">
-            자동차보험 계산하기
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </Link>
-        </div>
 
-        {/* 🏥 실손의료비 보상 계산기 (우측 메뉴) */}
-        <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-green)] transition-all duration-300 group">
-          <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-green)] pl-2.5">
-            <span className="text-[var(--google-green)] text-lg leading-none">🏥</span>
-            실손의료비 계산기
-          </h3>
-          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed">
-            급여/비급여 병원비, 약제비 본인부담금을 공제한 예상 실손 보상금을 산출해 보세요.
-          </p>
-          <Link href="/calculator/medical" className="flex items-center justify-center gap-2 w-full bg-[var(--google-green)] text-white font-bold text-sm py-2.5 rounded-xl hover:bg-[#0d652d] transition-colors shadow-sm">
-            실손의료비 계산하기
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </Link>
-        </div>
 
         {/* 진료과목별 분쟁 가이드 */}
         <SpecialtyDiseaseCategories />
