@@ -43,9 +43,17 @@ export default function AutoCalculatorResult({ data }: Props) {
     } else if (alimony === injuryAlimony && data.hasInjury) {
       appliedAlimonyLabel = `부상 위자료 (${appliedInjuryGrade}급)`;
       if (data.hasMultipleInjuries && data.injuryGrade >= 2 && data.injuryGrade <= 11) {
-        formulas.push(`부상 위자료: ${data.injuryGrade}급에서 병급(상향) 적용된 ${appliedInjuryGrade}급 기준액`);
+        if (data.isAutoGrade) {
+          formulas.push(`부상 위자료: 다중 진단 병급 규정이 자동 적용되어 ${data.injuryGrade}급에서 1급 상향된 ${appliedInjuryGrade}급 기준액`);
+        } else {
+          formulas.push(`부상 위자료: ${data.injuryGrade}급에서 병급(상향) 적용된 ${appliedInjuryGrade}급 기준액`);
+        }
       } else {
-        formulas.push(`부상 위자료: 상해 ${appliedInjuryGrade}급 기준액 적용`);
+        if (data.isAutoGrade) {
+          formulas.push(`부상 위자료: 선택된 진단명 중 최고 급수인 ${appliedInjuryGrade}급 기준액 자동 적용`);
+        } else {
+          formulas.push(`부상 위자료: 상해 ${appliedInjuryGrade}급 기준액 적용`);
+        }
       }
     }
   }

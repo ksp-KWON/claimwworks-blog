@@ -11,6 +11,8 @@ export interface AutoInsuranceData {
   // 부상(상해) 관련
   injuryGrade: number; // 1~14급
   hasMultipleInjuries: boolean;
+  selectedDiagnoses: string[]; // 선택된 진단명 ID 목록
+  isAutoGrade: boolean; // 진단명 검색에 의해 급수가 자동 설정되었는지 여부
   hospitalDays: number;
   outpatientDays: number;
 
@@ -37,6 +39,8 @@ export const initialAutoData: AutoInsuranceData = {
 
   injuryGrade: 12,
   hasMultipleInjuries: false,
+  selectedDiagnoses: [],
+  isAutoGrade: false,
   hospitalDays: 0,
   outpatientDays: 0,
   disabilityRate: 0,
