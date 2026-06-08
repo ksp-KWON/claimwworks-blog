@@ -186,7 +186,7 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
                 <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  부상 진단명
+                  부상 진단명 (다중선택 가능)
                 </label>
                 
                 {/* 스마트 검색창 - 구글 스타일 */}
