@@ -137,20 +137,22 @@ export default function ExpertModeForm() {
                   </svg>
                 </div>
                 {data.injuryGrade >= 2 && data.injuryGrade <= 11 ? (
-                  <div className="flex items-center gap-2 h-[34px] px-1">
-                    <input 
-                      type="checkbox" 
-                      id="hasMultipleInjuries" 
-                      checked={data.hasMultipleInjuries} 
-                      onChange={e => handleChange('hasMultipleInjuries', e.target.checked)} 
-                      className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
-                    />
-                    <label htmlFor="hasMultipleInjuries" className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
-                      <span className="font-bold text-blue-600 dark:text-blue-400">진단명 중복</span> (상향 조정 적용)
-                    </label>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => handleChange('hasMultipleInjuries', false)} 
+                      className={`flex-1 py-1.5 rounded text-sm font-bold transition-colors ${!data.hasMultipleInjuries ? 'bg-gray-700 text-white dark:bg-gray-200 dark:text-gray-900 shadow' : 'bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'}`}
+                    >
+                      단일 상해
+                    </button>
+                    <button 
+                      onClick={() => handleChange('hasMultipleInjuries', true)} 
+                      className={`flex-1 py-1.5 rounded text-sm font-bold transition-colors ${data.hasMultipleInjuries ? 'bg-blue-600 text-white shadow' : 'bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'}`}
+                    >
+                      복수 상해(상향)
+                    </button>
                   </div>
                 ) : (
-                  <div className="h-[34px]"></div>
+                  <div className="h-[32px]"></div>
                 )}
               </div>
               <div>
