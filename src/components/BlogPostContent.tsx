@@ -538,27 +538,24 @@ function CTABanner() {
       </div>
 
       {/* 헤더 배너 4카드 그대로 복사 + 그림자 */}
-      <div
-        className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 py-2.5 px-2 sm:px-3 rounded-2xl border border-[var(--google-border)] bg-[var(--background)] dark:bg-[#202124]"
-        style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1px 6px rgba(26,115,232,0.08)' }}
-      >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         {/* 카드 1: 카카오톡 상담 */}
         <a
           href="https://open.kakao.com/o/sWeszp7"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2.5 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[#f29900] hover:shadow-md transition-all duration-200 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(242,153,0,0.15)] hover:border-[#f29900] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-10 h-10 rounded-full bg-[#fef7e0] dark:bg-[#e37400] flex items-center justify-center shrink-0">
-            <svg className="w-5 h-5 text-[#f29900] dark:text-[#fde293]" fill="currentColor" viewBox="0 0 24 24">
+          <div className="w-12 h-12 rounded-full bg-[#fef7e0] dark:bg-[#e37400]/20 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
+            <svg className="w-6 h-6 text-[#f29900] dark:text-[#fde293]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.7 1.7 5.1 4.2 6.5l-1.1 4.1c-.1.3.2.5.4.4l4.8-3.2c.5.1 1.1.1 1.7.1 5.5 0 10-3.5 10-7.8S17.5 3 12 3z" />
             </svg>
           </div>
-          <div className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
+          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
+            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
               카카오톡 상담
             </span>
-            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
+            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
               실시간 채팅상담
             </span>
           </div>
@@ -569,21 +566,21 @@ function CTABanner() {
           href="https://forms.gle/E9vj7iqAHeJGhJ549"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2.5 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[#34A853] hover:shadow-md transition-all duration-200 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(52,168,83,0.15)] hover:border-[#34A853] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d] flex items-center justify-center shrink-0">
-            <svg className="w-5 h-5 text-[#34A853] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <div className="w-12 h-12 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
+            <svg className="w-6 h-6 text-[#34A853] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
               <line x1="16" y1="13" x2="8" y2="13" />
               <line x1="16" y1="17" x2="8" y2="17" />
             </svg>
           </div>
-          <div className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#34A853] transition-colors">
+          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
+            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#34A853] transition-colors">
               상담신청 양식
             </span>
-            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
+            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
               예약상담 신청서
             </span>
           </div>
@@ -592,21 +589,21 @@ function CTABanner() {
         {/* 카드 3: 보상스쿨 소개 */}
         <Link
           href="/about"
-          className="flex items-center gap-2.5 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[#1A73E8] hover:shadow-md transition-all duration-200 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(26,115,232,0.15)] hover:border-[#1A73E8] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-10 h-10 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6] flex items-center justify-center shrink-0">
-            <svg className="w-5 h-5 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <div className="w-12 h-12 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
+            <svg className="w-6 h-6 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
               <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
           </div>
-          <div className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#1A73E8] transition-colors">
+          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
+            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#1A73E8] transition-colors">
               보상스쿨 소개
             </span>
-            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
+            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
               자격 및 경력사항
             </span>
           </div>
@@ -617,19 +614,19 @@ function CTABanner() {
           href="https://www.youtube.com/@bosangschool"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2.5 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[#d93025] hover:shadow-md transition-all duration-200 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(217,48,37,0.15)] hover:border-[#d93025] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-10 h-10 rounded-full bg-[#fce8e6] dark:bg-[#c5221f] flex items-center justify-center shrink-0">
-            <svg className="w-5 h-5 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <div className="w-12 h-12 rounded-full bg-[#fce8e6] dark:bg-[#c5221f]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
+            <svg className="w-6 h-6 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
               <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
             </svg>
           </div>
-          <div className="min-w-0 flex-1">
-            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
+          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
+            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
               보상스쿨 TV
             </span>
-            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
+            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
               유튜브 바로가기
             </span>
           </div>
