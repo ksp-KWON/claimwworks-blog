@@ -112,11 +112,16 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">상해 급수 (1~14급)</label>
-                <select value={data.injuryGrade} onChange={e => handleChange('injuryGrade', Number(e.target.value))} className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500">
-                  {Array.from({length: 14}, (_, i) => i + 1).map(g => (
-                    <option key={g} value={g}>{g}급</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select value={data.injuryGrade} onChange={e => handleChange('injuryGrade', Number(e.target.value))} className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500">
+                    {Array.from({length: 14}, (_, i) => i + 1).map(g => (
+                      <option key={g} value={g}>{g}급</option>
+                    ))}
+                  </select>
+                  <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">입원 일수</label>

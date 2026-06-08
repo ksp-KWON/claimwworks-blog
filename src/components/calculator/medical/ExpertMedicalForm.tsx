@@ -28,27 +28,37 @@ export default function ExpertMedicalForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">실손 가입 시기 (세대)</label>
-              <select 
-                value={data.generation} 
-                onChange={e => handleChange('generation', Number(e.target.value))} 
-                className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
-              >
-                <option value={1}>1세대 (2009년 8월 이전 - 100% 보상)</option>
-                <option value={2}>2세대 (2009.8 ~ 2017.3 - 90% 보상)</option>
-                <option value={3}>3세대 (2017.4 ~ 2021.6 - 착한실손)</option>
-                <option value={4}>4세대 (2021년 7월 이후)</option>
-              </select>
+              <div className="relative">
+                <select 
+                  value={data.generation} 
+                  onChange={e => handleChange('generation', Number(e.target.value))} 
+                  className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
+                >
+                  <option value={1}>1세대 (2009년 8월 이전 - 100% 보상)</option>
+                  <option value={2}>2세대 (2009.8 ~ 2017.3 - 90% 보상)</option>
+                  <option value={3}>3세대 (2017.4 ~ 2021.6 - 착한실손)</option>
+                  <option value={4}>4세대 (2021년 7월 이후)</option>
+                </select>
+                <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">진료 형태</label>
-              <select 
-                value={data.treatmentType} 
-                onChange={e => handleChange('treatmentType', e.target.value as TreatmentType)} 
-                className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
-              >
-                <option value="inpatient">입원</option>
-                <option value="outpatient">통원 (외래)</option>
-              </select>
+              <div className="relative">
+                <select 
+                  value={data.treatmentType} 
+                  onChange={e => handleChange('treatmentType', e.target.value as TreatmentType)} 
+                  className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
+                >
+                  <option value="inpatient">입원</option>
+                  <option value="outpatient">통원 (외래)</option>
+                </select>
+                <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
             </div>
             
             {data.treatmentType === 'outpatient' && (
