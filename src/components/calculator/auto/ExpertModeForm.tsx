@@ -184,107 +184,85 @@ export default function ExpertModeForm() {
           <section className="bg-gray-50 dark:bg-[#303134]/30 p-5 sm:p-6 rounded-2xl border border-blue-200 dark:border-blue-900/30">
             <h3 className="font-bold text-lg mb-4 text-blue-800 dark:text-blue-400">부상 상세 입력</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="col-span-1 sm:col-span-3">
-                <div className="flex justify-between items-end mb-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    상해 진단명 및 급수 (다중 선택 시 병급 자동 계산)
-                  </label>
-                  <button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center gap-1"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    내 진단명 찾기 (모달)
-                  </button>
-                </div>
+              <div className="col-span-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  상해 진단명 검색 (다중 선택 시 병급)
+                </label>
                 
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  {/* 스마트 검색창 */}
-                  <div className="flex-1 relative" ref={searchRef}>
-                    <div className="relative">
-                      <input 
-                        type="text" 
-                        value={searchTerm}
-                        onChange={(e) => {
-                          setSearchTerm(e.target.value);
-                          setIsSearchFocused(true);
-                        }}
-                        onFocus={() => setIsSearchFocused(true)}
-                        placeholder="진단명 검색 (예: 염좌, 골절)"
-                        className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500"
-                      />
-                      <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    
-                    {/* 자동완성 드롭다운 */}
-                    {isSearchFocused && searchTerm && (
-                      <div className="absolute z-10 w-full mt-1 bg-white dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                        {INJURY_DB.filter(i => i.name.includes(searchTerm)).map(i => (
-                          <div 
-                            key={i.id} 
-                            onClick={() => {
-                              handleToggleDiagnosis(i.id);
-                              setSearchTerm('');
-                              setIsSearchFocused(false);
-                            }}
-                            className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0 flex justify-between items-center"
-                          >
-                            <span className="text-sm text-gray-900 dark:text-gray-100">{i.name}</span>
-                            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">{i.grade}급</span>
-                          </div>
-                        ))}
-                        {INJURY_DB.filter(i => i.name.includes(searchTerm)).length === 0 && (
-                          <div className="px-4 py-3 text-sm text-gray-500 text-center">검색 결과가 없습니다.</div>
-                        )}
-                      </div>
-                    )}
+                {/* 스마트 검색창 */}
+                <div className="relative mb-2" ref={searchRef}>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      value={searchTerm}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setIsSearchFocused(true);
+                      }}
+                      onFocus={() => setIsSearchFocused(true)}
+                      placeholder="진단명 검색 (예: 염좌, 골절)"
+                      className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500"
+                    />
+                    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                   
-                  {/* 기존 수동 급수 선택 (수동 입력용) */}
-                  <div className="w-full sm:w-48 relative">
-                    <select 
-                      value={data.injuryGrade} 
-                      onChange={e => {
-                        handleChange('injuryGrade', Number(e.target.value));
-                        // 수동 변경 시 기존 선택 초기화
-                        handleChange('selectedDiagnoses', []);
-                      }} 
-                      className={`appearance-none [&::-ms-expand]:hidden w-full ${data.isAutoGrade ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-[#202124] border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white'} border rounded-xl py-3 pl-4 pr-10 font-bold focus:ring-2 focus:ring-blue-500`}
-                    >
-                      {Array.from({length: 14}, (_, i) => i + 1).map(g => (
-                        <option key={g} value={g}>{g}급 {data.isAutoGrade && data.injuryGrade === g ? '(자동)' : ''}</option>
+                  {/* 자동완성 드롭다운 */}
+                  {isSearchFocused && searchTerm && (
+                    <div className="absolute z-50 w-full mt-1 bg-white dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                      {INJURY_DB.filter(i => i.name.includes(searchTerm)).map(i => (
+                        <div 
+                          key={i.id} 
+                          onClick={() => {
+                            handleToggleDiagnosis(i.id);
+                            setSearchTerm('');
+                            setIsSearchFocused(false);
+                          }}
+                          className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0 flex justify-between items-center"
+                        >
+                          <span className="text-sm text-gray-900 dark:text-gray-100">{i.name}</span>
+                          <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">{i.grade}급</span>
+                        </div>
                       ))}
-                    </select>
-                    <svg className={`absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 ${data.isAutoGrade ? 'text-blue-500' : 'text-gray-400'} pointer-events-none`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
+                      {INJURY_DB.filter(i => i.name.includes(searchTerm)).length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500 text-center">검색 결과가 없습니다.</div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* 힌트 태그 & 선택된 태그 영역 */}
-                <div className="bg-gray-100/50 dark:bg-gray-800/30 rounded-xl p-3 border border-gray-200/50 dark:border-gray-700/50 min-h-[60px]">
-                  {data.selectedDiagnoses.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
+                {/* 선택된 태그 영역 */}
+                <div className="flex flex-col gap-2">
+                  {data.selectedDiagnoses.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-2">
                       {INJURY_DB.filter(i => data.selectedDiagnoses.includes(i.id)).map(i => (
-                        <div key={i.id} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-3 py-1.5 rounded-lg text-sm font-bold border border-blue-200 dark:border-blue-800">
+                        <div key={i.id} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-lg text-xs font-bold border border-blue-200 dark:border-blue-800">
                           <span>[{i.grade}급] {i.name}</span>
                           <button onClick={() => handleToggleDiagnosis(i.id)} className="ml-1 hover:text-red-500">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                           </button>
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">💡 {data.injuryGrade}급 대표 진단명:</span>
-                      {getHintsForGrade(data.injuryGrade).map((hint, idx) => (
-                        <span key={idx} className="text-xs bg-white dark:bg-[#303134] text-gray-600 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 shadow-sm">
-                          #{hint}
-                        </span>
-                      ))}
-                      {getHintsForGrade(data.injuryGrade).length === 0 && <span className="text-xs text-gray-400">등록된 힌트가 없습니다.</span>}
-                    </div>
                   )}
+                  
+                  {/* 기존 수동 급수 선택 (검색 안할 때 보조용) */}
+                  <div className="relative">
+                    <select 
+                      value={data.injuryGrade} 
+                      onChange={e => {
+                        handleChange('injuryGrade', Number(e.target.value));
+                        handleChange('selectedDiagnoses', []);
+                      }} 
+                      className={`appearance-none [&::-ms-expand]:hidden w-full ${data.isAutoGrade ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-[#202124] border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white'} border rounded-xl py-2 pl-3 pr-8 text-sm font-bold focus:ring-2 focus:ring-blue-500`}
+                    >
+                      {Array.from({length: 14}, (_, i) => i + 1).map(g => (
+                        <option key={g} value={g}>{g}급 {data.isAutoGrade && data.injuryGrade === g ? '(최종 적용)' : ''}</option>
+                      ))}
+                    </select>
+                    <svg className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 ${data.isAutoGrade ? 'text-blue-500' : 'text-gray-400'} pointer-events-none`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
                 </div>
               </div>
               <div>
@@ -418,76 +396,6 @@ export default function ExpertModeForm() {
         <AutoCalculatorResult data={data} />
       </div>
 
-      {/* 진단명 찾기 모달 (아이디어 2) */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#202124] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            {/* 모달 헤더 */}
-            <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800">
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">내 진단명 찾기</h3>
-                <p className="text-sm text-gray-500 mt-1">부위별 카테고리에서 진단명을 찾아 다중 선택하세요.</p>
-              </div>
-              <button onClick={() => setIsModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 bg-gray-50 dark:bg-gray-800 rounded-full transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-              </button>
-            </div>
-            
-            {/* 탭 메뉴 */}
-            <div className="flex overflow-x-auto p-4 gap-2 border-b border-gray-100 dark:border-gray-800 scrollbar-hide">
-              {['전체', '머리/목', '척추', '가슴/복부', '팔/다리', '기타'].map(tab => (
-                <button 
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-colors ${activeTab === tab ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* 리스트 영역 */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50 dark:bg-[#1a1a1c]">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {INJURY_DB.filter(i => activeTab === '전체' || i.category === activeTab).map(i => {
-                  const isSelected = data.selectedDiagnoses.includes(i.id);
-                  return (
-                    <div 
-                      key={i.id}
-                      onClick={() => handleToggleDiagnosis(i.id)}
-                      className={`flex justify-between items-center p-4 rounded-xl cursor-pointer border-2 transition-all ${isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' : 'border-transparent bg-white dark:bg-[#303134] hover:border-blue-200 dark:hover:border-blue-800 shadow-sm'}`}
-                    >
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-bold px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{i.category}</span>
-                          <span className={`text-xs font-bold px-2 py-0.5 rounded ${i.grade <= 3 ? 'bg-red-100 text-red-700' : i.grade <= 7 ? 'bg-orange-100 text-orange-700' : i.grade <= 11 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-700'}`}>{i.grade}급</span>
-                        </div>
-                        <span className={`font-bold ${isSelected ? 'text-blue-700 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'}`}>{i.name}</span>
-                      </div>
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-colors ${isSelected ? 'bg-blue-500 border-blue-500 text-white' : 'border-gray-300 dark:border-gray-600'}`}>
-                        {isSelected && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* 하단 확인 버튼 */}
-            <div className="p-4 sm:p-6 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-[#202124]">
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
-              >
-                <span>선택 완료</span>
-                {data.selectedDiagnoses.length > 0 && (
-                  <span className="bg-white/20 px-2.5 py-0.5 rounded-full text-sm">{data.selectedDiagnoses.length}건 적용됨</span>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
