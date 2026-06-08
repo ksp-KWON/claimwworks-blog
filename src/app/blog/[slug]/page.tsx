@@ -7,6 +7,9 @@ import BlogPostContent from '@/components/BlogPostContent';
 // 빌드 시 모든 블로그 글을 미리 생성 (정적 사이트 배포용)
 export async function generateStaticParams() {
   const posts = getSortedPostsData(false);
+  if (posts.length === 0) {
+    return [{ slug: '_empty' }];
+  }
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -87,7 +90,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </header>
 
       {/* 본문 — 새로운 BlogPostContent 컴포넌트로 렌더링 */}
-      <BlogPostContent content={post.content} summary={post.summary} />
+      <BlogPostContent content={post.content} />
 
       {/* 태그 목록 */}
       <footer className="mt-14 pt-8 border-t border-[var(--google-border)]">
