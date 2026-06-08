@@ -186,7 +186,7 @@ export default function ExpertModeForm() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="col-span-1">
                 <label className="flex items-end h-[40px] text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  본인진단명을 모두 검색하여 추가하세요
+                  진단명을 검색하여 모두 추가하세요
                 </label>
                 
                 {/* 스마트 검색창 */}
@@ -201,8 +201,9 @@ export default function ExpertModeForm() {
                       }}
                       onFocus={() => setIsSearchFocused(true)}
                       placeholder="진단명 검색창"
-                      className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500"
+                      className="w-full text-center bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 px-12 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400 placeholder:font-normal placeholder:text-base"
                     />
+                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                   
                   {/* 자동완성 드롭다운 */}
@@ -243,9 +244,7 @@ export default function ExpertModeForm() {
                       ))}
                     </div>
                   ) : (
-                    <div className="h-[32px] flex items-center text-xs text-gray-400">
-                      진단명을 검색하여 추가해주세요.
-                    </div>
+                    <div className="h-[32px]"></div>
                   )}
                 </div>
               </div>
