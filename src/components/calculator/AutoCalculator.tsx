@@ -126,8 +126,8 @@ export default function AutoCalculator() {
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
         <div>
-          <h3 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed]">고급 자동차보험 합의금 계산기</h3>
-          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-1">약관 지급기준 및 호프만계수 적용 (다중 병합 지원)</p>
+          <h3 className="font-extrabold text-[#202124] dark:text-[#e8eaed] text-[15px] sm:text-base">자동차보험 합의금 계산기</h3>
+          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5 font-medium">약관 지급기준 및 호프만계수 적용 <span className="inline-block bg-[var(--google-surface-variant)] dark:bg-[#303134] px-1.5 py-0.5 rounded text-[10px] ml-1">다중 병합 지원</span></p>
         </div>
       </div>
 
