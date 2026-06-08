@@ -86,9 +86,9 @@ export default function RootLayout({
           </div>
         </header>
 
-        {/* 2. 구글 스타일 4단 정보 카드 영역 */}
-        <section className="w-full bg-[var(--background)] border-b border-[var(--google-border)] py-3 transition-colors">
-          <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 px-2 sm:px-5">
+        {/* 2. 구글 스타일 4단 정보 카드 영역 — sticky 고정 배너 */}
+        <section className="sticky top-[64px] z-40 w-full bg-[var(--background)] border-b border-[var(--google-border)] py-2.5 transition-colors shadow-sm">
+          <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 px-2 sm:px-5">
             
             {/* 링크 1: 보상스쿨 소개 */}
             <Link href="/about" className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 group">

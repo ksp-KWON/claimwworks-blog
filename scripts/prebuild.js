@@ -66,7 +66,41 @@ function run() {
   if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
   fs.writeFileSync(publicOutputPath, JSON.stringify(posts, null, 2), 'utf8');
   console.log(`Also copied to ${publicOutputPath}`);
+
+  // RSS 피드 자동 생성 (public/rss.xml)
+  const rssOutputPath = path.join(process.cwd(), 'public/rss.xml');
+  const siteUrl = 'https://claimworks-blog.pages.dev'; // 프로젝트 배포 주소
+  let rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>보상스쿨 블로그</title>
+  <link>${siteUrl}</link>
+  <description>손해사정, 보상금, 실손보험 청구, 병원비 보상 완벽 가이드</description>
+  <language>ko-KR</language>
+  <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
+  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+`;
+
+  posts.slice(0, 50).forEach(post => {
+    // 본문 중 유효한 날짜만 파싱
+    let pubDate = new Date().toUTCString();
+    if (post.date) {
+      const d = new Date(post.date);
+      if (!isNaN(d.getTime())) pubDate = d.toUTCString();
+    }
+    
+    rssXml += `  <item>
+    <title><![CDATA[${post.title}]]></title>
+    <link>${siteUrl}/blog/${post.slug}</link>
+    <description><![CDATA[${post.summary}]]></description>
+    <pubDate>${pubDate}</pubDate>
+    <guid>${siteUrl}/blog/${post.slug}</guid>
+  </item>\n`;
+  });
+
+  rssXml += `</channel>\n</rss>`;
+  fs.writeFileSync(rssOutputPath, rssXml, 'utf8');
+  console.log(`Successfully generated RSS feed to ${rssOutputPath}`);
 }
 
 run();
-
