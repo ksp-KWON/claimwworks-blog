@@ -37,7 +37,7 @@ export default function ExpertModeForm() {
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">공통 기준 입력</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세전)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세후)</label>
               <div className="relative mb-2">
                 <input
                   type="text"
