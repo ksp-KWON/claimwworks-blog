@@ -37,7 +37,7 @@ export default function ExpertModeForm() {
           <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">공통 기준 입력</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세후)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">월 평균 소득 (세법상 입증 가능한 세후 소득 기준)</label>
               <div className="relative mb-2">
                 <input
                   type="text"
@@ -72,6 +72,22 @@ export default function ExpertModeForm() {
                 <button onClick={() => handleChange('faultRatio', 10)} className="flex-1 py-1.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">10%</button>
                 <button onClick={() => handleChange('faultRatio', 20)} className="flex-1 py-1.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">20%</button>
                 <button onClick={() => addValue('faultRatio', 10, 100)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+10%</button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">사고 당시 만 나이 (사망/장해 상실수익액 계산용)</label>
+              <div className="relative mb-2">
+                <input
+                  type="number"
+                  value={data.ageAtAccident || ''}
+                  onChange={e => handleChange('ageAtAccident', Number(e.target.value))}
+                  className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-bold"
+                />
+                <span className="absolute right-4 top-3.5 text-gray-400">세</span>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => addValue('ageAtAccident', -1)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">-1살</button>
+                <button onClick={() => addValue('ageAtAccident', 1)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+1살</button>
               </div>
             </div>
           </div>
@@ -113,7 +129,7 @@ export default function ExpertModeForm() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">상해 급수 (1~14급)</label>
                 <div className="relative">
-                  <select value={data.injuryGrade} onChange={e => handleChange('injuryGrade', Number(e.target.value))} className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500">
+                  <select value={data.injuryGrade} onChange={e => handleChange('injuryGrade', Number(e.target.value))} className="appearance-none [&::-ms-expand]:hidden w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-blue-500">
                     {Array.from({length: 14}, (_, i) => i + 1).map(g => (
                       <option key={g} value={g}>{g}급</option>
                     ))}
@@ -189,7 +205,7 @@ export default function ExpertModeForm() {
           <h3 className="font-bold text-lg mb-4 text-green-800 dark:text-green-400">직불 치료비 및 향후치료비</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">직불영수증 (본인지출 병원비)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">직불영수증 (병원 발행용 영수증 기준)</label>
               <div className="relative mb-2">
                 <input type="text" value={data.directReceipts ? formatCurrency(data.directReceipts) : ''} onChange={e => handleChange('directReceipts', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-green-500" />
                 <span className="absolute right-4 top-3.5 text-gray-400">원</span>
@@ -201,7 +217,7 @@ export default function ExpertModeForm() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">향후치료비 (성형, 핀제거 등)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">향후치료비 (성형(흉터제거), 핀제거, 미경과 치료비 등)</label>
               <div className="relative mb-2">
                 <input type="text" value={data.futureTreatmentCost ? formatCurrency(data.futureTreatmentCost) : ''} onChange={e => handleChange('futureTreatmentCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-green-500" />
                 <span className="absolute right-4 top-3.5 text-gray-400">원</span>

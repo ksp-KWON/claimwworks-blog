@@ -32,7 +32,7 @@ export default function ExpertMedicalForm() {
                 <select 
                   value={data.generation} 
                   onChange={e => handleChange('generation', Number(e.target.value))} 
-                  className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
+                  className="appearance-none [&::-ms-expand]:hidden w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
                 >
                   <option value={1}>1세대 (2009년 8월 이전 - 100% 보상)</option>
                   <option value={2}>2세대 (2009.8 ~ 2017.3 - 90% 보상)</option>
@@ -50,7 +50,7 @@ export default function ExpertMedicalForm() {
                 <select 
                   value={data.treatmentType} 
                   onChange={e => handleChange('treatmentType', e.target.value as TreatmentType)} 
-                  className="appearance-none w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
+                  className="appearance-none [&::-ms-expand]:hidden w-full bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 font-bold"
                 >
                   <option value="inpatient">입원</option>
                   <option value="outpatient">통원 (외래)</option>
@@ -61,7 +61,7 @@ export default function ExpertMedicalForm() {
               </div>
             </div>
             
-            {data.treatmentType === 'outpatient' && (
+            {data.treatmentType === 'outpatient' && data.generation > 1 && (
               <div className="sm:col-span-2 mt-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">병원 규모 (통원 공제금액 계산용)</label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

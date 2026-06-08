@@ -38,19 +38,23 @@ export default function AutoCalculatorResult({ data }: Props) {
 
   // 4. 상실수익액 (소득 * 장해율 * 호프만계수) - 시연용 가라 호프만 계수(240 한도 적용)
   let lostEarnings = 0;
-  if (data.hasDisability && data.disabilityRate > 0) {
-    // 약관/판례상 호프만 계수는 최대 240개월을 한도로 함.
+  if (data.hasDeath) {
+    // 사망 상실수익액: 소득 * 2/3 * 취업가능월수(호프만계수 대체)
+    const months = Math.min(Math.max((65 - data.ageAtAccident) * 12, 0), 240);
+    lostEarnings = Math.floor(data.income * (2/3) * months);
+  } else if (data.hasDisability && data.disabilityRate > 0) {
+    // 장해 상실수익액
     const months = data.disabilityYears === 0 ? 240 : Math.min(data.disabilityYears * 12, 240);
-    // 단순화된 계산식: 월소득 * 장해율 * 개월수(호프만대체)
     lostEarnings = Math.floor(data.income * (data.disabilityRate / 100) * months * 0.8);
   }
 
-  // 5. 합의 조율 항목 및 실제 지출
+  // 5. 합의 조율 항목, 실제 지출 및 장례비
   const directReceipts = data.directReceipts;
   const futureTreatmentCost = data.futureTreatmentCost;
+  const funeralCost = data.hasDeath ? 5000000 : 0; // 약관상 장례비 500만원
 
   // 총 합계 (과실 상계 전)
-  const totalBeforeFault = alimony + lostIncome + otherDamages + lostEarnings + directReceipts + futureTreatmentCost;
+  const totalBeforeFault = alimony + lostIncome + otherDamages + lostEarnings + directReceipts + futureTreatmentCost + funeralCost;
   
   // 과실 상계 (직불영수증 등 제외 복잡한 상계가 있지만 여기서는 전체 단순 상계)
   const finalTotal = Math.floor(totalBeforeFault * ((100 - data.faultRatio) / 100));
@@ -83,7 +87,20 @@ export default function AutoCalculatorResult({ data }: Props) {
           </>
         )}
         
-        {data.hasDisability && (
+        {data.hasDeath && (
+          <>
+            <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
+              <span className="text-gray-600 dark:text-gray-400">사망 장례비</span>
+              <span className="font-bold text-gray-900 dark:text-white">{funeralCost.toLocaleString()} 원</span>
+            </div>
+            <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
+              <span className="text-gray-600 dark:text-gray-400">상실수익액 (사망, 만 {data.ageAtAccident}세)</span>
+              <span className="font-bold text-gray-900 dark:text-white">{lostEarnings.toLocaleString()} 원</span>
+            </div>
+          </>
+        )}
+        
+        {!data.hasDeath && data.hasDisability && (
           <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
             <span className="text-gray-600 dark:text-gray-400">상실수익액 (장해 {data.disabilityRate}%)</span>
             <span className="font-bold text-gray-900 dark:text-white">{lostEarnings.toLocaleString()} 원</span>
