@@ -375,6 +375,7 @@ function TOCNav({
   onItemClick: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
 }) {
   if (!toc.length) return null;
+  return (
     <nav className="mb-12 rounded-2xl overflow-hidden border border-[#d93025]/25 bg-[#fce8e6]/50 dark:bg-[#d93025]/10">
       <div className="flex items-center gap-2.5 px-5 py-3 border-b border-[#d93025]/20 bg-[#d93025]/10 dark:bg-[#d93025]/15">
         <div className="w-5 h-5 rounded bg-[#d93025] flex items-center justify-center shrink-0">
