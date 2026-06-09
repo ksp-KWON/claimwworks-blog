@@ -24,79 +24,131 @@ import MedicalCalculator from './calculator/MedicalCalculator';
 // ─── 스크롤 오프셋: header(64) + sticky banner(52) + 버퍼(20) = 136px ───
 const SCROLL_OFFSET = 140;
 
-// ─── 본문에서 제거할 섹션 패턴 ───
-const SKIP_PATTERNS = [
-  /목차/,
-  /table\s+of\s+contents/i,
-  /핵심\s*요약/,
-  /key\s*point/i,
-  /자가진단/,
-  /체크리스트/,
-  /faq/i,
-  /자주\s*묻는\s*질문/,
-  /카카오톡\s*무료\s*상담/,
-  /call\s*to\s*action/i,
-  /seo\s*요약/i,
-];
-
-function shouldSkipH2(title: string): boolean {
-  return SKIP_PATTERNS.some(p => p.test(title));
-}
+// ─── 본문에서 식별할 섹션 패턴 ───
+const KEY_POINT_PATTERNS = /(?:핵심\s*요약|key\s*point)/i;
+const CHECKLIST_PATTERNS = /(?:자가진단|체크리스트)/i;
+const FAQ_PATTERNS = /(?:faq|자주\s*묻는)/i;
+const CTA_PATTERNS = /(?:카카오톡|call\s*to\s*action|상담\s*신청)/i;
 
 // ─── 핵심 요약 추출 ───
 function extractKeyPoints(content: string): string[] {
-  const m = content.match(/##[^\n]*(?:핵심\s*요약|key\s*point)[^\n]*\n([\s\S]*?)(?=\n##|$)/i);
-  if (!m) return [];
-  return m[1]
-    .split('\n')
-    .filter(l => /^[-*]/.test(l.trim()))
-    .map(l => l.replace(/^[-*]\s*/, '').replace(/^[🛡️💡✅☑️⭐]+\s*/, '').trim())
-    .filter(Boolean)
-    .slice(0, 3);
+  const lines = content.split('\n');
+  const points: string[] = [];
+  let inSection = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^##\s+/.test(trimmed) && KEY_POINT_PATTERNS.test(trimmed)) {
+      inSection = true;
+      continue;
+    }
+    if (inSection) {
+      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^#/.test(trimmed)) break; // Stop at normal text
+      if (/^#/.test(trimmed)) break; // Stop at new heading
+      
+      if (/^[-*]/.test(trimmed) && !/---/.test(trimmed)) {
+        points.push(trimmed.replace(/^[-*]\s*/, '').replace(/^[🛡️💡✅☑️⭐]+\s*/, '').trim());
+      }
+    }
+  }
+  return points.slice(0, 3);
 }
 
 // ─── 체크리스트 추출 ───
 function extractChecklist(content: string): string[] {
-  const m = content.match(/##[^\n]*(?:자가진단|체크리스트)[^\n]*\n([\s\S]*?)(?=\n##|$)/i);
-  if (!m) return [];
-  return m[1]
-    .split('\n')
-    .filter(l => /[☑️✅]/.test(l))
-    .map(l => l.replace(/^[\s☑️✅]+/, '').trim())
-    .filter(Boolean);
+  const lines = content.split('\n');
+  const items: string[] = [];
+  let inSection = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^##\s+/.test(trimmed) && CHECKLIST_PATTERNS.test(trimmed)) {
+      inSection = true;
+      continue;
+    }
+    if (inSection) {
+      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^[☑️✅]/.test(trimmed) && !/^#/.test(trimmed)) break;
+      if (/^#/.test(trimmed)) break;
+      
+      if (/^[-*]/.test(trimmed) || /^[☑️✅]/.test(trimmed)) {
+        const text = trimmed.replace(/^[-*]\s*/, '').replace(/^\[[ x]\]\s*/i, '').replace(/^[☑️✅]\s*/, '').trim();
+        if (text && !/---/.test(text)) items.push(text);
+      }
+    }
+  }
+  return items;
 }
 
 // ─── FAQ 추출 ───
 function extractFAQ(content: string): { q: string; a: string }[] {
-  const m = content.match(/##[^\n]*(?:faq|자주\s*묻는)[^\n]*\n([\s\S]*?)(?=\n##\s*\d+\.|\n\[👉|\[SEO_SUMMARY\]|$)/i);
-  if (!m) return [];
-  const qMatches = [...m[1].matchAll(/###\s*(.+)/g)];
-  const answers = m[1].split(/###\s*.+/g).slice(1);
-  return qMatches.map((q, i) => ({
-    q: q[1].trim(),
-    a: (answers[i] || '').trim(),
-  }));
-}
-
-// ─── 본문 전처리: 특수 섹션 제거 ───
-function preprocessBody(content: string): string {
-  let skip = false;
   const lines = content.split('\n');
-  const result: string[] = [];
+  const faqs: { q: string; a: string }[] = [];
+  let inSection = false;
+  let currentQ = '';
+  let currentA = '';
 
   for (const line of lines) {
-    if (line.startsWith('## ')) {
-      const title = line.replace(/^##\s*/, '').trim();
-      skip = shouldSkipH2(title);
-      if (!skip) result.push(line);
+    const trimmed = line.trim();
+    if (/^##\s+/.test(trimmed) && FAQ_PATTERNS.test(trimmed)) {
+      inSection = true;
       continue;
     }
-    if (!skip) result.push(line);
+    if (inSection) {
+      if (/^#{1,2}\s/.test(trimmed)) break; // Stop at H1 or H2
+      if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
+
+      if (/^###\s+/.test(trimmed)) {
+        if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
+        currentQ = trimmed.replace(/^###\s*/, '').trim();
+        currentA = '';
+      } else if (currentQ) {
+        currentA += line + '\n';
+      }
+    }
+  }
+  if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
+  return faqs;
+}
+
+// ─── 본문 전처리: 특수 섹션 완벽 제거 ───
+function preprocessBody(content: string): string {
+  const lines = content.split('\n');
+  const result: string[] = [];
+  let skipType: 'NONE' | 'KEY_POINTS' | 'CHECKLIST' | 'FAQ' | 'CTA' = 'NONE';
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // 1. Check if heading starts a skip section
+    if (/^##\s+/.test(trimmed)) {
+      if (KEY_POINT_PATTERNS.test(trimmed)) { skipType = 'KEY_POINTS'; continue; }
+      if (CHECKLIST_PATTERNS.test(trimmed)) { skipType = 'CHECKLIST'; continue; }
+      if (FAQ_PATTERNS.test(trimmed)) { skipType = 'FAQ'; continue; }
+      if (CTA_PATTERNS.test(trimmed)) { skipType = 'CTA'; continue; }
+    }
+
+    // 2. Check if we should STOP skipping
+    if (skipType === 'KEY_POINTS') {
+      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^#/.test(trimmed)) skipType = 'NONE';
+      else if (/^#/.test(trimmed)) skipType = 'NONE';
+    } else if (skipType === 'CHECKLIST') {
+      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^[☑️✅]/.test(trimmed) && !/^#/.test(trimmed)) skipType = 'NONE';
+      else if (/^#/.test(trimmed)) skipType = 'NONE';
+    } else if (skipType === 'FAQ') {
+      if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
+    } else if (skipType === 'CTA') {
+      if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
+    }
+
+    // 3. Process line
+    if (skipType === 'NONE') {
+      result.push(line);
+    }
   }
 
   return result
     .join('\n')
-    .replace(/\[SEO_SUMMARY\]:.*/g, '')
+    .replace(/\[SEO_SUMMARY\]:.*/gi, '')
     .replace(/\n\[👉[^\]]*\]\([^)]*\)/g, '')
     .replace(/\n\[[^\]]*카카오[^\]]*\]\([^)]*\)/g, '')
     .trim();
