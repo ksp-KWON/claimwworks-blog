@@ -136,7 +136,7 @@ export default function RootLayout({
           </main>
 
           {/* 사이드바 영역 (우측 27%) */}
-          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain custom-scrollbar self-start space-y-4 transition-all duration-300">
+          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[80px] self-start space-y-4 transition-all duration-300">
             <SidebarContent />
           </aside>
         </div>
