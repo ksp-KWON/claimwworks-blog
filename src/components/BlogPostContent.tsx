@@ -375,65 +375,46 @@ function TOCNav({
   onItemClick: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
 }) {
   if (!toc.length) return null;
-  return (
-    <nav className="relative mb-12 px-7 py-8 bg-white/80 dark:bg-[#1a1b1e]/80 backdrop-blur-2xl rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(217,48,37,0.06)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden">
-      {/* Subtle top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d93025]/40 to-transparent" />
-      
-      <div className="flex items-center gap-3 mb-7 pb-5 border-b border-gray-100 dark:border-white/5">
-        <div className="w-9 h-9 rounded-xl bg-[#fce8e6] dark:bg-[#d93025]/10 flex items-center justify-center shrink-0 shadow-sm border border-[#fce8e6] dark:border-[#d93025]/20">
-          <svg className="w-4 h-4 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+    <nav className="mb-12 rounded-2xl overflow-hidden border border-[#d93025]/25 bg-[#fce8e6]/50 dark:bg-[#d93025]/10">
+      <div className="flex items-center gap-2.5 px-5 py-3 border-b border-[#d93025]/20 bg-[#d93025]/10 dark:bg-[#d93025]/15">
+        <div className="w-5 h-5 rounded bg-[#d93025] flex items-center justify-center shrink-0">
+          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
           </svg>
         </div>
-        <span className="text-[17px] font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
-          이 글의 목차
-        </span>
+        <span className="text-[11px] font-extrabold text-[#d93025] uppercase tracking-[0.1em]">이 글의 목차</span>
       </div>
 
-      <div className="relative pl-3">
-        {/* 수직 타임라인 선 */}
-        <div className="absolute top-4 bottom-4 left-[15px] w-[2px] bg-gradient-to-b from-gray-100 via-gray-100 to-transparent dark:from-white/10 dark:via-white/10 dark:to-transparent" />
-
-        <ul className="space-y-1">
-          {toc.map((item, i) => {
-            const isActive = activeId === item.id;
-            return (
-              <li key={item.id} className="relative z-10">
-                <a
-                  href={`#${item.id}`}
-                  onClick={(e) => onItemClick(e, item.id)}
-                  className={`group flex items-start gap-4 w-full px-4 py-3 rounded-2xl transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-white dark:bg-[#202124] shadow-sm border border-gray-100 dark:border-white/10' 
-                      : 'border border-transparent hover:bg-gray-50/50 dark:hover:bg-white/[0.02]'
-                  }`}
-                >
-                  {/* 타임라인 점 */}
-                  <div className="relative mt-[8px] shrink-0 z-10">
-                    <div className={`w-2.5 h-2.5 rounded-full ring-4 ring-white dark:ring-[#1a1b1e] transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-[#d93025] scale-[1.2] shadow-[0_0_12px_rgba(217,48,37,0.5)]' 
-                        : 'bg-gray-200 dark:bg-gray-700 group-hover:bg-[#d93025]/40'
-                    }`} />
-                  </div>
-                  
-                  {/* 텍스트 내용 */}
-                  <div className={`flex-1 min-w-0 transition-transform duration-300 ${isActive ? 'translate-x-1' : ''}`}>
-                    <span className={`text-[15px] leading-snug break-keep block ${
-                      isActive 
-                        ? 'font-bold text-[#d93025] dark:text-[#f28b82]' 
-                        : 'font-medium text-[#d93025]/80 dark:text-[#f28b82]/80 group-hover:text-[#d93025] dark:group-hover:text-[#f28b82]'
-                    }`}>
-                      {item.text}
-                    </span>
-                  </div>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <ul className="px-5 py-4 space-y-3">
+        {toc.map((item, i) => {
+          const isActive = activeId === item.id;
+          return (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                onClick={(e) => onItemClick(e, item.id)}
+                className="group flex items-start gap-3 w-full"
+              >
+                <span className={`w-5 h-5 rounded text-[11px] font-bold flex items-center justify-center shrink-0 mt-[2px] transition-colors ${
+                  isActive
+                    ? 'bg-[#d93025] text-white shadow-sm'
+                    : 'bg-[#d93025]/20 dark:bg-[#d93025]/30 text-[#d93025] dark:text-[#f28b82] group-hover:bg-[#d93025] group-hover:text-white'
+                }`}>
+                  {i + 1}
+                </span>
+                
+                <span className={`text-[14.5px] leading-relaxed break-keep transition-colors ${
+                  isActive 
+                    ? 'font-bold text-[#d93025] dark:text-[#f28b82]' 
+                    : 'font-medium text-[#d93025]/80 dark:text-[#f28b82]/80 group-hover:text-[#d93025] dark:group-hover:text-[#f28b82]'
+                }`}>
+                  {item.text}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }
