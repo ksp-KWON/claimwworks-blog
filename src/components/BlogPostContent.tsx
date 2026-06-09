@@ -298,6 +298,25 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     green: ({ children }: any) => <strong className="text-[#34A853] dark:text-[#81c995] font-bold">{children}</strong>,
     blue: ({ children }: any) => <strong className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold">{children}</strong>,
     purple: ({ children }: any) => <strong className="text-[#9333ea] dark:text-[#c084fc] font-bold">{children}</strong>,
+    hr1: () => (
+      <div className="my-16 flex items-center justify-center gap-4">
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+      </div>
+    ),
+    hr2: () => (
+      <div className="my-16 flex justify-center">
+        <div className="w-24 h-px bg-gray-300 dark:bg-gray-600"></div>
+      </div>
+    ),
+    hr3: () => (
+      <div className="my-16 flex items-center justify-center gap-4">
+        <div className="w-24 h-px bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#d93025]" />
+        <div className="w-24 h-px bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600" />
+      </div>
+    ),
   };
 
   return (
