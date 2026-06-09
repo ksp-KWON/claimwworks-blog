@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <article className="w-full bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 lg:p-12 border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
+    <article className="w-full bg-white dark:bg-[#202124] rounded-none sm:rounded-3xl px-3 py-6 sm:p-10 lg:p-12 border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       {/* 상단 네비게이션 */}
       <div className="mb-6">
         <Link

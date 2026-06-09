@@ -21,7 +21,7 @@ export default function AutoCalculatorPage() {
         </nav>
       </div>
 
-      <article className="w-full bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 lg:p-12 border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
+      <article className="w-full bg-white dark:bg-[#202124] rounded-none sm:rounded-3xl px-3 py-6 sm:p-10 lg:p-12 border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
         <header className="mb-10 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#e8f0fe] dark:bg-[#8ab4f8]/20 text-[var(--google-blue)] dark:text-[#8ab4f8] mb-6">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>

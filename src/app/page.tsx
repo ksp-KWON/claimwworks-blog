@@ -85,7 +85,7 @@ export default function Home() {
   const posts = getSortedPostsData();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-3 sm:px-0">
       
       {/* 2. 메인 페이지 인트로 헤더 */}
       <div className="border-b border-[var(--google-border)] pb-4">

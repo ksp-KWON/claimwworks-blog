@@ -142,7 +142,7 @@ export default function RootLayout({
         </section>
 
         {/* 3. 티스토리 2단 레이아웃 본문 75% : 사이드바 25% 구조 */}
-        <div className="mx-auto w-[92vw] xl:w-[85vw] max-w-7xl px-2 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 transition-all duration-300">
+        <div className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 transition-all duration-300">
           
           {/* 본문 영역 (좌측 75%) */}
           <main className="w-full lg:w-[73%] flex-1 min-w-0">
