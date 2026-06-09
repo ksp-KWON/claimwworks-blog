@@ -12,14 +12,26 @@ published: true
 - **조급한 합의는 금물 :** 사고 직후 <red>섣불리 합의서에 도장을 찍으면</red>, 추후 발생할 수 있는 후유증(디스크 등)에 대한 보상을 받을 수 없습니다.
 - **나의 정확한 손해액 알기 :** 아래 제공된 보상스쿨 교통사고 합의금 계산기를 통해 최소한의 기준점을 먼저 파악하세요.
 
-<hr1 />
-위는 **옵션 1 (미디엄 스타일)**입니다.
+<br/>
 
-<hr2 />
-위는 **옵션 2 (노션 실선 스타일)**입니다.
+<div class="my-16 flex items-center justify-center gap-4">
+  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+</div>
+<p style="text-align:center;">☝️ <strong>옵션 1 (미디엄 스타일 - 점 3개)</strong></p>
 
-<hr3 />
-위는 **옵션 3 (브랜드 붉은 점 스타일)**입니다.
+<div class="my-16 flex justify-center">
+  <div class="w-24 h-px bg-gray-300 dark:bg-gray-600"></div>
+</div>
+<p style="text-align:center;">☝️ <strong>옵션 2 (노션 실선 스타일)</strong></p>
+
+<div class="my-16 flex items-center justify-center gap-4">
+  <div class="w-24 h-px bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+  <span class="w-1.5 h-1.5 rounded-full bg-[#d93025]"></span>
+  <div class="w-24 h-px bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600"></div>
+</div>
+<p style="text-align:center;">☝️ <strong>옵션 3 (브랜드 붉은 점 스타일)</strong></p>
 
 ---
 
