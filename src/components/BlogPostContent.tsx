@@ -218,8 +218,11 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h2
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="text-xl font-bold text-[#1A73E8] dark:text-[#8ab4f8] mt-12 mb-6 px-4 py-3 bg-[#E8F0FE] dark:bg-[#1A73E8]/10 border-l-4 border-[#1A73E8] rounded-r-xl tracking-tight leading-snug break-keep"
+        className="text-[20px] sm:text-[22px] font-bold text-gray-900 dark:text-[#e8eaed] mt-14 mb-6 px-5 py-4 sm:px-6 bg-white dark:bg-[#202124] border border-gray-100 dark:border-white/5 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] flex items-center gap-3.5 tracking-tight break-keep"
       >
+        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#fce8e6] dark:bg-[#d93025]/20 flex items-center justify-center shadow-sm">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#d93025]" />
+        </span>
         {children}
       </h2>
     ),
@@ -227,8 +230,9 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h3
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="inline-flex text-[16px] font-bold text-[#1A73E8] dark:text-[#8ab4f8] mt-8 mb-4 px-3.5 py-1.5 bg-[#f1f3f4] dark:bg-[#303134] rounded-lg tracking-tight items-center shadow-sm border border-[#e8eaed] dark:border-[#3c4043]"
+        className="inline-flex items-center text-[16px] font-bold text-gray-800 dark:text-[#e8eaed] mt-8 mb-4 px-4 py-2 bg-gray-50/80 dark:bg-white/[0.04] border border-gray-100/50 dark:border-white/5 rounded-full tracking-tight break-keep shadow-[0_2px_10px_rgba(0,0,0,0.01)]"
       >
+        <span className="text-[#d93025] mr-2 opacity-80 text-[15px] font-extrabold">#</span>
         {children}
       </h3>
     ),
