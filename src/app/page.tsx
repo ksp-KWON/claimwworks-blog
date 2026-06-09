@@ -100,7 +100,7 @@ export default function Home() {
 
       {/* 3. 본문 영역: 가이드 카드 격자(Grid) 배치 */}
       {posts.length === 0 ? (
-        <div className="bg-[var(--background)] rounded-2xl p-12 text-center border border-[var(--google-border)]">
+        <div className="bg-white dark:bg-[#202124] rounded-3xl p-12 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
           <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 19h6"></path><path d="M10 15h8"></path><path d="M10 19h8"></path></svg>
           <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6] font-medium">등록된 가이드 문서가 아직 존재하지 않습니다.</p>
         </div>
@@ -111,7 +111,7 @@ export default function Home() {
             return (
               <article 
                 key={post.slug}
-                className={`group bg-[var(--background)] dark:bg-[#202124] rounded-2xl overflow-hidden border border-[var(--google-border)] ${colors.border} hover:shadow-md transition-all duration-200 flex flex-col min-h-[220px]`}
+                className={`group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] ${colors.border} hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col min-h-[220px]`}
               >
                 <Link href={`/blog/${post.slug}`} className="p-5 flex flex-col justify-between h-full flex-1">
                   

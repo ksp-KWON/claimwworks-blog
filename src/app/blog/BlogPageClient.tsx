@@ -108,7 +108,7 @@ function HospitalListView({
   const currentHospitals = specialtyData.hospitals.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div className="bg-[var(--background)] dark:bg-[#202124] rounded-[24px] border border-[var(--google-border)] shadow-sm p-4 sm:p-8 lg:p-10">
+    <div className="bg-white dark:bg-[#202124] rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] p-4 sm:p-8 lg:p-10">
       <div className="flex items-center justify-between mb-6 border-b border-[var(--google-border)] pb-4">
         <div>
           <h2 className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
@@ -128,7 +128,7 @@ function HospitalListView({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {currentHospitals.map((hosp: { name: string; address: string; tel: string }, i: number) => (
-          <div key={i} className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-[16px] bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200">
+          <div key={i} className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-[16px] bg-white dark:bg-[#202124] border border-gray-100 dark:border-white/5 shadow-sm hover:border-[var(--google-blue)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             <div className="w-10 h-10 shrink-0 bg-[#e8f0fe] dark:bg-[#174ea6]/20 text-[var(--google-blue)] dark:text-[#8ab4f8] rounded-full flex items-center justify-center">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
             </div>
@@ -269,7 +269,7 @@ export default function BlogPageClient() {
 
         {loading ? (
           /* 로딩 스피너 */
-          <div className="bg-[var(--background)] dark:bg-[#202124] rounded-[24px] p-16 text-center border border-[var(--google-border)] shadow-sm">
+          <div className="bg-white dark:bg-[#202124] rounded-[24px] p-16 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <div className="inline-block w-8 h-8 border-4 border-[var(--google-blue)] border-t-transparent rounded-full animate-spin mb-4" />
             <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6]">{region} 의료기관 데이터 불러오는 중...</p>
           </div>
@@ -304,7 +304,7 @@ export default function BlogPageClient() {
                   {filteredPosts.map((post) => (
                     <article
                       key={post.slug}
-                      className="bg-white dark:bg-[#202124] p-5 sm:p-6 rounded-[24px] border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200"
+                      className="bg-white dark:bg-[#202124] p-5 sm:p-6 rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[var(--google-blue)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300"
                     >
                       <div className="flex flex-wrap items-center gap-3 text-xs mb-3">
                         <span className="px-2.5 py-1 rounded-md bg-[#e8f0fe] dark:bg-[#174ea6]/20 text-[var(--google-blue)] font-bold">
@@ -329,7 +329,7 @@ export default function BlogPageClient() {
                 </div>
               ) : (
                 /* 필터링된 포스트가 없을 경우 상담 유도 UI */
-                <div className="bg-[var(--background)] dark:bg-[#202124] rounded-[24px] p-8 sm:p-10 text-center border border-[var(--google-border)] shadow-sm">
+                <div className="bg-white dark:bg-[#202124] rounded-[24px] p-8 sm:p-10 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
                   <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   <h3 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-2">
                     해당 진료과목과 관련된 칼럼이 없습니다.
@@ -364,7 +364,7 @@ export default function BlogPageClient() {
           </div>
         ) : (
           /* 데이터 없음 */
-          <div className="bg-[var(--background)] dark:bg-[#202124] rounded-[24px] p-10 text-center border border-[var(--google-border)] shadow-sm">
+          <div className="bg-white dark:bg-[#202124] rounded-[24px] p-10 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" /><circle cx="12" cy="10" r="3" /></svg>
             <h2 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-2">
               {region} 의료기관 정보
@@ -416,7 +416,7 @@ export default function BlogPageClient() {
           </nav>
         </div>
 
-        <div className="bg-[var(--background)] rounded-2xl border border-[var(--google-border)] shadow-sm p-5 sm:p-6">
+        <div className="bg-white dark:bg-[#202124] rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] p-5 sm:p-6">
           <h2 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-1">
             {sido} 구/군 선택
           </h2>
@@ -430,7 +430,7 @@ export default function BlogPageClient() {
                 <Link
                   key={dist}
                   href={`/blog?sido=${encodeURIComponent(sido)}&region=${encodeURIComponent(dist)}`}
-                  className="group relative flex items-center justify-between p-3.5 sm:p-4 rounded-xl bg-white dark:bg-[#202124] border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 overflow-hidden"
+                  className="group relative flex items-center justify-between p-3.5 sm:p-4 rounded-[16px] bg-white dark:bg-[#202124] border border-gray-100 dark:border-white/5 shadow-sm hover:border-[var(--google-blue)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-[var(--google-blue)]/0 to-[var(--google-blue)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   <div className="flex items-center gap-2.5 sm:gap-3 relative z-10">
@@ -555,7 +555,7 @@ export default function BlogPageClient() {
       {displayPosts.length === 0 ? (
         categoryFilter ? (
           /* 필터링된 포스트가 없을 경우 상담 유도 UI */
-          <div className="bg-[var(--background)] dark:bg-[#202124] rounded-[24px] p-8 sm:p-10 text-center border border-[var(--google-border)] shadow-sm">
+          <div className="bg-white dark:bg-[#202124] rounded-[24px] p-8 sm:p-10 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             <h3 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-2">
               해당 진료과목과 관련된 칼럼이 없습니다.
@@ -586,7 +586,7 @@ export default function BlogPageClient() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-16 bg-[var(--background)] dark:bg-[#202124] rounded-2xl border border-[var(--google-border)] shadow-sm">
+          <div className="text-center py-16 bg-white dark:bg-[#202124] rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 19h6"></path><path d="M10 15h8"></path><path d="M10 19h8"></path></svg>
             <p className="text-sm font-bold tracking-wide text-[#5f6368] dark:text-[#9aa0a6]">
               {tagFilter ? `'#${tagFilter}' 태그에 해당하는 게시글이 없습니다.` : '등록된 블로그 포스팅이 존재하지 않습니다.'}
@@ -598,7 +598,7 @@ export default function BlogPageClient() {
           {displayPosts.map((post) => (
             <article
               key={post.slug}
-              className="bg-[var(--background)] dark:bg-[#202124] p-5 sm:p-6 rounded-xl border border-[var(--google-border)] hover:border-[var(--google-blue)] hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+              className="bg-white dark:bg-[#202124] p-5 sm:p-6 rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[var(--google-blue)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex flex-wrap items-center gap-3 text-xs mb-3">

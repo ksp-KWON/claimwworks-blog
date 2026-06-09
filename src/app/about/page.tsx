@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <article className="w-full bg-[var(--background)] dark:bg-[#202124] rounded-2xl p-6 sm:p-10 lg:p-12 border border-[var(--google-border)]">
+    <article className="w-full bg-white dark:bg-[#202124] rounded-3xl p-6 sm:p-10 lg:p-12 border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       
       {/* 1. 소개 헤더 */}
       <header className="border-b border-[var(--google-border)] pb-6 mb-8">
