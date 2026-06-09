@@ -1,15 +1,18 @@
 'use client';
 
 import { AutoInsuranceData, INJURY_ALIMONY_TABLE } from './calculator-types';
+import { useRef } from 'react';
 
 interface Props {
   data: AutoInsuranceData;
 }
 
 export default function AutoCalculatorResult({ data }: Props) {
+  const resultRef = useRef<HTMLDivElement>(null);
+
   // 간단한 약관/호프만계수 시연용 계산 로직 (실제 실무 로직은 매우 복잡하므로 시연용 추정치만 산출)
   
-  let formulas: string[] = [];
+  const formulas: string[] = [];
 
   // 호프만 계수 산출 함수 (월 5/12% 단리 할인 방식 누적합, 판례 한도 240)
   const getHoffmanCoefficient = (months: number) => {
@@ -149,8 +152,70 @@ export default function AutoCalculatorResult({ data }: Props) {
   // 과실 상계 (직불영수증 등 제외 복잡한 상계가 있지만 여기서는 전체 단순 상계)
   const finalTotal = Math.floor(totalBeforeFault * ((100 - data.faultRatio) / 100));
 
+  const exportPDF = async () => {
+    if (!resultRef.current) return;
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const jsPDF = (await import('jspdf')).default;
+      
+      const originalBg = resultRef.current.style.backgroundColor;
+      resultRef.current.style.backgroundColor = '#ffffff';
+      
+      const canvas = await html2canvas(resultRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      resultRef.current.style.backgroundColor = originalBg;
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('보상스쿨_교통사고_합의금명세서.pdf');
+    } catch (e) {
+      console.error(e);
+      alert('PDF 생성 중 오류가 발생했습니다.');
+    }
+  };
+
+  const shareResult = () => {
+    const text = `보상스쿨 교통사고 합의금 계산결과\n▶ 추정 합의금: ${finalTotal.toLocaleString()}원\n\n자세한 내역은 보상스쿨에서 확인해보세요!`;
+    
+    if (typeof window !== 'undefined' && (window as any).Kakao && (window as any).Kakao.isInitialized()) {
+      (window as any).Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '보상스쿨 자동차사고 합의금 산출 결과',
+          description: `예상 합의금: ${finalTotal.toLocaleString()}원\n자세한 보상 명세서를 확인해 보세요!`,
+          imageUrl: 'https://claimworks-blog.pages.dev/og-image.png',
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+        buttons: [
+          {
+            title: '합의금 결과 보기',
+            link: {
+              mobileWebUrl: window.location.href,
+              webUrl: window.location.href,
+            },
+          },
+        ],
+      });
+    } else if (navigator.share) {
+      navigator.share({
+        title: '보상스쿨 합의금 산출 명세서',
+        text: text,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(text + '\n' + window.location.href);
+      alert('결과가 클립보드에 복사되었습니다. 카카오톡이나 메시지 앱에 붙여넣기 해보세요.');
+    }
+  };
+
   return (
-    <div className="bg-blue-50 dark:bg-[#303134]/50 rounded-3xl p-5 sm:p-8 border border-blue-100 dark:border-gray-800 shadow-sm sticky top-6">
+    <div ref={resultRef} className="bg-blue-50 dark:bg-[#303134]/50 rounded-3xl p-5 sm:p-8 border border-blue-100 dark:border-gray-800 shadow-sm sticky top-6">
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
         <span className="w-1.5 h-6 bg-blue-600 rounded-full inline-block shrink-0" />
         산출 명세서 (추정치)
@@ -244,7 +309,24 @@ export default function AutoCalculatorResult({ data }: Props) {
         <strong className="text-red-500">⚠️ 참고:</strong> 위 결과는 대인배상 약관 및 단순화된 호프만계수를 적용한 참고용 추정치입니다. 실제로는 치료비 상계가 발생할 수 있으며, 법원 기준(특인) 적용 시 수백~수천만 원 이상 증액될 수 있습니다. 섣불리 합의하지 마시고 반드시 전문가와 상담하세요.
       </div>
 
-      <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-4 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
+      <div className="mt-6 flex flex-col sm:flex-row gap-3">
+        <button 
+          onClick={shareResult}
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#FEE500] hover:bg-[#F4DC00] text-black rounded-xl font-bold transition-colors"
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.541 2 10.908c0 2.502 1.432 4.745 3.659 6.13-.314 1.157-1.14 4.183-1.182 4.341-.053.197.075.18.156.126.104-.07 3.324-2.222 4.606-3.084.887.24 1.821.366 2.761.366 5.523 0 10-3.541 10-7.908C22 6.541 17.523 3 12 3z"/></svg>
+          결과 공유하기
+        </button>
+        <button 
+          onClick={exportPDF}
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl font-bold transition-colors dark:bg-[#202124] dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#303134]"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          PDF 다운로드
+        </button>
+      </div>
+
+      <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-3 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
         보상스쿨 무료 상담 신청하기
       </a>
     </div>

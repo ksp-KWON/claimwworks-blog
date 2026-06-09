@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { AutoInsuranceData, initialAutoData } from './calculator-types';
 import AutoCalculatorResult from './AutoCalculatorResult';
-import { INJURY_DB, InjuryDiagnosis } from './injury-db';
+import { INJURY_DB } from './injury-db';
 
 export default function ExpertModeForm() {
   const [data, setData] = useState<AutoInsuranceData>(initialAutoData);
@@ -11,8 +11,6 @@ export default function ExpertModeForm() {
   // 상해 검색 및 모달 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('전체');
   
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -27,43 +25,38 @@ export default function ExpertModeForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 병급 로직: 선택된 진단명들이 바뀔 때마다 급수 자동 세팅
-  useEffect(() => {
-    if (data.selectedDiagnoses.length > 0) {
-      const selected = INJURY_DB.filter(i => data.selectedDiagnoses.includes(i.id));
-      if (selected.length > 0) {
-        let highestGrade = Math.min(...selected.map(i => i.grade)); // 숫자가 작을수록 높은 급수
-        const grades2to11 = selected.filter(i => i.grade >= 2 && i.grade <= 11);
-        
-        let hasMultiple = false;
-        if (grades2to11.length >= 2) {
-          hasMultiple = true;
-        }
-
-        setData(prev => ({
-          ...prev,
-          injuryGrade: highestGrade,
-          hasMultipleInjuries: hasMultiple,
-          isAutoGrade: true
-        }));
-      }
-    } else if (data.isAutoGrade) {
-      // 선택된 게 하나도 없어지면 기본값으로
-      setData(prev => ({
-        ...prev,
-        isAutoGrade: false,
-        hasMultipleInjuries: false
-      }));
-    }
-  }, [data.selectedDiagnoses]);
-
   const handleToggleDiagnosis = (id: string) => {
     setData(prev => {
-      if (prev.selectedDiagnoses.includes(id)) {
-        return { ...prev, selectedDiagnoses: prev.selectedDiagnoses.filter(d => d !== id) };
+      let newDiagnoses = [...prev.selectedDiagnoses];
+      if (newDiagnoses.includes(id)) {
+        newDiagnoses = newDiagnoses.filter(d => d !== id);
       } else {
-        return { ...prev, selectedDiagnoses: [...prev.selectedDiagnoses, id] };
+        newDiagnoses.push(id);
       }
+
+      if (newDiagnoses.length > 0) {
+        const selected = INJURY_DB.filter(i => newDiagnoses.includes(i.id));
+        if (selected.length > 0) {
+          const highestGrade = Math.min(...selected.map(i => i.grade));
+          const grades2to11 = selected.filter(i => i.grade >= 2 && i.grade <= 11);
+          const hasMultiple = grades2to11.length >= 2;
+          
+          return {
+            ...prev,
+            selectedDiagnoses: newDiagnoses,
+            injuryGrade: highestGrade,
+            hasMultipleInjuries: hasMultiple,
+            isAutoGrade: true
+          };
+        }
+      }
+
+      return {
+        ...prev,
+        selectedDiagnoses: newDiagnoses,
+        isAutoGrade: false,
+        hasMultipleInjuries: false
+      };
     });
   };
 

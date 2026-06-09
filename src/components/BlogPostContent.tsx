@@ -281,8 +281,10 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     ),
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const finalComponents: any = {
     ...components,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculator: ({ ...props }: any) => {
       const isAuto = props.type === 'auto';
       const isMedical = props.type === 'medical';
@@ -319,11 +321,11 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
         </div>
       );
     },
-    red: ({ children }: any) => <strong className="text-[#d93025] dark:text-[#f28b82] font-bold">{children}</strong>,
-    orange: ({ children }: any) => <strong className="text-[#f29900] dark:text-[#fde293] font-bold">{children}</strong>,
-    green: ({ children }: any) => <strong className="text-[#34A853] dark:text-[#81c995] font-bold">{children}</strong>,
-    blue: ({ children }: any) => <strong className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold">{children}</strong>,
-    purple: ({ children }: any) => <strong className="text-[#9333ea] dark:text-[#c084fc] font-bold">{children}</strong>,
+    red: ({ children }: { children: React.ReactNode }) => <strong className="text-[#d93025] dark:text-[#f28b82] font-bold">{children}</strong>,
+    orange: ({ children }: { children: React.ReactNode }) => <strong className="text-[#f29900] dark:text-[#fde293] font-bold">{children}</strong>,
+    green: ({ children }: { children: React.ReactNode }) => <strong className="text-[#34A853] dark:text-[#81c995] font-bold">{children}</strong>,
+    blue: ({ children }: { children: React.ReactNode }) => <strong className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold">{children}</strong>,
+    purple: ({ children }: { children: React.ReactNode }) => <strong className="text-[#9333ea] dark:text-[#c084fc] font-bold">{children}</strong>,
     hr1: () => (
       <div className="my-16 flex items-center justify-center gap-4">
         <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
@@ -666,20 +668,14 @@ function CTABanner() {
           href="https://open.kakao.com/o/sWeszp7"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(242,153,0,0.2)] hover:border-[#f29900] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(242,153,0,0.2)] hover:border-[#f29900] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-12 h-12 rounded-full bg-[#fef7e0] dark:bg-[#e37400]/20 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-            <svg className="w-6 h-6 text-[#f29900] dark:text-[#fde293]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 3c-5.5 0-10 3.5-10 7.8 0 2.7 1.7 5.1 4.2 6.5l-1.1 4.1c-.1.3.2.5.4.4l4.8-3.2c.5.1 1.1.1 1.7.1 5.5 0 10-3.5 10-7.8S17.5 3 12 3z" />
-            </svg>
+          <div className="w-10 h-10 rounded-full bg-[#fef7e0] dark:bg-[#e37400] flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-[#f29900] dark:text-[#fde293]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
           </div>
-          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
-            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
-              카카오톡 상담
-            </span>
-            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
-              실시간 채팅상담
-            </span>
+          <div className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">카카오톡 상담</span>
+            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">실시간 채팅상담</span>
           </div>
         </a>
 
@@ -688,46 +684,28 @@ function CTABanner() {
           href="https://forms.gle/E9vj7iqAHeJGhJ549"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(52,168,83,0.2)] hover:border-[#34A853] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(52,168,83,0.2)] hover:border-[#34A853] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-12 h-12 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-            <svg className="w-6 h-6 text-[#34A853] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-            </svg>
+          <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d] flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-[var(--google-green)] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           </div>
-          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
-            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#34A853] transition-colors">
-              상담신청 양식
-            </span>
-            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
-              예약상담 신청서
-            </span>
+          <div className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-green)] transition-colors">상담신청 양식</span>
+            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">예약상담 신청서</span>
           </div>
         </a>
 
         {/* 카드 3: 보상스쿨 소개 */}
         <Link
           href="/about"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(26,115,232,0.2)] hover:border-[#1A73E8] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(26,115,232,0.2)] hover:border-[#1A73E8] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-12 h-12 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-            <svg className="w-6 h-6 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+          <div className="w-10 h-10 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6] flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-[var(--google-blue)] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           </div>
-          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
-            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#1A73E8] transition-colors">
-              보상스쿨 소개
-            </span>
-            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
-              자격 및 경력사항
-            </span>
+          <div className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-blue)] transition-colors">보상스쿨 소개</span>
+            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">자격 및 경력사항</span>
           </div>
         </Link>
 
@@ -736,21 +714,14 @@ function CTABanner() {
           href="https://www.youtube.com/@bosangschool"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(217,48,37,0.2)] hover:border-[#d93025] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(217,48,37,0.2)] hover:border-[#d93025] hover:-translate-y-1 transition-all duration-300 group"
         >
-          <div className="w-12 h-12 rounded-full bg-[#fce8e6] dark:bg-[#c5221f]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-            <svg className="w-6 h-6 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
-              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-            </svg>
+          <div className="w-10 h-10 rounded-full bg-[#fce8e6] dark:bg-[#c5221f] flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-[var(--google-red)] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
           </div>
-          <div className="min-w-0 flex-1 mt-1 sm:mt-0">
-            <span className="block text-[15px] font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[#d93025] transition-colors">
-              보상스쿨 TV
-            </span>
-            <span className="block text-[13px] text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">
-              유튜브 바로가기
-            </span>
+          <div className="min-w-0 flex-1">
+            <span className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] truncate group-hover:text-[var(--google-red)] transition-colors">보상스쿨 TV</span>
+            <span className="block text-xs text-[#5f6368] dark:text-[#9aa0a6] truncate mt-0.5">유튜브 바로가기</span>
           </div>
         </a>
       </div>

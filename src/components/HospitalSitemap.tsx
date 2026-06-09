@@ -228,38 +228,38 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
   const specialtyList = Object.entries(specialties).sort((a, b) => b[1].count - a[1].count);
 
   return (
-    <article className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200/60 dark:border-zinc-800/60 shadow-sm relative">
+    <article className="bg-white dark:bg-[#202124] rounded-[24px] sm:rounded-[32px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative overflow-hidden">
 
       {/* 상단 헤더 */}
-      <div className="px-4 py-5 sm:px-6 border-b border-slate-100 dark:border-zinc-800/80 bg-gradient-to-r from-blue-50/80 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/10">
+      <div className="px-4 py-5 sm:px-6 border-b border-[var(--google-border)] bg-[#f8f9fa] dark:bg-[#303134]">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-bold mb-1.5">
+            <div className="flex items-center gap-2 text-xs text-[var(--google-blue)] dark:text-[#8ab4f8] font-bold mb-1.5">
               <span>🗺️</span>
               <span>{sido}</span>
-              <span className="text-slate-300 dark:text-zinc-600">›</span>
+              <span className="text-[#dadce0] dark:text-[#5f6368]">›</span>
               <span>{region}</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-zinc-50 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-tight">
               {region} 의료기관 안내
             </h1>
-            <p className="text-xs text-slate-500 dark:text-zinc-400 mt-1.5 leading-relaxed">
+            <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-1.5 leading-relaxed">
               공인·검증된 의료기관 정보를 진료과목별로 안내합니다.<br />
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">진료과목을 클릭</span>하시면 치료 가능 병명과 병원 목록을 확인하실 수 있습니다.
+              <span className="text-[var(--google-blue)] dark:text-[#8ab4f8] font-semibold">진료과목을 클릭</span>하시면 치료 가능 병명과 병원 목록을 확인하실 수 있습니다.
             </p>
           </div>
           <div className="text-right shrink-0">
-            <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{totalHospitals.toLocaleString()}</div>
-            <div className="text-xs text-slate-400 dark:text-zinc-500 font-medium">총 등록 의료기관</div>
-            <div className="text-xs text-slate-400 dark:text-zinc-500">{specialtyList.length}개 진료과목</div>
+            <div className="text-2xl font-extrabold text-[var(--google-blue)] dark:text-[#8ab4f8]">{totalHospitals.toLocaleString()}</div>
+            <div className="text-xs text-[#5f6368] dark:text-[#9aa0a6] font-medium">총 등록 의료기관</div>
+            <div className="text-xs text-[#5f6368] dark:text-[#9aa0a6]">{specialtyList.length}개 진료과목</div>
           </div>
         </div>
       </div>
 
       {/* 안내 배너 */}
-      <div className="mx-4 sm:mx-6 mt-5 p-3.5 bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/30 rounded-xl flex items-start gap-2.5">
+      <div className="mx-4 sm:mx-6 mt-5 p-3.5 bg-[#fef7e0] dark:bg-[#e37400]/10 border border-[#fde293] dark:border-[#e37400]/30 rounded-xl flex items-start gap-2.5">
         <span className="text-base shrink-0 mt-0.5">⚠️</span>
-        <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed font-medium">
+        <p className="text-xs text-[#ea8600] dark:text-[#fde293] leading-relaxed font-bold">
           본 의료기관 정보는 건강보험심사평가원(HIRA) 공개 데이터 기반입니다. 
           개별 진료 가능 여부는 해당 병원에 직접 확인하시기 바랍니다.
         </p>
@@ -267,7 +267,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
 
       {/* 진료과목별 카드 그리드 */}
       <div className="p-4 sm:p-6">
-        <div className="text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wide mb-4">
+        <div className="text-xs font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wide mb-4">
           📋 진료과목별 의료기관 현황
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -285,11 +285,11 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
 
       {/* 하단 SEO 텍스트 */}
       <div className="px-4 pb-4 sm:px-6 sm:pb-6">
-        <div className="p-4 bg-slate-50 dark:bg-zinc-800/40 rounded-2xl border border-slate-100 dark:border-zinc-800">
-          <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed break-keep">
-            <strong className="text-slate-700 dark:text-zinc-300">{region}</strong>에서 교통사고·상해 치료를 받으셨거나, 
+        <div className="p-4 bg-[#f8f9fa] dark:bg-[#303134] rounded-2xl border border-[var(--google-border)] shadow-sm">
+          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] leading-relaxed break-keep">
+            <strong className="text-[#202124] dark:text-[#e8eaed]">{region}</strong>에서 교통사고·상해 치료를 받으셨거나, 
             보험사와의 합의금 분쟁으로 어려움을 겪고 계신다면 
-            <strong className="text-blue-600 dark:text-blue-400"> 보상스쿨 손해사정 전문가 그룹</strong>에 무료 상담을 신청해 주세요.
+            <strong className="text-[var(--google-blue)] dark:text-[#8ab4f8]"> 보상스쿨 전문가 그룹</strong>에 무료 상담을 신청해 주세요.
             거주지 및 근무지 인근 의료기관 선택부터 정당한 보험금 청구까지 도와드립니다.
           </p>
         </div>
