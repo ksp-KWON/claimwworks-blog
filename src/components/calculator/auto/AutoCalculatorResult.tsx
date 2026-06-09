@@ -244,7 +244,7 @@ export default function AutoCalculatorResult({ data }: Props) {
         <strong className="text-red-500">⚠️ 참고:</strong> 위 결과는 대인배상 약관 및 단순화된 호프만계수를 적용한 참고용 추정치입니다. 실제로는 치료비 상계가 발생할 수 있으며, 법원 기준(특인) 적용 시 수백~수천만 원 이상 증액될 수 있습니다. 섣불리 합의하지 마시고 반드시 전문가와 상담하세요.
       </div>
 
-      <a href="https://google.com" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-4 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
+      <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-4 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
         보상스쿨 무료 상담 신청하기
       </a>
     </div>
