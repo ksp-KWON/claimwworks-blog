@@ -400,27 +400,27 @@ function TOCNav({
                 <a
                   href={`#${item.id}`}
                   onClick={(e) => onItemClick(e, item.id)}
-                  className={`group flex items-center gap-4 w-full px-3 py-2.5 rounded-xl transition-all duration-300 ${
+                  className={`group flex items-start gap-4 w-full px-3 py-2.5 rounded-xl transition-all duration-300 ${
                     isActive 
-                      ? 'bg-[#e8f0fe]/50 dark:bg-[#1A73E8]/10' 
+                      ? 'bg-[#fce8e6] dark:bg-[#d93025]/10' 
                       : 'hover:bg-[#f8f9fa] dark:hover:bg-[#303134]'
                   }`}
                 >
                   {/* 타임라인 점 */}
-                  <div className="relative shrink-0">
+                  <div className="relative mt-[7px] shrink-0">
                     <div className={`w-2 h-2 rounded-full ring-4 ring-white dark:ring-[#202124] transition-all duration-300 ${
                       isActive 
-                        ? 'bg-[#1A73E8] scale-[1.5] shadow-[0_0_8px_rgba(26,115,232,0.4)]' 
-                        : 'bg-[#dadce0] dark:bg-[#5f6368] group-hover:bg-[#1A73E8]/50'
+                        ? 'bg-[#d93025] scale-[1.5] shadow-[0_0_8px_rgba(217,48,37,0.4)]' 
+                        : 'bg-[#dadce0] dark:bg-[#5f6368] group-hover:bg-[#d93025]/50'
                     }`} />
                   </div>
                   
                   {/* 텍스트 내용 */}
-                  <div className={`flex-1 transition-transform duration-300 ${isActive ? 'translate-x-1' : ''}`}>
-                    <span className={`text-[15px] block truncate ${
+                  <div className={`flex-1 min-w-0 transition-transform duration-300 ${isActive ? 'translate-x-1' : ''}`}>
+                    <span className={`text-[15px] leading-snug break-keep block text-[#d93025] dark:text-[#f28b82] ${
                       isActive 
-                        ? 'font-bold text-[#1A73E8] dark:text-[#8ab4f8]' 
-                        : 'font-medium text-[#5f6368] dark:text-[#9aa0a6] group-hover:text-[#202124] dark:group-hover:text-[#e8eaed]'
+                        ? 'font-bold' 
+                        : 'font-medium opacity-80 group-hover:opacity-100'
                     }`}>
                       {item.text}
                     </span>
