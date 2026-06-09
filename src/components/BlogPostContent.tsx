@@ -376,21 +376,21 @@ function TOCNav({
 }) {
   if (!toc.length) return null;
   return (
-    <nav className="mb-10 px-6 py-7 bg-gradient-to-br from-white to-[#f8f9fa] dark:from-[#202124] dark:to-[#303134]/50 rounded-2xl border border-[#e8eaed] dark:border-[#3c4043] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
-      <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-[#f1f3f4] dark:border-[#3c4043]">
-        <div className="w-8 h-8 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
-          <svg className="w-4 h-4 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+    <nav className="mb-10 px-6 py-7 bg-gradient-to-br from-[#fffafa] to-[#fce8e6]/40 dark:from-[#3a1a1a]/40 dark:to-[#2a1212]/30 rounded-2xl border border-[#fce8e6] dark:border-[#d93025]/20 shadow-[0_4px_20px_rgba(217,48,37,0.04)] dark:shadow-[0_4px_20px_rgba(217,48,37,0.15)]">
+      <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-[#fce8e6] dark:border-[#d93025]/20">
+        <div className="w-8 h-8 rounded-full bg-[#fce8e6] dark:bg-[#d93025]/20 flex items-center justify-center shrink-0">
+          <svg className="w-4 h-4 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
             <path d="M4 6h16M4 12h16M4 18h7" />
           </svg>
         </div>
-        <span className="text-[16px] font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-tight">
+        <span className="text-[16px] font-extrabold text-[#d93025] dark:text-[#f28b82] tracking-tight">
           이 글의 목차
         </span>
       </div>
 
       <div className="relative pl-3">
         {/* 수직 타임라인 선 */}
-        <div className="absolute top-3 bottom-3 left-[15px] w-[2px] bg-[#f1f3f4] dark:bg-[#3c4043]" />
+        <div className="absolute top-3 bottom-3 left-[15px] w-[2px] bg-[#fce8e6] dark:bg-[#d93025]/20" />
 
         <ul className="space-y-1">
           {toc.map((item, i) => {
@@ -402,8 +402,8 @@ function TOCNav({
                   onClick={(e) => onItemClick(e, item.id)}
                   className={`group flex items-start gap-4 w-full px-3 py-2.5 rounded-xl transition-all duration-300 ${
                     isActive 
-                      ? 'bg-[#fce8e6] dark:bg-[#d93025]/10' 
-                      : 'hover:bg-[#f8f9fa] dark:hover:bg-[#303134]'
+                      ? 'bg-[#fce8e6] dark:bg-[#d93025]/20' 
+                      : 'hover:bg-[#fdf2f1] dark:hover:bg-[#d93025]/10'
                   }`}
                 >
                   {/* 타임라인 점 */}
