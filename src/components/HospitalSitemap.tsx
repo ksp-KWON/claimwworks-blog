@@ -37,7 +37,7 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 3;
 
   const changeDisease = (disease: string | null) => {
     setSelectedDisease(disease);
@@ -145,7 +145,7 @@ function SpecialtyCard({ specialtyName, data, region, sido }: {
             {/* 병원 목록 */}
             {/* 병원 목록 */}
             {visibleHospitals.length > 0 ? (
-              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+              <div className="space-y-2 pr-1">
                 <div className="text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wide flex items-center gap-1.5">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                   {selectedDisease ? `${selectedDisease} 취급 병원` : '전체 병원 목록'}
@@ -228,7 +228,7 @@ export default function HospitalSitemap({ region, sido, specialties }: HospitalS
   const specialtyList = Object.entries(specialties).sort((a, b) => b[1].count - a[1].count);
 
   return (
-    <article className="bg-white dark:bg-[#202124] rounded-[24px] sm:rounded-[32px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative overflow-hidden">
+    <article className="bg-white dark:bg-[#202124] rounded-[24px] sm:rounded-[32px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
 
       {/* 상단 헤더 */}
       <div className="px-4 py-5 sm:px-6 border-b border-[var(--google-border)] bg-[#f8f9fa] dark:bg-[#303134]">
