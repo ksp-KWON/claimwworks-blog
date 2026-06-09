@@ -149,8 +149,7 @@ function preprocessBody(content: string): string {
   return result
     .join('\n')
     .replace(/\[SEO_SUMMARY\]:.*/gi, '')
-    .replace(/\n\[👉[^\]]*\]\([^)]*\)/g, '')
-    .replace(/\n\[[^\]]*카카오[^\]]*\]\([^)]*\)/g, '')
+    .replace(/\[[^\]]*(?:카카오|상담)[^\]]*\]\([^)]*\)/g, '')
     .trim();
 }
 
@@ -274,10 +273,10 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <strong className="font-bold text-[#1A73E8] dark:text-[#8ab4f8]">{children}</strong>
     ),
     hr: () => (
-      <div className="my-10 flex items-center gap-4">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#dadce0] dark:via-[#5f6368] to-transparent" />
-        <span className="text-[#dadce0] dark:text-[#5f6368] text-xs">✦</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#dadce0] dark:via-[#5f6368] to-transparent" />
+      <div className="my-16 flex items-center justify-center gap-4">
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
       </div>
     ),
   };

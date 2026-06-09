@@ -38,7 +38,7 @@ export default function SidebarContent() {
   return (
     <>
       {/* 🚗 자동차보험 합의금 계산기 (항상 표시) */}
-      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-blue)] transition-all duration-300 group mb-6">
+      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(26,115,232,0.2)] hover:border-[var(--google-blue)] hover:-translate-y-1 transition-all duration-300 group mb-6 relative overflow-hidden">
         <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
           <span className="text-[var(--google-blue)] text-lg leading-none">🚗</span>
           자동차보험 합의금 계산기
@@ -53,7 +53,7 @@ export default function SidebarContent() {
       </div>
 
       {/* 🏥 실손의료비 보상 계산기 (항상 표시) */}
-      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-[var(--google-border)] shadow-sm hover:shadow-md hover:border-[var(--google-green)] transition-all duration-300 group mb-6">
+      <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(52,168,83,0.2)] hover:border-[var(--google-green)] hover:-translate-y-1 transition-all duration-300 group mb-6 relative overflow-hidden">
         <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-green)] pl-2.5">
           <span className="text-[var(--google-green)] text-lg leading-none">🏥</span>
           실손의료비 계산기

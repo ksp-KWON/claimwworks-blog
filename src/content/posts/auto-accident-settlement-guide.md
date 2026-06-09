@@ -12,27 +12,6 @@ published: true
 - **조급한 합의는 금물 :** 사고 직후 <red>섣불리 합의서에 도장을 찍으면</red>, 추후 발생할 수 있는 후유증(디스크 등)에 대한 보상을 받을 수 없습니다.
 - **나의 정확한 손해액 알기 :** 아래 제공된 보상스쿨 교통사고 합의금 계산기를 통해 최소한의 기준점을 먼저 파악하세요.
 
-<br/>
-
-<div class="my-16 flex items-center justify-center gap-4">
-  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-  <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-</div>
-<p style="text-align:center;">☝️ <strong>옵션 1 (미디엄 스타일 - 점 3개)</strong></p>
-
-<div class="my-16 flex justify-center">
-  <div class="w-24 h-px bg-gray-300 dark:bg-gray-600"></div>
-</div>
-<p style="text-align:center;">☝️ <strong>옵션 2 (노션 실선 스타일)</strong></p>
-
-<div class="my-16 flex items-center justify-center gap-4">
-  <div class="w-24 h-px bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
-  <span class="w-1.5 h-1.5 rounded-full bg-[#d93025]"></span>
-  <div class="w-24 h-px bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600"></div>
-</div>
-<p style="text-align:center;">☝️ <strong>옵션 3 (브랜드 붉은 점 스타일)</strong></p>
-
 ---
 
 갑작스러운 교통사고, 몸이 아픈 것도 서러운데 보험사 담당자의 계속되는 합의 종용 전화에 스트레스가 이만저만이 아니실 겁니다. 이번 포스팅에서는 교통사고 피해자분들이 가장 궁금해하시는 **합의금 계산 방식**에 대해 실제 보상 실무 관점에서 상세히 안내해 드리겠습니다.
@@ -88,11 +67,5 @@ published: true
 
 ### Q3. 보험사에서 제시한 금액이 적당한지 어떻게 아나요?
 가장 정확한 방법은 본인의 진단명과 소득을 바탕으로 직접 산출해 보는 것입니다. 위 계산기를 활용하시거나, 전문가에게 검토를 요청하시는 것이 가장 안전합니다.
-
----
-
-교통사고 합의, 혼자 고민하다 수백만 원 손해 보지 마시고 정당한 권리를 찾으시길 바랍니다. 내 사고에 맞는 정확한 진단과 보상 가능성이 궁금하시다면 언제든 무료로 상담을 신청해 주세요.
-
-[👉 카카오톡 1:1 무료 상담하기 (클릭)](https://open.kakao.com/o/sWeszp7)
 
 [SEO_SUMMARY]: 교통사고 합의금 계산 방법과 보험사가 절대 먼저 알려주지 않는 향후치료비, 휴업손해 산출 노하우를 손해사정사가 직접 알려드립니다.
