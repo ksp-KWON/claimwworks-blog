@@ -218,9 +218,8 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h2
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] mt-12 mb-5 pb-2.5 border-b-2 border-[#1A73E8]/20 flex items-center gap-2.5"
+        className="text-xl font-bold text-[#1A73E8] dark:text-[#8ab4f8] mt-12 mb-6 px-4 py-3 bg-[#E8F0FE] dark:bg-[#1A73E8]/10 border-l-4 border-[#1A73E8] rounded-r-xl tracking-tight leading-snug break-keep"
       >
-        <span className="w-1.5 h-6 bg-[#1A73E8] rounded-full inline-block shrink-0" />
         {children}
       </h2>
     ),
@@ -228,9 +227,9 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h3
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="text-[15px] font-bold text-[#1A73E8] dark:text-[#8ab4f8] mt-8 mb-3 flex items-center gap-1.5"
+        className="inline-flex text-[16px] font-bold text-[#1A73E8] dark:text-[#8ab4f8] mt-8 mb-4 px-3.5 py-1.5 bg-[#f1f3f4] dark:bg-[#303134] rounded-lg tracking-tight items-center shadow-sm border border-[#e8eaed] dark:border-[#3c4043]"
       >
-        <span className="opacity-60">▸</span>{children}
+        {children}
       </h3>
     ),
     blockquote: ({ children }) => (
