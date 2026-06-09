@@ -18,7 +18,7 @@ import rehypeSlug from 'rehype-slug';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { Components } from 'react-markdown';
-import AutoCalculator from './calculator/AutoCalculator';
+import AutoCalculatorContainer from './calculator/auto/AutoCalculatorContainer';
 import MedicalCalculator from './calculator/MedicalCalculator';
 
 // ─── 스크롤 오프셋: header(64) + sticky banner(52) + 버퍼(20) = 136px ───
@@ -282,7 +282,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     ...components,
     calculator: ({ ...props }: any) => {
       if (props.type === 'auto') {
-        return <div className="my-8"><AutoCalculator /></div>;
+        return <div className="my-8"><AutoCalculatorContainer /></div>;
       }
       if (props.type === 'medical') {
         return <div className="my-8"><MedicalCalculator /></div>;
