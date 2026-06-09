@@ -2,6 +2,8 @@
 
 import { AutoInsuranceData, INJURY_ALIMONY_TABLE } from './calculator-types';
 import { useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface Props {
   data: AutoInsuranceData;
@@ -155,9 +157,6 @@ export default function AutoCalculatorResult({ data }: Props) {
   const exportPDF = async () => {
     if (!resultRef.current) return;
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF } = await import('jspdf');
-      
       const originalBg = resultRef.current.style.backgroundColor;
       resultRef.current.style.backgroundColor = '#ffffff';
       
@@ -171,9 +170,9 @@ export default function AutoCalculatorResult({ data }: Props) {
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('보상스쿨_교통사고_합의금명세서.pdf');
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('PDF 생성 중 오류가 발생했습니다.');
+      alert(`PDF 생성 중 오류가 발생했습니다: ${e?.message || String(e)}`);
     }
   };
 

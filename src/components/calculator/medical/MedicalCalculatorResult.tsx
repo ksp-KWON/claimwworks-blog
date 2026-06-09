@@ -2,6 +2,8 @@
 
 import { MedicalInsuranceData } from './medical-calculator-types';
 import { useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 export default function MedicalCalculatorResult({ data }: { data: MedicalInsuranceData }) {
   const resultRef = useRef<HTMLDivElement>(null);
@@ -136,9 +138,6 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
   const exportPDF = async () => {
     if (!resultRef.current) return;
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF } = await import('jspdf');
-      
       const originalBg = resultRef.current.style.backgroundColor;
       resultRef.current.style.backgroundColor = '#ffffff';
       
@@ -152,9 +151,9 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('보상스쿨_실손의료비_예상보상금.pdf');
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert('PDF 생성 중 오류가 발생했습니다.');
+      alert(`PDF 생성 중 오류가 발생했습니다: ${e?.message || String(e)}`);
     }
   };
 
