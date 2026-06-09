@@ -7,6 +7,12 @@ export default function MedicalCalculator() {
   const [hospitalType, setHospitalType] = useState<number>(1); // 1: 의원, 2: 병원, 3: 종합병원
   const [medicalBill, setMedicalBill] = useState<number>(100000); // 총 발생 의료비
 
+  const formatCurrency = (val: number | string) => {
+    if (!val) return '';
+    return Number(val.toString().replace(/,/g, '')).toLocaleString();
+  };
+  const parseCurrency = (val: string) => Number(val.replace(/[^0-9]/g, ''));
+
   // 계산 로직 (단순화된 기준)
   let returnAmount = 0;
   let deductible = 0;
@@ -84,7 +90,7 @@ export default function MedicalCalculator() {
               <button 
                 key={idx}
                 onClick={() => setHospitalType(idx + 1)}
-                className={`p-2.5 rounded-lg border text-center text-sm transition-colors ${
+                className={`p-3 rounded-lg border text-center text-sm transition-colors ${
                   hospitalType === idx + 1 
                     ? 'border-[var(--google-green)] bg-[#e6f4ea] dark:bg-[#34A853]/10 text-[var(--google-green)] dark:text-[#81c995] font-bold' 
                     : 'border-[var(--google-border)] bg-transparent text-[#5f6368] dark:text-[#9aa0a6] hover:bg-[#f8f9fa] dark:hover:bg-[#303134]'
@@ -101,9 +107,10 @@ export default function MedicalCalculator() {
           <label className="block text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2">총 발생 의료비 (영수증 환자부담총액)</label>
           <div className="relative">
             <input 
-              type="number" step="10000"
-              value={medicalBill} onChange={(e) => setMedicalBill(Number(e.target.value))}
-              className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-[var(--google-border)] rounded-lg p-3 pr-10 text-sm text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[var(--google-green)] focus:outline-none"
+              type="text"
+              value={medicalBill ? formatCurrency(medicalBill) : ''} 
+              onChange={(e) => setMedicalBill(parseCurrency(e.target.value))}
+              className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-[var(--google-border)] rounded-lg p-3 pr-10 text-sm text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[var(--google-green)] focus:outline-none font-bold"
             />
             <span className="absolute right-4 top-3 text-[#5f6368]">원</span>
           </div>
@@ -141,6 +148,10 @@ export default function MedicalCalculator() {
             </span>
           </div>
         </div>
+
+        <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-6 py-4 bg-[#34A853] hover:bg-[#137333] text-white rounded-xl font-bold transition-colors">
+          보상스쿨 무료상담 신청하기
+        </a>
       </div>
 
       <div className="mt-6 p-4 rounded-xl bg-[#fce8e6] dark:bg-[#c5221f]/10 border border-[#d93025]/20 flex gap-3">

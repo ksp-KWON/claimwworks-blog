@@ -85,7 +85,7 @@ export default function ExpertModeForm() {
     if (!val) return '';
     return Number(val.toString().replace(/,/g, '')).toLocaleString();
   };
-  const parseCurrency = (val: string) => Number(val.replace(/,/g, ''));
+  const parseCurrency = (val: string) => Number(val.replace(/[^0-9]/g, ''));
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto">
@@ -142,10 +142,10 @@ export default function ExpertModeForm() {
                 <span className="absolute right-4 top-3.5 text-gray-400">%</span>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => handleChange('faultRatio', 0)} className="flex-1 py-1.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">0%</button>
-                <button onClick={() => handleChange('faultRatio', 10)} className="flex-1 py-1.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">10%</button>
-                <button onClick={() => handleChange('faultRatio', 20)} className="flex-1 py-1.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">20%</button>
-                <button onClick={() => addValue('faultRatio', 10, 100)} className="flex-1 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+10%</button>
+                <button onClick={() => handleChange('faultRatio', 0)} className="flex-1 py-2.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">0%</button>
+                <button onClick={() => handleChange('faultRatio', 10)} className="flex-1 py-2.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">10%</button>
+                <button onClick={() => handleChange('faultRatio', 20)} className="flex-1 py-2.5 bg-white dark:bg-[#202124] border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800">20%</button>
+                <button onClick={() => addValue('faultRatio', 10, 100)} className="flex-1 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">+10%</button>
               </div>
             </div>
           </div>
