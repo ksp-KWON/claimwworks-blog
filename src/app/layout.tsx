@@ -8,6 +8,7 @@ import SidebarContent from "@/components/SidebarContent";
 import FloatingKakaoButton from "@/components/FloatingKakaoButton";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import SearchBar from "@/components/SearchBar";
+import SmartStickyLayout from "@/components/SmartStickyLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -127,20 +128,11 @@ export default function RootLayout({
           </div>
         </header>
 
-
         {/* 3. 티스토리 2단 레이아웃 본문 75% : 사이드바 25% 구조 */}
-        <div className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 transition-all duration-300">
-          
-          {/* 본문 영역 (좌측 75%) - 짧을 경우 sticky 적용하여 빈 공란 방지 */}
-          <main className="w-full lg:w-[73%] lg:sticky lg:top-[80px] self-start flex-1 min-w-0 transition-all duration-300">
-            {children}
-          </main>
-
-          {/* 사이드바 영역 (우측 27%) — 데스크탑: sticky 및 자체 스크롤 적용으로 하단 잘림 방지 */}
-          <aside className="w-full lg:w-[27%] lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain custom-scrollbar self-start space-y-4 transition-all duration-300">
-            <SidebarContent />
-          </aside>
-        </div>
+        <SmartStickyLayout
+          mainContent={children}
+          sidebarContent={<SidebarContent />}
+        />
 
         {/* 4. 구글 표면 색상 푸터 */}
         <footer className="w-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border-t border-[var(--google-border)]">
