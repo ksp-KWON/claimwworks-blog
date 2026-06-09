@@ -237,8 +237,9 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       </h3>
     ),
     blockquote: ({ children }) => (
-      <div className="my-6 p-4 sm:p-5 rounded-xl border-l-4 border-[#34A853] bg-[#E6F4EA] dark:bg-[#0d652d]/20">
-        <div className="text-[15px] text-[#137333] dark:text-[#81c995] leading-relaxed [&>p]:m-0">{children}</div>
+      <div className="my-8 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-start gap-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#34A853]" />
+        <div className="text-[15px] text-gray-800 dark:text-[#e8eaed] leading-[1.8] [&>p]:m-0 flex-1">{children}</div>
       </div>
     ),
     table: ({ children }) => (
@@ -337,23 +338,24 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
 // ════════════════════════════════════════════════════════════════════════════
 function KeyPointsBox({ points }: { points: string[] }) {
   return (
-    <div className="mb-8 rounded-2xl overflow-hidden border border-[#1A73E8]/25 bg-[#E8F0FE] dark:bg-[#1A73E8]/10">
-      <div className="flex items-center gap-2.5 px-5 py-3 border-b border-[#1A73E8]/20 bg-[#1A73E8]/8 dark:bg-[#1A73E8]/15">
-        <div className="w-5 h-5 rounded bg-[#1A73E8] flex items-center justify-center shrink-0">
-          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+    <div className="mb-10 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#1A73E8]" />
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-white/5">
+        <div className="w-8 h-8 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+          <svg className="w-4 h-4 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <span className="text-[11px] font-extrabold text-[#1A73E8] uppercase tracking-[0.1em]">Key Points</span>
+        <span className="text-[13px] font-extrabold text-gray-900 dark:text-white uppercase tracking-[0.1em]">Key Points</span>
       </div>
-      <ul className="px-5 py-4 space-y-3">
+      <ul className="px-6 py-5 space-y-3">
         {points.map((point, i) => (
-          <li key={i} className="flex items-start gap-3">
-            <span className="w-5 h-5 rounded bg-[#1A73E8]/20 dark:bg-[#1A73E8]/30 text-[#1A73E8] dark:text-[#8ab4f8] text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+          <li key={i} className="flex items-start gap-3.5">
+            <span className="w-6 h-6 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 text-[#1A73E8] dark:text-[#8ab4f8] text-[12px] font-bold flex items-center justify-center shrink-0 mt-0.5">
               {i + 1}
             </span>
             <span
-              className="text-[14.5px] text-[#202124] dark:text-[#e8eaed] leading-relaxed"
+              className="text-[15px] text-gray-800 dark:text-[#e8eaed] leading-[1.7]"
               dangerouslySetInnerHTML={{
                 __html: point.replace(/\*\*(.+?)\*\*/g, '<strong style="font-weight:700;color:#1A73E8">$1</strong>'),
               }}
@@ -432,29 +434,32 @@ function ChecklistBox({ items }: { items: string[] }) {
   const pct = Math.round((count / items.length) * 100);
 
   return (
-    <div className="my-10 rounded-2xl overflow-hidden border border-[#34A853]/30 shadow-sm">
+    <div className="my-12 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#34A853]" />
       {/* 헤더 */}
-      <div className="px-5 py-4 bg-[#E6F4EA] dark:bg-[#0d652d]/30 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <span className="text-xl">🛡️</span>
+      <div className="px-6 py-5 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#34A853]/20 flex items-center justify-center shrink-0">
+            <span className="text-xl">🛡️</span>
+          </div>
           <div>
-            <p className="font-bold text-[#137333] dark:text-[#81c995] text-[15px]">
-              내 보험금·보상금 1분 자가진단
+            <p className="font-extrabold text-gray-900 dark:text-white text-[16px] tracking-tight">
+              내 보험금 자가진단
             </p>
-            <p className="text-xs text-[#34A853]/80 mt-0.5">
+            <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
               해당 항목을 클릭해 체크해 보세요
             </p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-[#137333] dark:text-[#81c995]">
-            {count}<span className="text-sm font-normal text-[#34A853]/70">/{items.length}</span>
+          <p className="text-2xl font-black text-[#34A853] dark:text-[#81c995]">
+            {count}<span className="text-sm font-bold text-gray-400 dark:text-gray-500">/{items.length}</span>
           </p>
         </div>
       </div>
 
       {/* 진행 바 */}
-      <div className="h-1.5 bg-[#e0f0e4] dark:bg-[#0d652d]/20">
+      <div className="h-1 bg-gray-100 dark:bg-white/5">
         <div
           className="h-full bg-[#34A853] transition-all duration-500 rounded-r-full"
           style={{ width: `${pct}%` }}
@@ -462,7 +467,7 @@ function ChecklistBox({ items }: { items: string[] }) {
       </div>
 
       {/* 항목들 */}
-      <div className="bg-white dark:bg-[#202124] divide-y divide-[#f1f3f4] dark:divide-[#3c4043]">
+      <div className="bg-white dark:bg-[#202124] divide-y divide-gray-100 dark:divide-white/5">
         {items.map((item, i) => (
           <button
             key={i}
@@ -471,17 +476,17 @@ function ChecklistBox({ items }: { items: string[] }) {
               next[i] = !next[i];
               setChecked(next);
             }}
-            className={`w-full flex items-center gap-4 px-5 py-3.5 text-left transition-colors ${
+            className={`w-full flex items-center gap-4 px-6 py-4 text-left transition-colors ${
               checked[i]
-                ? 'bg-[#E6F4EA] dark:bg-[#0d652d]/15'
-                : 'hover:bg-[#f8f9fa] dark:hover:bg-[#303134]'
+                ? 'bg-gray-50 dark:bg-white/[0.02]'
+                : 'hover:bg-gray-50 dark:hover:bg-[#303134]'
             }`}
           >
             <div
               className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
                 checked[i]
                   ? 'bg-[#34A853] border-[#34A853]'
-                  : 'border-[#dadce0] dark:border-[#5f6368]'
+                  : 'border-gray-300 dark:border-gray-600'
               }`}
             >
               {checked[i] && (
@@ -491,10 +496,10 @@ function ChecklistBox({ items }: { items: string[] }) {
               )}
             </div>
             <span
-              className={`text-[14px] leading-relaxed ${
+              className={`text-[15px] leading-relaxed break-keep transition-colors ${
                 checked[i]
-                  ? 'text-[#137333] dark:text-[#81c995] line-through opacity-70'
-                  : 'text-[#202124] dark:text-[#e8eaed]'
+                  ? 'text-[#34A853] dark:text-[#81c995] font-bold line-through opacity-80'
+                  : 'text-gray-800 dark:text-[#e8eaed] font-medium'
               }`}
             >
               {item}
@@ -505,10 +510,10 @@ function ChecklistBox({ items }: { items: string[] }) {
 
       {/* 결과 메시지 */}
       {count >= 3 && (
-        <div className="bg-[#34A853] px-5 py-3.5 flex items-center gap-3">
+        <div className="bg-[#e6f4ea] dark:bg-[#34A853]/10 border-t border-[#34A853]/20 px-6 py-4 flex items-center gap-3">
           <span className="text-xl">⚠️</span>
-          <p className="text-white text-[13px] font-medium leading-relaxed">
-            <strong>{count}개 이상 해당</strong>됩니다. 청구 가능한 보험금이 남아있을 가능성이 높으니 무료 진단을 받아보세요.
+          <p className="text-[#137333] dark:text-[#81c995] text-[14px] font-semibold leading-relaxed">
+            <strong className="font-extrabold">{count}개 이상 해당</strong>됩니다. 청구 가능한 보험금이 남아있을 가능성이 높으니 전문가 무료 진단을 받아보세요.
           </p>
         </div>
       )}
@@ -523,61 +528,68 @@ function FAQBox({ items }: { items: { q: string; a: string }[] }) {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   return (
-    <div className="my-10 rounded-2xl overflow-hidden border border-[#7C4DFF]/20 shadow-sm">
+    <div className="my-12 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#7C4DFF]" />
       {/* 헤더 */}
-      <div className="px-5 py-4 bg-[#EDE7F6] dark:bg-[#4a148c]/20 flex items-center gap-2.5">
-        <span className="text-xl">💡</span>
+      <div className="px-6 py-5 border-b border-gray-100 dark:border-white/5 flex items-center gap-3.5">
+        <div className="w-10 h-10 rounded-full bg-[#EDE7F6] dark:bg-[#7C4DFF]/20 flex items-center justify-center shrink-0">
+          <span className="text-xl">💡</span>
+        </div>
         <div>
-          <p className="font-bold text-[#4a148c] dark:text-[#ce93d8] text-[15px]">
+          <p className="font-extrabold text-gray-900 dark:text-white text-[16px] tracking-tight">
             자주 묻는 질문 FAQ TOP {items.length}
           </p>
-          <p className="text-xs text-[#7C4DFF]/70 mt-0.5">클릭하면 답변을 확인할 수 있습니다</p>
+          <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
+            항목을 클릭하면 답변을 확인할 수 있습니다
+          </p>
         </div>
       </div>
 
       {/* 항목들 */}
-      <div className="bg-white dark:bg-[#202124] divide-y divide-[#f3e5f5] dark:divide-[#4a148c]/20">
+      <div className="bg-white dark:bg-[#202124] divide-y divide-gray-100 dark:divide-white/5">
         {items.map((item, i) => (
           <div key={i}>
             <button
               onClick={() => setOpenIdx(openIdx === i ? null : i)}
-              className="w-full flex items-center gap-3.5 px-5 py-4 text-left hover:bg-[#f3e5f5]/50 dark:hover:bg-[#4a148c]/10 transition-colors"
+              className="w-full flex items-center gap-4 px-6 py-4.5 text-left hover:bg-gray-50 dark:hover:bg-[#303134] transition-colors"
             >
-              <span className="w-7 h-7 rounded-lg bg-[#EDE7F6] dark:bg-[#4a148c]/30 text-[#7C4DFF] dark:text-[#ce93d8] text-[12px] font-bold flex items-center justify-center shrink-0">
+              <span className="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 text-[13px] font-bold flex items-center justify-center shrink-0 transition-colors">
                 Q{i + 1}
               </span>
-              <span className="flex-1 font-semibold text-[15px] text-[#202124] dark:text-[#e8eaed]">
+              <span className={`flex-1 text-[15px] transition-colors break-keep ${openIdx === i ? 'font-extrabold text-[#7C4DFF] dark:text-[#ce93d8]' : 'font-semibold text-gray-800 dark:text-[#e8eaed]'}`}>
                 {item.q}
               </span>
               <svg
-                className={`w-4 h-4 text-[#7C4DFF] shrink-0 transition-transform duration-200 ${openIdx === i ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 shrink-0 transition-transform duration-300 ${openIdx === i ? 'rotate-180 text-[#7C4DFF]' : 'text-gray-400'}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                strokeWidth="2"
+                strokeWidth="2.5"
               >
                 <polyline points="6 9 12 15 18 9" />
               </svg>
             </button>
 
-            {openIdx === i && (
-              <div className="px-5 pb-5 pt-1 bg-[#faf5ff] dark:bg-[#4a148c]/5">
-                <div className="flex gap-3">
-                  <span className="w-7 h-7 rounded-lg bg-[#7C4DFF] text-white text-[12px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+            <div 
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${openIdx === i ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+            >
+              <div className="px-6 pb-6 pt-2">
+                <div className="flex gap-4 p-5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5">
+                  <span className="w-8 h-8 rounded-full bg-[#7C4DFF] text-white text-[13px] font-bold flex items-center justify-center shrink-0">
                     A
                   </span>
-                  <p
-                    className="text-[14.5px] text-[#5f6368] dark:text-[#9aa0a6] leading-relaxed flex-1"
+                  <div
+                    className="text-[14.5px] text-gray-700 dark:text-gray-300 leading-[1.8] flex-1 break-keep"
                     dangerouslySetInnerHTML={{
                       __html: item.a.replace(
                         /\*\*(.+?)\*\*/g,
-                        '<strong style="font-weight:700;color:#202124">$1</strong>'
+                        '<strong style="font-weight:800;color:#202124" class="dark:text-white">$1</strong>'
                       ),
                     }}
                   />
                 </div>
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>
@@ -608,7 +620,7 @@ function CTABanner() {
           href="https://open.kakao.com/o/sWeszp7"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(242,153,0,0.15)] hover:border-[#f29900] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(242,153,0,0.2)] hover:border-[#f29900] hover:-translate-y-1 transition-all duration-300 group"
         >
           <div className="w-12 h-12 rounded-full bg-[#fef7e0] dark:bg-[#e37400]/20 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
             <svg className="w-6 h-6 text-[#f29900] dark:text-[#fde293]" fill="currentColor" viewBox="0 0 24 24">
@@ -630,7 +642,7 @@ function CTABanner() {
           href="https://forms.gle/E9vj7iqAHeJGhJ549"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(52,168,83,0.15)] hover:border-[#34A853] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(52,168,83,0.2)] hover:border-[#34A853] hover:-translate-y-1 transition-all duration-300 group"
         >
           <div className="w-12 h-12 rounded-full bg-[#e6f4ea] dark:bg-[#0d652d]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
             <svg className="w-6 h-6 text-[#34A853] dark:text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -653,7 +665,7 @@ function CTABanner() {
         {/* 카드 3: 보상스쿨 소개 */}
         <Link
           href="/about"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(26,115,232,0.15)] hover:border-[#1A73E8] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(26,115,232,0.2)] hover:border-[#1A73E8] hover:-translate-y-1 transition-all duration-300 group"
         >
           <div className="w-12 h-12 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
             <svg className="w-6 h-6 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -678,7 +690,7 @@ function CTABanner() {
           href="https://www.youtube.com/@bosangschool"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-[var(--google-border)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(217,48,37,0.15)] hover:border-[#d93025] hover:-translate-y-1 transition-all duration-300 group"
+          className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 p-4 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(217,48,37,0.2)] hover:border-[#d93025] hover:-translate-y-1 transition-all duration-300 group"
         >
           <div className="w-12 h-12 rounded-full bg-[#fce8e6] dark:bg-[#c5221f]/30 flex items-center justify-center shrink-0 mx-auto sm:mx-0">
             <svg className="w-6 h-6 text-[#d93025] dark:text-[#f28b82]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
