@@ -289,6 +289,11 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       }
       return null;
     },
+    red: ({ children }: any) => <strong className="text-[#d93025] dark:text-[#f28b82] font-bold">{children}</strong>,
+    orange: ({ children }: any) => <strong className="text-[#f29900] dark:text-[#fde293] font-bold">{children}</strong>,
+    green: ({ children }: any) => <strong className="text-[#34A853] dark:text-[#81c995] font-bold">{children}</strong>,
+    blue: ({ children }: any) => <strong className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold">{children}</strong>,
+    purple: ({ children }: any) => <strong className="text-[#9333ea] dark:text-[#c084fc] font-bold">{children}</strong>,
   };
 
   return (
@@ -304,7 +309,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       {/* 3. 본문 */}
       <div data-blog-body>
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
           rehypePlugins={[rehypeRaw, rehypeSlug]}
           components={finalComponents}
         >
@@ -371,47 +376,51 @@ function TOCNav({
 }) {
   if (!toc.length) return null;
   return (
-    <nav className="mb-10 px-5 py-6 bg-[#f8f9fa] dark:bg-[#303134]/30 rounded-2xl border border-[#e8eaed] dark:border-[#3c4043]">
-      <div className="flex items-center gap-2 mb-5">
-        <svg className="w-5 h-5 text-[#5f6368] dark:text-[#9aa0a6]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path d="M4 6h16M4 12h16M4 18h7" />
-        </svg>
-        <span className="text-[14px] font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-wide">
+    <nav className="mb-10 px-6 py-7 bg-gradient-to-br from-white to-[#f8f9fa] dark:from-[#202124] dark:to-[#303134]/50 rounded-2xl border border-[#e8eaed] dark:border-[#3c4043] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+      <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-[#f1f3f4] dark:border-[#3c4043]">
+        <div className="w-8 h-8 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+          <svg className="w-4 h-4 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+            <path d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </div>
+        <span className="text-[16px] font-extrabold text-[#202124] dark:text-[#e8eaed] tracking-tight">
           이 글의 목차
         </span>
       </div>
 
-      <div className="relative pl-2">
+      <div className="relative pl-3">
         {/* 수직 타임라인 선 */}
-        <div className="absolute top-2 bottom-2 left-[11px] w-[2px] bg-[#e8eaed] dark:bg-[#3c4043]" />
+        <div className="absolute top-3 bottom-3 left-[15px] w-[2px] bg-[#f1f3f4] dark:bg-[#3c4043]" />
 
-        <ul className="space-y-4">
+        <ul className="space-y-1">
           {toc.map((item, i) => {
             const isActive = activeId === item.id;
             return (
-              <li key={item.id} className="relative z-10 flex items-start">
+              <li key={item.id} className="relative z-10">
                 <a
                   href={`#${item.id}`}
                   onClick={(e) => onItemClick(e, item.id)}
-                  className={`group flex items-start gap-4 w-full transition-all duration-200 ${
-                    isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100'
+                  className={`group flex items-center gap-4 w-full px-3 py-2.5 rounded-xl transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-[#e8f0fe]/50 dark:bg-[#1A73E8]/10' 
+                      : 'hover:bg-[#f8f9fa] dark:hover:bg-[#303134]'
                   }`}
                 >
                   {/* 타임라인 점 */}
-                  <div className="relative mt-[5px] shrink-0">
-                    <div className={`w-2.5 h-2.5 rounded-full ring-4 ring-[#f8f9fa] dark:ring-[#303134] transition-colors duration-200 ${
+                  <div className="relative shrink-0">
+                    <div className={`w-2 h-2 rounded-full ring-4 ring-white dark:ring-[#202124] transition-all duration-300 ${
                       isActive 
-                        ? 'bg-[#1A73E8] scale-125' 
+                        ? 'bg-[#1A73E8] scale-[1.5] shadow-[0_0_8px_rgba(26,115,232,0.4)]' 
                         : 'bg-[#dadce0] dark:bg-[#5f6368] group-hover:bg-[#1A73E8]/50'
                     }`} />
                   </div>
                   
                   {/* 텍스트 내용 */}
-                  <div className={`flex-1 flex flex-col ${isActive ? 'translate-x-1' : ''} transition-transform duration-200`}>
-                    <span className={`text-[15px] leading-snug break-keep ${
+                  <div className={`flex-1 transition-transform duration-300 ${isActive ? 'translate-x-1' : ''}`}>
+                    <span className={`text-[15px] block truncate ${
                       isActive 
                         ? 'font-bold text-[#1A73E8] dark:text-[#8ab4f8]' 
-                        : 'font-medium text-[#3c4043] dark:text-[#bdc1c6] group-hover:text-[#1A73E8]'
+                        : 'font-medium text-[#5f6368] dark:text-[#9aa0a6] group-hover:text-[#202124] dark:group-hover:text-[#e8eaed]'
                     }`}>
                       {item.text}
                     </span>
