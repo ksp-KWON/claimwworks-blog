@@ -137,7 +137,7 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
     if (!resultRef.current) return;
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const jsPDF = (await import('jspdf')).default;
+      const { jsPDF } = await import('jspdf');
       
       const originalBg = resultRef.current.style.backgroundColor;
       resultRef.current.style.backgroundColor = '#ffffff';
