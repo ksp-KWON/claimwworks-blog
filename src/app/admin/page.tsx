@@ -302,7 +302,7 @@ ${inputText}
   }
 
   return (
-    <div className="min-h-screen relative bg-[#f8f9fa] dark:bg-[#1e1e20] p-4 sm:p-8 font-sans overflow-x-hidden">
+    <div className="h-[calc(100vh-160px)] relative bg-[#f8f9fa] dark:bg-[#1e1e20] p-3 sm:p-4 font-sans overflow-hidden flex flex-col">
       {/* Dynamic Background - Aligned straight to avoid diagonal tilt perception */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex flex-col">
         <div className="w-full h-[50vh] bg-blue-100/40 dark:bg-blue-900/10 blur-[100px]" />
@@ -312,65 +312,67 @@ ${inputText}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-[1400px] mx-auto space-y-6 relative z-10"
+        className="max-w-[1500px] w-full mx-auto flex flex-col flex-1 min-h-0 relative z-10 space-y-3"
       >
         
-        {/* Header Dashboard */}
-        <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-2xl p-6 sm:p-8 rounded-[2rem] shadow-sm border border-white/50 dark:border-white/5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        {/* Header Bar - Slim & Professional */}
+        <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-2xl px-5 py-3 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">AI 자율주행 블로그 센터</h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">서버리스 보안 클라이언트 아키텍처</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">AI 블로그 관리 센터</h1>
+                <span className="px-1.5 py-0.5 text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded">v2.1</span>
+              </div>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">안전한 서버리스 보안 아키텍처</p>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row items-center gap-3 bg-white/50 dark:bg-black/20 p-3 rounded-2xl border border-gray-100 dark:border-white/5 w-full xl:w-auto">
-            <div className="flex flex-col gap-2 w-full sm:w-auto">
-              <div className="flex items-center gap-3">
-                <span className="w-16 text-xs font-bold text-gray-500 dark:text-gray-400 text-right">Gemini</span>
-                <input 
-                  type="password" 
-                  value={geminiKey} 
-                  onChange={e => setGeminiKey(e.target.value)} 
-                  className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#1e1e20] border border-gray-200 dark:border-white/10 w-full sm:w-48 text-sm focus:ring-2 focus:ring-blue-500/50 outline-none transition-all text-gray-700 dark:text-gray-200"
-                  placeholder="AIzaSy..."
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-16 text-xs font-bold text-gray-500 dark:text-gray-400 text-right">GitHub</span>
-                <input 
-                  type="password" 
-                  value={githubToken} 
-                  onChange={e => setGithubToken(e.target.value)} 
-                  className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#1e1e20] border border-gray-200 dark:border-white/10 w-full sm:w-48 text-sm focus:ring-2 focus:ring-blue-500/50 outline-none transition-all text-gray-700 dark:text-gray-200"
-                  placeholder="ghp_..."
-                />
-              </div>
+          <div className="flex items-center gap-2 bg-white/50 dark:bg-black/20 px-3 py-1.5 rounded-xl border border-gray-100 dark:border-white/5 w-full md:w-auto overflow-x-auto">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] font-bold text-gray-400">Gemini:</span>
+              <input 
+                type="password" 
+                value={geminiKey} 
+                onChange={e => setGeminiKey(e.target.value)} 
+                className="px-2 py-1 rounded bg-white dark:bg-[#1e1e20] border border-gray-255 dark:border-white/10 w-24 sm:w-32 text-[11px] focus:ring-1 focus:ring-blue-500 outline-none transition-all text-gray-700 dark:text-gray-200"
+                placeholder="AIzaSy..."
+              />
             </div>
-            <button onClick={saveKeys} className="w-full sm:w-auto px-5 py-4 sm:py-0 sm:h-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-all font-bold shadow-md active:scale-95">
+            <div className="h-4 w-[1px] bg-gray-200 dark:bg-white/10 shrink-0 mx-1" />
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] font-bold text-gray-400">GitHub:</span>
+              <input 
+                type="password" 
+                value={githubToken} 
+                onChange={e => setGithubToken(e.target.value)} 
+                className="px-2 py-1 rounded bg-white dark:bg-[#1e1e20] border border-gray-255 dark:border-white/10 w-24 sm:w-32 text-[11px] focus:ring-1 focus:ring-blue-500 outline-none transition-all text-gray-700 dark:text-gray-200"
+                placeholder="ghp_..."
+              />
+            </div>
+            <button onClick={saveKeys} className="ml-1 px-3 py-1 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-lg transition-all text-xs font-bold shadow active:scale-95">
               키 저장
             </button>
           </div>
         </div>
 
-        {/* Status Banner */}
+        {/* Status Banner - Compact */}
         <AnimatePresence>
           {statusMessage && (
             <motion.div 
               initial={{ opacity: 0, height: 0 }} 
               animate={{ opacity: 1, height: 'auto' }} 
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
+              className="overflow-hidden flex-shrink-0"
             >
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 px-6 py-4 rounded-2xl font-medium flex items-center justify-between shadow-sm">
-                <span className="flex items-center gap-3">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-150 dark:border-blue-800/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-xl text-xs font-medium flex items-center justify-between shadow-sm">
+                <span className="flex items-center gap-2">
                   {isLoading ? (
-                     <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                     <svg className="animate-spin h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                   ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   )}
                   {statusMessage}
                 </span>
@@ -379,12 +381,13 @@ ${inputText}
           )}
         </AnimatePresence>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[75vh] min-h-[600px]">
-          {/* Left Column: Input */}
-          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-6 rounded-[2rem] shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full">
+        {/* Main Workspace - Adaptive Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
+          {/* Left Column: Input Panel */}
+          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0">
             
-            {/* Mode Switcher */}
-            <div className="flex bg-gray-100/50 dark:bg-black/20 p-1.5 rounded-2xl mb-6">
+            {/* Mode Tab Switcher */}
+            <div className="flex bg-gray-100/50 dark:bg-black/20 p-1 rounded-xl mb-4 flex-shrink-0">
               {[
                 { id: 'manual', label: '수동 (대본 포장)' },
                 { id: 'semi-auto', label: '반자동 (링크/개요)' },
@@ -396,7 +399,7 @@ ${inputText}
                     setMode(m.id as any);
                     if (m.id === 'edit') fetchPostList();
                   }}
-                  className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-bold transition-all ${mode === m.id ? 'bg-white dark:bg-[#3f3f42] text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all ${mode === m.id ? 'bg-white dark:bg-[#3f3f42] text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
                 >
                   {m.label}
                 </button>
@@ -404,10 +407,10 @@ ${inputText}
             </div>
 
             {mode === 'edit' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-4">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 flex-shrink-0">
                 <div className="relative">
                   <select 
-                    className="w-full pl-4 pr-10 py-3.5 rounded-xl border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-900 dark:text-white font-medium appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    className="w-full pl-4 pr-10 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-950 dark:text-white text-xs font-medium appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500"
                     onChange={(e) => {
                       const post = postList.find(p => p.name === e.target.value);
                       if(post) loadPost(post.name, post.sha);
@@ -422,7 +425,7 @@ ${inputText}
                     ))}
                   </select>
                   <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                   </div>
                 </div>
               </motion.div>
@@ -433,7 +436,7 @@ ${inputText}
                 <textarea
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="flex-1 w-full p-5 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none transition-all leading-relaxed"
+                  className="flex-1 w-full p-4 rounded-xl border border-gray-250 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-950 dark:text-white placeholder-gray-400 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none transition-all leading-relaxed custom-scrollbar"
                   placeholder={mode === 'manual' 
                     ? "✨ 이곳에 유튜브 대본 등 원문을 붙여넣으세요.\nAI가 원문을 보존하면서 가독성을 극대화한 UI(소제목, 표, Q&A)를 덧씌워 포장합니다." 
                     : "💡 이곳에 타겟 키워드, 뼈대(개요), 또는 참고할 블로그/유튜브 링크를 적어주세요.\nAI가 인사이트를 추출하여 완전히 새로운 전문적인 포스팅을 창작합니다."}
@@ -441,9 +444,9 @@ ${inputText}
                 <button 
                   onClick={handleGenerate}
                   disabled={isLoading}
-                  className="mt-4 w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/25 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-3 text-lg"
+                  className="mt-3 w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl shadow shadow-blue-500/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2 text-sm"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                   AI 자율 작성 가동
                 </button>
               </motion.div>
@@ -451,22 +454,22 @@ ${inputText}
 
             {mode === 'edit' && isPreview && (
                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col min-h-0 relative">
-                  <div className="absolute top-3 right-4 px-2 py-1 bg-yellow-100 text-yellow-800 text-[10px] font-bold rounded-md">수동 마크다운 편집기</div>
+                  <div className="absolute top-2.5 right-3 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[9px] font-bold rounded">수동 마크다운 편집기</div>
                   <textarea
                     value={generatedMarkdown}
                     onChange={(e) => setGeneratedMarkdown(e.target.value)}
-                    className="flex-1 w-full p-5 font-mono text-sm leading-relaxed rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-[#1e1e20]/80 text-gray-800 dark:text-gray-300 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all custom-scrollbar"
+                    className="flex-1 w-full p-4 font-mono text-xs leading-relaxed rounded-xl border border-gray-250 dark:border-white/10 bg-gray-50/50 dark:bg-[#1e1e20]/80 text-gray-800 dark:text-gray-300 resize-none focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all custom-scrollbar"
                   />
                </motion.div>
             )}
           </div>
 
-          {/* Right Column: Preview */}
-          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-6 rounded-[2rem] shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full relative overflow-hidden">
-            <div className="flex items-center justify-between mb-4 z-10">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          {/* Right Column: Preview Panel */}
+          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0 relative overflow-hidden">
+            <div className="flex items-center justify-between mb-3 z-10 flex-shrink-0">
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                 </span>
                 실시간 미리보기
               </h2>
@@ -478,42 +481,43 @@ ${inputText}
                     exit={{ opacity: 0, scale: 0.9 }}
                     onClick={publishToGithub}
                     disabled={isLoading}
-                    className="px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 font-bold rounded-xl transition-all disabled:opacity-50 flex items-center gap-2 shadow-md active:scale-95"
+                    className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 text-xs font-bold rounded-xl transition-all disabled:opacity-50 flex items-center gap-1.5 shadow active:scale-95"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                     GitHub 즉시 발행
                   </motion.button>
                 )}
               </AnimatePresence>
             </div>
             
-            <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar z-10 bg-white/40 dark:bg-black/10 rounded-2xl p-6 border border-white/40 dark:border-white/5">
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar z-10 bg-white/40 dark:bg-black/10 rounded-xl p-4 sm:p-5 border border-white/40 dark:border-white/5 min-h-0">
               {generatedMarkdown ? (
-                <article className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                <article className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                     {generatedMarkdown}
                   </ReactMarkdown>
                 </article>
               ) : (
                 <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
-                  <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
-                    <svg className="w-20 h-20 mb-6 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+                    <svg className="w-16 h-16 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   </motion.div>
-                  <p className="text-lg font-medium text-gray-500 dark:text-gray-400">마법이 일어날 공간입니다</p>
-                  <p className="text-sm mt-2 opacity-70">좌측에서 내용을 입력하고 AI 작성을 시작해 보세요.</p>
+                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">마법이 일어날 공간입니다</p>
+                  <p className="text-[11px] mt-1 opacity-70">좌측에서 내용을 입력하고 AI 작성을 시작해 보세요.</p>
                 </div>
               )}
             </div>
           </div>
         </div>
         
-        <div className="flex justify-between items-center px-4 opacity-50 mt-4">
-           <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        {/* Footer Info - Slim */}
+        <div className="flex justify-between items-center px-2 opacity-50 flex-shrink-0">
+           <span className="text-[10px] text-gray-500 dark:text-gray-400 flex items-center gap-1">
+             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
              종단간 브라우저 샌드박스 암호화
            </span>
-           <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-             v2.0 (Glassmorphism UI)
+           <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono">
+             v2.1 (Glassmorphism UI)
            </span>
         </div>
       </motion.div>
