@@ -15,19 +15,20 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
             </svg>
             보상스쿨 미디어 센터
+            <a 
+              href="https://www.youtube.com/@bosangschool" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-[var(--google-blue)] transition-colors ml-1" 
+              title="유튜브 채널 홈으로 이동"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
           </h2>
           <p className="text-xs sm:text-sm text-[#5f6368] dark:text-[#9aa0a6] mt-1.5 break-keep">
             어렵고 복잡한 보상 실무와 의학 지식을 보상스쿨 전문가가 영상으로 알기 쉽게 브리핑합니다.
           </p>
         </div>
-        <a 
-          href="https://www.youtube.com/@bosangschool" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-xs sm:text-sm font-bold text-[var(--google-blue)] hover:underline flex items-center gap-1 shrink-0 pb-0.5"
-        >
-          채널 홈 <span className="hidden sm:inline">바로가기</span> →
-        </a>
       </div>
 
       {/* 2. 블로그 글 카드와 똑같은 머티리얼 슬라이더 */}
@@ -38,7 +39,7 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
             href={`https://youtu.be/${video.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[#FF0000]/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col w-[260px] sm:w-[300px] shrink-0 snap-start min-h-[220px]"
+            className="group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[#FF0000]/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col w-[260px] sm:w-[calc(33.333%-11px)] shrink-0 snap-start min-h-[220px]"
           >
             {/* 썸네일 영역 */}
             <div className="relative aspect-video w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden">
