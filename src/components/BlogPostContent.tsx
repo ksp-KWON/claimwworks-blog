@@ -46,8 +46,11 @@ function extractKeyPoints(content: string): string[] {
       if (/^#{1,2}\s/.test(trimmed)) break; // Stop at next H1/H2
       if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
       
-      if (/^[-*]/.test(trimmed) && !/---/.test(trimmed)) {
-        points.push(trimmed.replace(/^[-*]\s*/, '').replace(/^[🛡️💡✅☑️⭐]+\s*/, '').trim());
+      if (/^---/.test(trimmed)) continue;
+      
+      if (/^[-*]\s+/.test(trimmed) || /^[🛡️💡✅☑️⭐]/.test(trimmed)) {
+        const text = trimmed.replace(/^[-*]\s*/, '').replace(/^[🛡️💡✅☑️⭐]+\s*/, '').trim();
+        if (text) points.push(text);
       }
     }
   }
@@ -70,9 +73,11 @@ function extractChecklist(content: string): string[] {
       if (/^#{1,2}\s/.test(trimmed)) break; // Stop at next H1/H2
       if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
       
-      if (/^[-*]/.test(trimmed) || /^[☑️✅]/.test(trimmed)) {
+      if (/^---/.test(trimmed)) continue;
+      
+      if (/^[-*]\s+/.test(trimmed) || /^[☑️✅]/.test(trimmed)) {
         const text = trimmed.replace(/^[-*]\s*/, '').replace(/^\[[ x]\]\s*/i, '').replace(/^[☑️✅]\s*/, '').trim();
-        if (text && !/---/.test(text)) items.push(text);
+        if (text) items.push(text);
       }
     }
   }
