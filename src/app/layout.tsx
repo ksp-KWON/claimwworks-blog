@@ -138,9 +138,9 @@ export default function RootLayout({
               © {new Date().getFullYear()} 보상스쿨 헬스케어 & 손해사정 보상가이드. All rights reserved.
             </p>
             <p className="iagree text-center md:text-right flex items-center gap-2">
-              <span className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">이용약관</span>
+              <Link href="/terms" className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">이용약관</Link>
               <span className="w-1 h-1 rounded-full bg-[#dadce0] dark:bg-[#5f6368]"></span>
-              <span className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">개인정보처리방침</span>
+              <Link href="/privacy" className="hover:text-[var(--google-blue)] cursor-pointer transition-colors">개인정보처리방침</Link>
             </p>
           </div>
         </footer>
