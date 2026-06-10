@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getSortedPostsData } from "@/lib/posts";
-import YouTubeSection from "@/components/YouTubeSection";
+import YouTubeBriefing from "@/components/YouTubeBriefing";
 
 // 구글의 대표적인 4색 테마를 카테고리별로 매칭해주는 스타일 헬퍼 함수
 function getCategoryColor(category: string) {
@@ -99,6 +99,9 @@ export default function Home() {
         </p>
       </div>
 
+      {/* 유튜브 전문가 브리핑 섹션 */}
+      <YouTubeBriefing />
+
       {/* 3. 본문 영역: 가이드 카드 격자(Grid) 배치 */}
       {posts.length === 0 ? (
         <div className="bg-white dark:bg-[#202124] rounded-3xl p-12 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
@@ -151,9 +154,6 @@ export default function Home() {
           })}
         </div>
       )}
-
-      {/* 유튜브 최신 영상 섹션 (본문 하단 배치) */}
-      <YouTubeSection />
 
     </div>
   );
