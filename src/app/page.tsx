@@ -88,6 +88,9 @@ export default function Home() {
   return (
     <div className="space-y-8 px-3 sm:px-0">
       
+      {/* 유튜브 전문가 브리핑 섹션 (소개글 위쪽 배치) */}
+      <YouTubeBriefing />
+
       {/* 2. 메인 페이지 인트로 헤더 */}
       <div className="border-b border-[var(--google-border)] pb-4">
         <h2 className="text-lg sm:text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
@@ -98,9 +101,6 @@ export default function Home() {
           건강보험심사평가원의 공개 정보를 기반으로 보상스쿨 전문가가 분석한 실무 노하우를 제공합니다.
         </p>
       </div>
-
-      {/* 유튜브 전문가 브리핑 섹션 */}
-      <YouTubeBriefing />
 
       {/* 3. 본문 영역: 가이드 카드 격자(Grid) 배치 */}
       {posts.length === 0 ? (

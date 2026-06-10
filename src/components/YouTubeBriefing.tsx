@@ -27,7 +27,7 @@ export default async function YouTubeBriefing() {
           title: titleMatch ? titleMatch[1] : '',
           published: publishedMatch ? new Date(publishedMatch[1]).toLocaleDateString('ko-KR') : ''
         };
-      }).filter(v => v.id).slice(0, 5); // 1 featured + 4 list items
+      }).filter(v => v.id).slice(0, 10); // 가로 슬라이더를 위해 10개 로드
     }
   } catch (error) {
     console.error('Failed to fetch YouTube RSS:', error);
