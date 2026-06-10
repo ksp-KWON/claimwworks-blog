@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import StickyBox from "react-sticky-box";
+import { usePathname } from "next/navigation";
 
 interface Props {
   mainContent: ReactNode;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function SmartStickyLayout({ mainContent, sidebarContent }: Props) {
+  const pathname = usePathname();
   const sidebarContentRef = useRef<HTMLDivElement>(null);
   const [minHeight, setMinHeight] = useState<number>(0);
 
@@ -44,7 +46,12 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
     resizeObserver.observe(sidebarContentRef.current);
     
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [pathname]);
+
+  // 관리자 페이지(/admin)일 경우, 사이드바 레이아웃을 씌우지 않고 본문만 전체 너비로 렌더링합니다.
+  if (pathname === '/admin') {
+    return <>{mainContent}</>;
+  }
 
   return (
     <div 
