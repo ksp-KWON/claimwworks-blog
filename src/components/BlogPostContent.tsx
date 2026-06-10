@@ -258,11 +258,12 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     a: ({ href = '', children }) => (
       <a
         href={href}
-        className="text-[#1A73E8] dark:text-[#8ab4f8] font-semibold hover:underline"
+        className="inline-flex items-center gap-0.5 px-2 py-0.5 mx-0.5 bg-[#1A73E8]/5 dark:bg-[#8ab4f8]/10 text-[#1A73E8] dark:text-[#8ab4f8] font-bold rounded-md border-b-2 border-[#1A73E8]/30 dark:border-[#8ab4f8]/30 hover:bg-[#1A73E8]/15 dark:hover:bg-[#8ab4f8]/20 hover:border-[#1A73E8] dark:hover:border-[#8ab4f8] transition-all duration-200 hover:-translate-y-[1px] no-underline group"
         target={href.startsWith('http') ? '_blank' : undefined}
         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
-        {children}
+        <span>{children}</span>
+        <svg className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100 transition-transform duration-200 group-hover:translate-x-[2px] group-hover:-translate-y-[2px] ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" /></svg>
       </a>
     ),
     p: ({ children }) => (
