@@ -56,7 +56,8 @@ async function callGemini(prompt, isJson = false) {
   if (!res.ok) throw new Error(`API HTTP ${res.status}: ${await res.text()}`);
   
   const data = await res.json();
-  let text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  let text = parts.map(p => p.text || '').join('');
   if (!text) throw new Error('응답 텍스트 파싱 실패');
 
   if (isJson) {
