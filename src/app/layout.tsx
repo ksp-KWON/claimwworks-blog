@@ -9,6 +9,7 @@ import FloatingKakaoButton from "@/components/FloatingKakaoButton";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import SearchBar from "@/components/SearchBar";
 import SmartStickyLayout from "@/components/SmartStickyLayout";
+import YouTubeLounge from "@/components/YouTubeLounge";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -118,6 +119,8 @@ export default function RootLayout({
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                   <span className="hidden md:inline">소개</span>
                 </Link>
+                <div className="w-px h-4 bg-[var(--google-border)] mx-1 hidden sm:block"></div>
+                <YouTubeLounge />
               </nav>
               <ThemeToggle />
             </div>
