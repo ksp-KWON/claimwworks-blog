@@ -2,7 +2,7 @@
 
 import { AutoInsuranceData, INJURY_ALIMONY_TABLE } from './calculator-types';
 import { useRef } from 'react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 interface Props {
@@ -160,13 +160,12 @@ export default function AutoCalculatorResult({ data }: Props) {
       const originalBg = resultRef.current.style.backgroundColor;
       resultRef.current.style.backgroundColor = '#ffffff';
       
-      const canvas = await html2canvas(resultRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      const imgData = await toPng(resultRef.current, { backgroundColor: '#ffffff', pixelRatio: 2 });
       resultRef.current.style.backgroundColor = originalBg;
       
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (resultRef.current.offsetHeight * pdfWidth) / resultRef.current.offsetWidth;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('보상스쿨_교통사고_합의금명세서.pdf');

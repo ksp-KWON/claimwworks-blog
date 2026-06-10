@@ -2,7 +2,7 @@
 
 import { MedicalInsuranceData } from './medical-calculator-types';
 import { useRef } from 'react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 export default function MedicalCalculatorResult({ data }: { data: MedicalInsuranceData }) {
@@ -141,13 +141,12 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
       const originalBg = resultRef.current.style.backgroundColor;
       resultRef.current.style.backgroundColor = '#ffffff';
       
-      const canvas = await html2canvas(resultRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      const imgData = await toPng(resultRef.current, { backgroundColor: '#ffffff', pixelRatio: 2 });
       resultRef.current.style.backgroundColor = originalBg;
       
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (resultRef.current.offsetHeight * pdfWidth) / resultRef.current.offsetWidth;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('보상스쿨_실손의료비_예상보상금.pdf');
