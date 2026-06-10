@@ -42,7 +42,7 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === '1234') { // .env.local의 ADMIN_PASSWORD와 동일하게 설정 (단순 클라이언트 보안)
+    if (password === '9913006') { // .env.local의 ADMIN_PASSWORD와 동일하게 설정 (단순 클라이언트 보안)
       setIsLoggedIn(true);
     } else {
       alert('비밀번호가 틀렸습니다.');
