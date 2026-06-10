@@ -43,8 +43,8 @@ function extractKeyPoints(content: string): string[] {
       continue;
     }
     if (inSection) {
-      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^#/.test(trimmed)) break; // Stop at normal text
-      if (/^#/.test(trimmed)) break; // Stop at new heading
+      if (/^#{1,2}\s/.test(trimmed)) break; // Stop at next H1/H2
+      if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
       
       if (/^[-*]/.test(trimmed) && !/---/.test(trimmed)) {
         points.push(trimmed.replace(/^[-*]\s*/, '').replace(/^[🛡️💡✅☑️⭐]+\s*/, '').trim());
@@ -67,8 +67,8 @@ function extractChecklist(content: string): string[] {
       continue;
     }
     if (inSection) {
-      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^[☑️✅]/.test(trimmed) && !/^#/.test(trimmed)) break;
-      if (/^#/.test(trimmed)) break;
+      if (/^#{1,2}\s/.test(trimmed)) break; // Stop at next H1/H2
+      if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
       
       if (/^[-*]/.test(trimmed) || /^[☑️✅]/.test(trimmed)) {
         const text = trimmed.replace(/^[-*]\s*/, '').replace(/^\[[ x]\]\s*/i, '').replace(/^[☑️✅]\s*/, '').trim();
@@ -102,6 +102,7 @@ function extractFAQ(content: string): { q: string; a: string }[] {
         currentQ = trimmed.replace(/^###\s*/, '').trim();
         currentA = '';
       } else if (currentQ) {
+        if (trimmed === '---') continue; // 마크다운 구분선(---)은 답변 내용에서 제외
         currentA += line + '\n';
       }
     }
@@ -278,9 +279,9 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     ),
     hr: () => (
       <div className="my-16 flex items-center justify-center gap-4">
-        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <div className="w-24 h-px bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#d93025]" />
+        <div className="w-24 h-px bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600" />
       </div>
     ),
   };
