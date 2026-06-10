@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export const metadata = {
   title: '스마트 보상금 계산기 | 보상스쿨',

@@ -151,16 +151,19 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('보상스쿨_실손의료비_예상보상금.pdf');
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      alert(`PDF 생성 중 오류가 발생했습니다: ${e?.message || String(e)}`);
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      alert(`PDF 생성 중 오류가 발생했습니다: ${errorMsg}`);
     }
   };
 
   const shareResult = () => {
     const text = `보상스쿨 실손의료비 계산결과\n▶ 예상 보상금: ${result.totalPayout.toLocaleString()}원\n\n자세한 내역은 보상스쿨에서 확인해보세요!`;
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof window !== 'undefined' && (window as any).Kakao && (window as any).Kakao.isInitialized()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
