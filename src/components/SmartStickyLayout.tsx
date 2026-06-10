@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import StickyBox from "react-sticky-box";
 
 interface Props {
@@ -9,6 +9,15 @@ interface Props {
 }
 
 export default function SmartStickyLayout({ mainContent, sidebarContent }: Props) {
+  useEffect(() => {
+    // 폰트나 비동기 리소스가 로드된 후 StickyBox가 높이를 다시 계산하도록 강제 트리거
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        window.dispatchEvent(new Event('resize'));
+      });
+    }
+  }, []);
+
   return (
     <div className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8">
       

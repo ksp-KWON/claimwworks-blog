@@ -146,6 +146,7 @@ export function SpecialtyDiseaseCategories() {
       ...prev,
       [specialty]: !prev[specialty]
     }));
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
   };
 
   const specialties = [
