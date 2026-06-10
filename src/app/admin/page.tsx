@@ -257,17 +257,17 @@ ${inputText}
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#f8f9fa] to-[#e8eaed] dark:from-[#202124] dark:to-[#171717]">
-        {/* Animated background blobs */}
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#f8f9fa] to-[#e8eaed] dark:from-[#202124] dark:to-[#171717]">
+        {/* Straight aligned background blobs */}
         <motion.div 
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }} 
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.1, 1] }} 
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 left-0 w-full h-[400px] bg-blue-400/20 dark:bg-blue-600/10 blur-3xl"
         />
         <motion.div 
-          animate={{ scale: [1, 1.5, 1], rotate: [0, -90, 0] }} 
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.2, 1] }} 
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-0 left-0 w-full h-[400px] bg-purple-400/20 dark:bg-purple-600/10 blur-3xl"
         />
 
         <motion.form 
@@ -303,11 +303,10 @@ ${inputText}
 
   return (
     <div className="min-h-screen relative bg-[#f8f9fa] dark:bg-[#1e1e20] p-4 sm:p-8 font-sans overflow-x-hidden">
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent" />
-        <div className="absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] rounded-full bg-blue-100/40 dark:bg-blue-900/10 blur-[100px]" />
-        <div className="absolute top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-purple-100/40 dark:bg-purple-900/10 blur-[100px]" />
+      {/* Dynamic Background - Aligned straight to avoid diagonal tilt perception */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex flex-col">
+        <div className="w-full h-[50vh] bg-blue-100/40 dark:bg-blue-900/10 blur-[100px]" />
+        <div className="w-full h-[50vh] bg-purple-100/40 dark:bg-purple-900/10 blur-[100px]" />
       </div>
 
       <motion.div 

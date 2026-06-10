@@ -49,7 +49,7 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
   }, [pathname]);
 
   // 관리자 페이지(/admin)일 경우, 사이드바 레이아웃을 씌우지 않고 본문만 전체 너비로 렌더링합니다.
-  if (pathname === '/admin') {
+  if (pathname === '/admin' || pathname?.startsWith('/admin/')) {
     return <>{mainContent}</>;
   }
 
