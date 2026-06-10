@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSortedPostsData } from "@/lib/posts";
+import YouTubeSection from "@/components/YouTubeSection";
 
 // 구글의 대표적인 4색 테마를 카테고리별로 매칭해주는 스타일 헬퍼 함수
 function getCategoryColor(category: string) {
@@ -150,6 +151,9 @@ export default function Home() {
           })}
         </div>
       )}
+
+      {/* 유튜브 최신 영상 섹션 (본문 하단 배치) */}
+      <YouTubeSection />
 
     </div>
   );
