@@ -9,7 +9,6 @@ interface Props {
 }
 
 export default function SmartStickyLayout({ mainContent, sidebarContent }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const sidebarContentRef = useRef<HTMLDivElement>(null);
   const [minHeight, setMinHeight] = useState<number>(0);
 
@@ -28,6 +27,8 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
       for (const entry of entries) {
         if (entry.target === sidebarContentRef.current) {
           setMinHeight(entry.contentRect.height);
+          // 높이가 변하면 StickyBox가 경계를 다시 계산하도록 이벤트를 발생시킵니다.
+          window.dispatchEvent(new Event('resize'));
         }
       }
     });
@@ -39,9 +40,8 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
 
   return (
     <div 
-      ref={containerRef}
-      style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
       className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8"
+      style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
     >
       
       {/* 본문 영역 */}
@@ -50,8 +50,13 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
       </main>
 
       {/* 사이드바 영역 */}
-      <aside className="w-full lg:w-[27%] relative transition-all duration-300">
-        <StickyBox offsetTop={80} offsetBottom={20} className="w-full">
+      {/* Flex 컨테이너의 min-height가 자식 요소로 제대로 전파되지 않는 버그(Safari 등)를 막기 위해 aside에도 직접 minHeight를 적용합니다. */}
+      <aside 
+        className="w-full lg:w-[27%] relative transition-all duration-300"
+        style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
+      >
+        {/* key에 minHeight를 주어 컨텐츠 높이가 크게 변할 때마다 StickyBox를 아예 초기화시켜버림으로써 경계 계산 오류를 원천 차단합니다. */}
+        <StickyBox key={`sticky-${minHeight}`} offsetTop={80} offsetBottom={20} className="w-full">
           <div ref={sidebarContentRef}>
             {sidebarContent}
           </div>
