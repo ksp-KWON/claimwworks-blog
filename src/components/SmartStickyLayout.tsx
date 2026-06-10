@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import StickyBox from "react-sticky-box";
 
 interface Props {
@@ -9,6 +9,10 @@ interface Props {
 }
 
 export default function SmartStickyLayout({ mainContent, sidebarContent }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sidebarContentRef = useRef<HTMLDivElement>(null);
+  const [minHeight, setMinHeight] = useState<number>(0);
+
   useEffect(() => {
     // 폰트나 비동기 리소스가 로드된 후 StickyBox가 높이를 다시 계산하도록 강제 트리거
     if (document.fonts) {
@@ -16,10 +20,29 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
         window.dispatchEvent(new Event('resize'));
       });
     }
+
+    // 사이드바 컨텐츠의 실제 높이를 추적하여, StickyBox가 absolute로 변환될 때 부모 레이아웃이 붕괴되는 현상을 원천 차단
+    if (!sidebarContentRef.current) return;
+    
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === sidebarContentRef.current) {
+          setMinHeight(entry.contentRect.height);
+        }
+      }
+    });
+
+    resizeObserver.observe(sidebarContentRef.current);
+    
+    return () => resizeObserver.disconnect();
   }, []);
 
   return (
-    <div className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <div 
+      ref={containerRef}
+      style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
+      className="mx-auto w-full sm:w-[92vw] xl:w-[85vw] max-w-7xl px-0 sm:px-5 py-6 sm:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8"
+    >
       
       {/* 본문 영역 */}
       <main className="w-full lg:w-[73%] flex-1 min-w-0 transition-all duration-300">
@@ -27,10 +50,11 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
       </main>
 
       {/* 사이드바 영역 */}
-      {/* react-sticky-box가 트랙의 하단에 도달했을 때 absolute 속성으로 고정되는데, 이때 부모에 relative가 없으면 문서 전체를 기준으로 튕겨나가 푸터를 침범합니다. 반드시 relative가 필요합니다. */}
       <aside className="w-full lg:w-[27%] relative transition-all duration-300">
         <StickyBox offsetTop={80} offsetBottom={20} className="w-full">
-          {sidebarContent}
+          <div ref={sidebarContentRef}>
+            {sidebarContent}
+          </div>
         </StickyBox>
       </aside>
 

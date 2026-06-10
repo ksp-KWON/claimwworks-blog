@@ -1,7 +1,5 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-const YouTubeBriefingClient = dynamic(() => import('./YouTubeBriefingClient'), { ssr: false });
+import YouTubeBriefingClient from './YouTubeBriefingClient';
 
 export interface YouTubeVideo {
   id: string;
