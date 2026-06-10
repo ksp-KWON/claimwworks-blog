@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSortedPostsData } from "@/lib/posts";
+import YouTubeSlider from "@/components/YouTubeSlider";
 
 // 구글의 대표적인 4색 테마를 카테고리별로 매칭해주는 스타일 헬퍼 함수
 function getCategoryColor(category: string) {
@@ -97,6 +98,9 @@ export default function Home() {
           건강보험심사평가원의 공개 정보를 기반으로 보상스쿨 전문가가 분석한 실무 노하우를 제공합니다.
         </p>
       </div>
+
+      {/* 유튜브 최신 영상 슬라이더 */}
+      <YouTubeSlider />
 
       {/* 3. 본문 영역: 가이드 카드 격자(Grid) 배치 */}
       {posts.length === 0 ? (
