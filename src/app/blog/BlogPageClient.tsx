@@ -108,7 +108,7 @@ function HospitalListView({
   const currentHospitals = specialtyData.hospitals.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-4 py-6 sm:p-8 lg:p-10">
+    <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3.5 py-5 sm:p-8 lg:p-10">
       <div className="flex items-center justify-between mb-6 border-b border-[var(--google-border)] pb-4">
         <div>
           <h2 className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
@@ -598,7 +598,7 @@ export default function BlogPageClient() {
           {displayPosts.map((post) => (
             <article
               key={post.slug}
-              className="bg-white dark:bg-[#202124] p-5 sm:p-6 rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[var(--google-blue)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="bg-white dark:bg-[#202124] p-4 sm:p-6 rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[var(--google-blue)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex flex-wrap items-center gap-3 text-xs mb-3">

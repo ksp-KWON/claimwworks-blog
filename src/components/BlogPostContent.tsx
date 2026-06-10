@@ -223,7 +223,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h2
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="text-[20px] sm:text-[22px] font-bold text-gray-900 dark:text-[#e8eaed] mt-14 mb-6 px-5 py-4 sm:px-6 bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-center gap-3.5 tracking-tight break-keep"
+        className="text-[19px] sm:text-[22px] font-bold text-gray-900 dark:text-[#e8eaed] mt-12 mb-6 px-4 py-3 sm:px-6 bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-center gap-3 tracking-tight break-keep"
       >
         <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#fce8e6] dark:bg-[#d93025]/20 flex items-center justify-center shadow-sm">
           <span className="w-2.5 h-2.5 rounded-full bg-[#d93025]" />
@@ -242,7 +242,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       </h3>
     ),
     blockquote: ({ children }) => (
-      <div className="my-8 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-start gap-4 relative overflow-hidden">
+      <div className="my-8 p-4 sm:p-6 rounded-2xl bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-start gap-3 relative overflow-hidden">
         <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#34A853]" />
         <div className="text-[15px] text-gray-800 dark:text-[#e8eaed] leading-[1.8] [&>p]:m-0 flex-1">{children}</div>
       </div>
@@ -397,7 +397,7 @@ function KeyPointsBox({ points }: { points: string[] }) {
   return (
     <div className="mb-10 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-[#1A73E8]" />
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-white/5">
+      <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-100 dark:border-white/5">
         <div className="w-8 h-8 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
           <svg className="w-4 h-4 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
             <polyline points="20 6 9 17 4 12" />
@@ -405,7 +405,7 @@ function KeyPointsBox({ points }: { points: string[] }) {
         </div>
         <span className="text-[13px] font-extrabold text-gray-900 dark:text-white uppercase tracking-[0.1em]">Key Points</span>
       </div>
-      <ul className="px-6 py-5 space-y-3">
+      <ul className="px-4 py-4 space-y-3">
         {points.map((point, i) => (
           <li key={i} className="flex items-start gap-3.5">
             <span className="w-6 h-6 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 text-[#1A73E8] dark:text-[#8ab4f8] text-[12px] font-bold flex items-center justify-center shrink-0 mt-0.5">
@@ -495,7 +495,7 @@ function ChecklistBox({ items }: { items: string[] }) {
     <div className="my-12 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-[#34A853]" />
       {/* 헤더 */}
-      <div className="px-6 py-5 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
+      <div className="px-4 py-4 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-full bg-[#e6f4ea] dark:bg-[#34A853]/20 flex items-center justify-center shrink-0">
             <span className="text-xl">🛡️</span>
@@ -534,7 +534,7 @@ function ChecklistBox({ items }: { items: string[] }) {
               next[i] = !next[i];
               setChecked(next);
             }}
-            className={`w-full flex items-center gap-4 px-6 py-4 text-left transition-colors ${
+            className={`w-full flex items-center gap-3.5 px-4 py-3.5 text-left transition-colors ${
               checked[i]
                 ? 'bg-gray-50 dark:bg-white/[0.02]'
                 : 'hover:bg-gray-50 dark:hover:bg-[#303134]'
@@ -568,7 +568,7 @@ function ChecklistBox({ items }: { items: string[] }) {
 
       {/* 결과 메시지 */}
       {count >= 3 && (
-        <div className="bg-[#e6f4ea] dark:bg-[#34A853]/10 border-t border-[#34A853]/20 px-6 py-4 flex items-center gap-3">
+        <div className="bg-[#e6f4ea] dark:bg-[#34A853]/10 border-t border-[#34A853]/20 px-4 py-3.5 flex items-center gap-3">
           <span className="text-xl">⚠️</span>
           <p className="text-[#137333] dark:text-[#81c995] text-[14px] font-semibold leading-relaxed">
             <strong className="font-extrabold">{count}개 이상 해당</strong>됩니다. 청구 가능한 보험금이 남아있을 가능성이 높으니 전문가 무료 진단을 받아보세요.
@@ -589,7 +589,7 @@ function FAQBox({ items }: { items: { q: string; a: string }[] }) {
     <div className="my-12 rounded-2xl overflow-hidden bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-[#7C4DFF]" />
       {/* 헤더 */}
-      <div className="px-6 py-5 border-b border-gray-100 dark:border-white/5 flex items-center gap-3.5">
+      <div className="px-4 py-4 border-b border-gray-100 dark:border-white/5 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-[#EDE7F6] dark:bg-[#7C4DFF]/20 flex items-center justify-center shrink-0">
           <span className="text-xl">💡</span>
         </div>
@@ -609,7 +609,7 @@ function FAQBox({ items }: { items: { q: string; a: string }[] }) {
           <div key={i}>
             <button
               onClick={() => setOpenIdx(openIdx === i ? null : i)}
-              className="w-full flex items-center gap-4 px-6 py-4.5 text-left hover:bg-gray-50 dark:hover:bg-[#303134] transition-colors"
+              className="w-full flex items-center gap-3.5 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-[#303134] transition-colors"
             >
               <span className="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 text-[13px] font-bold flex items-center justify-center shrink-0 transition-colors">
                 Q{i + 1}
@@ -631,8 +631,8 @@ function FAQBox({ items }: { items: { q: string; a: string }[] }) {
             <div 
               className={`overflow-hidden transition-all duration-300 ease-in-out ${openIdx === i ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
             >
-              <div className="px-6 pb-6 pt-2">
-                <div className="flex gap-4 p-5 rounded-2xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5">
+              <div className="px-4 pb-4 pt-1.5">
+                <div className="flex gap-3.5 p-4 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5">
                   <span className="w-8 h-8 rounded-full bg-[#7C4DFF] text-white text-[13px] font-bold flex items-center justify-center shrink-0">
                     A
                   </span>
