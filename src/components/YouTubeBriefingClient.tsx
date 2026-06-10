@@ -8,18 +8,23 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
     <section className="mb-10 relative">
       
       {/* 1. 메인 블로그 인트로와 완벽하게 동일한 헤더 스타일 */}
-      <div className="border-b border-[var(--google-border)] pb-4 flex items-center justify-between mb-5">
-        <h2 className="text-lg sm:text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
-          <svg className="w-5 h-5 text-[#FF0000]" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
-          보상스쿨 미디어 센터
-        </h2>
+      <div className="border-b border-[var(--google-border)] pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-0 mb-5">
+        <div>
+          <h2 className="text-lg sm:text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
+            <svg className="w-5 h-5 text-[#FF0000]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            보상스쿨 미디어 센터
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5f6368] dark:text-[#9aa0a6] mt-1.5 break-keep">
+            어렵고 복잡한 보상 실무와 의학 지식을 보상스쿨 전문가가 영상으로 알기 쉽게 브리핑합니다.
+          </p>
+        </div>
         <a 
           href="https://www.youtube.com/@bosangschool" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-xs sm:text-sm font-bold text-[var(--google-blue)] hover:underline flex items-center gap-1"
+          className="text-xs sm:text-sm font-bold text-[var(--google-blue)] hover:underline flex items-center gap-1 shrink-0 pb-0.5"
         >
           채널 홈 <span className="hidden sm:inline">바로가기</span> →
         </a>
