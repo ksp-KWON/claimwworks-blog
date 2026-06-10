@@ -258,14 +258,14 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     a: ({ href = '', children }) => (
       <a
         href={href}
-        className="inline-flex items-center gap-2 px-3 py-1.5 mx-1 my-1 align-middle bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_24px_rgba(26,115,232,0.18)] hover:border-[#1A73E8]/40 dark:hover:border-[#8ab4f8]/40 transition-all duration-300 hover:-translate-y-[2px] text-[#1A73E8] dark:text-[#8ab4f8] font-bold text-[14.5px] group no-underline"
+        className="inline-flex items-center gap-2 px-3 py-1.5 mx-1 my-1 align-middle bg-white dark:bg-[#202124] border border-gray-200 dark:border-white/10 rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_24px_rgba(26,115,232,0.18)] hover:border-[#1A73E8]/40 dark:hover:border-[#8ab4f8]/40 transition-all duration-300 hover:-translate-y-[2px] text-[#1A73E8] dark:text-[#8ab4f8] font-bold text-[14.5px] group no-underline break-keep"
         target={href.startsWith('http') ? '_blank' : undefined}
         rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
         <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#e8f0fe] dark:bg-[#1A73E8]/20 flex items-center justify-center">
           <svg className="w-2.5 h-2.5 text-[#1A73E8] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
         </span>
-        <span className="truncate max-w-[200px] sm:max-w-[350px] leading-none mt-[1px]">{children}</span>
+        <span className="leading-[1.4] mt-[1px]">{children}</span>
         <svg className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-transform duration-300 group-hover:translate-x-[2px] group-hover:-translate-y-[2px] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" /></svg>
       </a>
     ),
