@@ -77,6 +77,7 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
             </div>
           </a>
         ))}
+      </div>
     </section>
   );
 }
