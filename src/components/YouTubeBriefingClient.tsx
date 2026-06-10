@@ -31,15 +31,16 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
         </div>
       </div>
 
-      {/* 2. 블로그 글 카드와 똑같은 머티리얼 슬라이더 */}
-      <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-3 px-3 sm:mx-0 sm:px-0">
-        {videos.map(video => (
+      {/* 2. 모바일에서는 슬라이더, 데스크탑에서는 3열 그리드로 전환 & 그림자 잘림 방지 py-4 패딩 추가 */}
+      <div className="flex overflow-x-auto gap-4 py-4 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-3 px-3 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible">
+        {videos.slice(0, 3).map(video => (
           <a
             key={video.id}
             href={`https://youtu.be/${video.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[#FF0000]/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col w-[260px] sm:w-[calc(33.333333%-13.333333px)] shrink-0 snap-start min-h-[220px]"          >
+            className="group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-[#FF0000]/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col w-[260px] sm:w-full shrink-0 sm:shrink snap-start min-h-[220px]"
+          >
             {/* 썸네일 영역 */}
             <div className="relative aspect-video w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden">
               <img 
