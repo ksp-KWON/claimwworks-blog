@@ -302,7 +302,7 @@ ${inputText}
   }
 
   return (
-    <div className="h-[calc(100vh-160px)] relative bg-[#f8f9fa] dark:bg-[#1e1e20] p-3 sm:p-4 font-sans overflow-hidden flex flex-col">
+    <div className="h-[calc(100vh-80px)] admin-page-container relative bg-[#f8f9fa] dark:bg-[#1e1e20] p-3 sm:p-4 font-sans overflow-hidden flex flex-col">
       {/* Dynamic Background - Aligned straight to avoid diagonal tilt perception */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex flex-col">
         <div className="w-full h-[50vh] bg-blue-100/40 dark:bg-blue-900/10 blur-[100px]" />

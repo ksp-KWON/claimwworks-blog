@@ -15,6 +15,13 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
   const [minHeight, setMinHeight] = useState<number>(0);
 
   useEffect(() => {
+    // 관리자 페이지 진입 시 body에 hide-footer 클래스 추가
+    if (pathname === '/admin' || pathname?.startsWith('/admin/')) {
+      document.body.classList.add('hide-footer');
+    } else {
+      document.body.classList.remove('hide-footer');
+    }
+
     // 폰트나 비동기 리소스가 로드된 후 StickyBox가 높이를 다시 계산하도록 강제 트리거
     if (document.fonts) {
       document.fonts.ready.then(() => {
@@ -45,7 +52,10 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
 
     resizeObserver.observe(sidebarContentRef.current);
     
-    return () => resizeObserver.disconnect();
+    return () => {
+      document.body.classList.remove('hide-footer');
+      resizeObserver.disconnect();
+    };
   }, [pathname]);
 
   // 관리자 페이지(/admin)일 경우, 사이드바 레이아웃을 씌우지 않고 본문만 전체 너비로 렌더링합니다.
