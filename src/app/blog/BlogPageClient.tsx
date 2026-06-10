@@ -108,7 +108,7 @@ function HospitalListView({
   const currentHospitals = specialtyData.hospitals.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div className="bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3 py-6 sm:p-8 lg:p-10">
+    <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-4 py-6 sm:p-8 lg:p-10">
       <div className="flex items-center justify-between mb-6 border-b border-[var(--google-border)] pb-4">
         <div>
           <h2 className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
@@ -269,7 +269,7 @@ export default function BlogPageClient() {
 
         {loading ? (
           /* 로딩 스피너 */
-          <div className="bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] py-16 px-3 sm:p-16 text-center border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
+          <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] py-16 px-4 sm:p-16 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <div className="inline-block w-8 h-8 border-4 border-[var(--google-blue)] border-t-transparent rounded-full animate-spin mb-4" />
             <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6]">{region} 의료기관 데이터 불러오는 중...</p>
           </div>
@@ -329,7 +329,7 @@ export default function BlogPageClient() {
                 </div>
               ) : (
                 /* 필터링된 포스트가 없을 경우 상담 유도 UI */
-                <div className="bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] py-8 px-3 sm:p-10 text-center border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
+                <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] py-8 px-4 sm:p-10 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
                   <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   <h3 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-2">
                     해당 진료과목과 관련된 칼럼이 없습니다.
@@ -364,7 +364,7 @@ export default function BlogPageClient() {
           </div>
         ) : (
           /* 데이터 없음 */
-          <div className="bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] py-10 px-3 sm:p-10 text-center border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
+          <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] py-10 px-4 sm:p-10 text-center border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" /><circle cx="12" cy="10" r="3" /></svg>
             <h2 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-2">
               {region} 의료기관 정보
@@ -416,7 +416,7 @@ export default function BlogPageClient() {
           </nav>
         </div>
 
-        <div className="bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3 py-5 sm:p-6">
+        <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-4 py-5 sm:p-6">
           <h2 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-1">
             {sido} 구/군 선택
           </h2>
@@ -586,7 +586,7 @@ export default function BlogPageClient() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-16 px-3 sm:p-16 bg-white dark:bg-[#202124] rounded-none sm:rounded-[24px] border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
+          <div className="text-center py-16 px-4 sm:p-16 bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
             <svg className="w-12 h-12 text-[#dadce0] dark:text-[#5f6368] mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M3 15h6"></path><path d="M3 19h6"></path><path d="M10 15h8"></path><path d="M10 19h8"></path></svg>
             <p className="text-sm font-bold tracking-wide text-[#5f6368] dark:text-[#9aa0a6]">
               {tagFilter ? `'#${tagFilter}' 태그에 해당하는 게시글이 없습니다.` : '등록된 블로그 포스팅이 존재하지 않습니다.'}

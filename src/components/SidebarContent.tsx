@@ -67,27 +67,38 @@ export default function SidebarContent() {
         </Link>
       </div>
 
-      {/* ── 모바일 전용 토글 버튼 (lg 이상에서는 숨김) ── */}
-      <button
-        onClick={() => setIsOpen(prev => !prev)}
-        className="lg:hidden w-full flex items-center justify-between px-4 py-3 bg-[var(--background)] border border-[var(--google-border)] rounded-2xl text-sm font-bold text-[#202124] dark:text-[#e8eaed] hover:border-[var(--google-blue)] transition-colors"
-        aria-expanded={isOpen}
-        aria-controls="sidebar-content"
-      >
-        <span className="flex items-center gap-2">
-          <svg className="w-4 h-4 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
+      {/* ── 모바일 전용 카테고리/인기키워드 안내 카드 (lg 이상에서는 숨김) ── */}
+      <div className="lg:hidden bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(26,115,232,0.2)] hover:border-[var(--google-blue)] hover:-translate-y-1 transition-all duration-300 group mb-6 relative overflow-hidden">
+        <h3 className="text-sm font-bold text-[#202124] dark:text-[#e8eaed] mb-2 flex items-center gap-2 border-l-4 border-[var(--google-blue)] pl-2.5">
+          <span className="text-[var(--google-blue)] text-lg leading-none">📂</span>
           카테고리 · 인기 키워드
-        </span>
-        <svg
-          className={`w-4 h-4 text-[#5f6368] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round"
+        </h3>
+        <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mb-4 leading-relaxed font-normal">
+          손해사정사가 분석한 진료과목별 분쟁 가이드와 대한민국 지역별 의료기관 리스트, 인기 태그 키워드를 확인하세요.
+        </p>
+        <button
+          onClick={() => setIsOpen(prev => !prev)}
+          className={`flex items-center justify-center gap-2 w-full font-bold text-sm py-2.5 rounded-xl transition-all duration-200 shadow-sm cursor-pointer ${
+            isOpen 
+              ? 'bg-gradient-to-r from-[#e8f0fe] to-[#f1f3f4] dark:from-[#174ea6]/20 dark:to-[#303134] border border-[var(--google-blue)] text-[var(--google-blue)] dark:text-[#8ab4f8]' 
+              : 'bg-[var(--google-blue)] text-white hover:bg-[#174ea6]'
+          }`}
+          aria-expanded={isOpen}
+          aria-controls="sidebar-content"
         >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
+          {isOpen ? (
+            <>
+              카테고리 메뉴 접기
+              <svg className="w-4 h-4 text-[var(--google-blue)] dark:text-[#8ab4f8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </>
+          ) : (
+            <>
+              카테고리 메뉴 열기
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* ── 사이드바 본문 (모바일: 토글 / 데스크탑: 항상 표시) ── */}
       <div
@@ -116,12 +127,9 @@ export default function SidebarContent() {
               <Link
                 key={tag}
                 href={`/blog?tag=${encodeURIComponent(tag)}`}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#9aa0a6] border border-transparent hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--google-surface-variant)] dark:bg-[#303134] text-[#5f6368] dark:text-[#c4c7c5] border border-transparent hover:border-[var(--google-blue)] hover:bg-[#e8f0fe] dark:hover:bg-[#174ea6]/20 hover:text-[var(--google-blue)] dark:hover:text-[#8ab4f8] transition-all duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
               >
-                <svg className="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
+                <span className="text-[var(--google-red)] opacity-70">#</span>
                 {tag}
               </Link>
             ))}
@@ -130,7 +138,7 @@ export default function SidebarContent() {
             {hasMoreTags && (
               <button
                 onClick={() => setShowAllTags(!showAllTags)}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white dark:bg-[#202124] text-[#5f6368] dark:text-[#9aa0a6] border border-[#dadce0] dark:border-[#5f6368] hover:border-[var(--google-blue)] hover:text-[var(--google-blue)] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#202124] text-[#5f6368] dark:text-[#c4c7c5] border border-gray-200 dark:border-white/5 hover:border-[var(--google-blue)] hover:bg-[#e8f0fe] dark:hover:bg-[#174ea6]/20 hover:text-[var(--google-blue)] dark:hover:text-[#8ab4f8] transition-all duration-200 shadow-sm cursor-pointer"
               >
                 {showAllTags ? (
                   <>
