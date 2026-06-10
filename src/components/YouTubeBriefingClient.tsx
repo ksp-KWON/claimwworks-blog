@@ -26,7 +26,7 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
       </div>
 
       {/* 2. 블로그 글 카드와 똑같은 머티리얼 슬라이더 */}
-      <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0">
+      <div className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-3 px-3 sm:mx-0 sm:px-0">
         {videos.map(video => (
           <a
             key={video.id}
@@ -77,17 +77,6 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
             </div>
           </a>
         ))}
-      </div>
-
-      <style dangerouslySetInnerHTML={{__html: `
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}} />
     </section>
   );
 }
