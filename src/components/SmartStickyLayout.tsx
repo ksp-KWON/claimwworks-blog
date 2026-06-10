@@ -23,12 +23,20 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
     // 사이드바 컨텐츠의 실제 높이를 추적하여, StickyBox가 absolute로 변환될 때 부모 레이아웃이 붕괴되는 현상을 원천 차단
     if (!sidebarContentRef.current) return;
     
+    // 초기 높이 설정
+    setMinHeight(sidebarContentRef.current.offsetHeight);
+    
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === sidebarContentRef.current) {
-          setMinHeight(entry.contentRect.height);
-          // 높이가 변하면 StickyBox가 경계를 다시 계산하도록 이벤트를 발생시킵니다.
-          window.dispatchEvent(new Event('resize'));
+          const newHeight = entry.contentRect.height;
+          setMinHeight(prev => {
+            if (Math.abs(prev - newHeight) > 10) {
+              // 높이가 10px 이상 유의미하게 변했을 때만 resize 이벤트를 발생시켜 무한루프 방지
+              setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+            }
+            return newHeight;
+          });
         }
       }
     });
@@ -55,8 +63,7 @@ export default function SmartStickyLayout({ mainContent, sidebarContent }: Props
         className="w-full lg:w-[27%] relative transition-all duration-300"
         style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
       >
-        {/* key에 minHeight를 주어 컨텐츠 높이가 크게 변할 때마다 StickyBox를 아예 초기화시켜버림으로써 경계 계산 오류를 원천 차단합니다. */}
-        <StickyBox key={`sticky-${minHeight}`} offsetTop={80} offsetBottom={20} className="w-full">
+        <StickyBox offsetTop={80} offsetBottom={20} className="w-full">
           <div ref={sidebarContentRef}>
             {sidebarContent}
           </div>
