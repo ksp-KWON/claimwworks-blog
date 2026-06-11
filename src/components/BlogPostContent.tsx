@@ -152,11 +152,15 @@ function preprocessBody(content: string): string {
     }
   }
 
-  return result
+  const processed = result
     .join('\n')
     .replace(/\[SEO_SUMMARY\]:.*/gi, '')
     .replace(/\[[^\]]*(?:카카오|상담)[^\]]*\]\([^)]*\)/g, '')
     .trim();
+
+  // remark-gfm의 한글 조사 결합 시 볼드(**) 파싱 버그를 예방하기 위해
+  // 모든 **볼드** 패턴을 안전한 HTML <strong> 태그로 선치환합니다.
+  return processed.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
 }
 
 // ─── 인터페이스 ───
