@@ -235,9 +235,8 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
       <h3
         id={id}
         style={{ scrollMarginTop: `${SCROLL_OFFSET}px` }}
-        className="inline-flex items-center text-[16px] font-bold text-gray-800 dark:text-[#e8eaed] mt-8 mb-4 px-4 py-2 bg-gray-50/80 dark:bg-white/[0.04] border border-gray-200 dark:border-white/10 rounded-full tracking-tight break-keep shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+        className="w-full flex items-center text-[16px] sm:text-[17px] font-bold text-gray-800 dark:text-[#e8eaed] mt-8 mb-4 px-4 py-3 bg-gray-50/80 dark:bg-white/[0.03] border-l-4 border-l-[#d93025] border border-y-gray-200 border-r-gray-200 dark:border-y-white/10 dark:border-r-white/10 rounded-r-xl tracking-tight break-keep shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
       >
-        <span className="text-[#d93025] mr-2 opacity-80 text-[15px] font-extrabold">#</span>
         {children}
       </h3>
     ),
