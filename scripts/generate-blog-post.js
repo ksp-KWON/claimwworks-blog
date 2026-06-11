@@ -39,35 +39,66 @@ function getExistingPostsInfo() {
 }
 
 // ── Gemini API 호출 코어 ──
-async function callGemini(prompt, isJson = false) {
+async function callGemini(prompt, schema = null, retries = 3, delayMs = 2000) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey || apiKey.length < 10) throw new Error('유효하지 않은 GEMINI_API_KEY');
 
+  // v1beta API 사용 (Structured Outputs 지원)
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.75, maxOutputTokens: 8192 },
-    }),
-  });
-
-  if (!res.ok) throw new Error(`API HTTP ${res.status}: ${await res.text()}`);
   
-  const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts || [];
-  let text = parts.map(p => p.text || '').join('');
-  if (!text) throw new Error('응답 텍스트 파싱 실패');
+  const generationConfig = { 
+    temperature: 0.75, 
+    maxOutputTokens: 8192 
+  };
 
-  if (isJson) {
+  if (schema) {
+    generationConfig.responseMimeType = 'application/json';
+    generationConfig.responseSchema = schema;
+  }
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      return JSON.parse(text.replace(/```json/gi, '').replace(/```/g, '').trim());
-    } catch {
-      throw new Error(`JSON 파싱 에러: ${text}`);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig,
+        }),
+      });
+
+      if (!res.ok) {
+        if (res.status === 429 || (res.status >= 500 && res.status < 600)) {
+          if (attempt < retries) {
+            console.warn(`[API 경고] 호출 실패 (${res.status}). ${delayMs}ms 후 재시도합니다... (시도 ${attempt}/${retries})`);
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+            continue;
+          }
+        }
+        throw new Error(`API HTTP ${res.status}: ${await res.text()}`);
+      }
+      
+      const data = await res.json();
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const text = parts.map(p => p.text || '').join('');
+      if (!text) throw new Error('응답 텍스트 파싱 실패');
+
+      if (schema) {
+        try {
+          return JSON.parse(text.trim());
+        } catch (e) {
+          throw new Error(`JSON 파싱 에러: ${text} | 상세: ${e.message}`);
+        }
+      }
+      return text;
+    } catch (err) {
+      if (attempt === retries) {
+        throw err;
+      }
+      console.warn(`[API 오류] ${err.message}. ${delayMs}ms 후 재시도합니다... (시도 ${attempt}/${retries})`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }
-  return text;
 }
 
 // ── 프롬프트 헌법(Rules) 설정 ──
@@ -131,10 +162,7 @@ ${postsContext}
 - FAQ 직후, 독자의 불안한 심리를 찌르는 강력한 무료 상담 유도 카피 작성 ("혼자 고민하다 수백만 원 손해 보지 마시고...").
 - 하단에 마크다운 링크 \`[👉 카카오톡 1:1 무료 상담하기 (클릭)](https://open.kakao.com/o/sWeszp7)\` 버튼 삽입.
 
-## 9. SEO 요약문 분리
-- 가장 마지막 줄에 \`[SEO_SUMMARY]: \`로 시작하는 150자 이내의 클릭 유도용 요약문 작성.
-
-위 규칙을 엄격히 적용하여 지금 바로 본문을 작성하세요.`;
+위 규칙을 엄격히 준수하여 본문을 작성해 주세요.`;
 }
 
 // ── 실행 ──
@@ -152,24 +180,67 @@ async function main() {
 
   const topicPrompt = `현재 슬러그: [${existingPosts.map(p => p.slug).join(', ')}]
 ${trendContext}
-이 목록과 중복되지 않으면서 검색량이 폭발할 '손해사정/의료/보상' 관련 타겟 키워드 1개를 선정해 순수 JSON으로만 응답:
-{"slug": "영어-하이픈", "title": "매력적인 제목", "category": "카테고리 중 택1", "specialtyCategory": "진료과목", "tags": ["태그5개"], "keywords": "키워드 3개"}`;
+이 목록과 중복되지 않으면서 검색량이 폭발할 '손해사정/의료/보상' 관련 타겟 키워드 1개를 선정해 주세요.`;
 
-  const topic = await callGemini(topicPrompt, true);
+  // 토픽 정보 설계를 위한 스키마
+  const topicSchema = {
+    type: "OBJECT",
+    properties: {
+      slug: { 
+        type: "STRING", 
+        description: "URL 경로명으로 사용할 하이픈(-) 구분 영문 소문자 문자열 (예: car-accident-settlement-calculation)"
+      },
+      title: { 
+        type: "STRING", 
+        description: "구글 검색엔진 최적화(SEO) 및 E-E-A-T 기준에 부합하는 가독성이 높은 포스팅 제목" 
+      },
+      category: { 
+        type: "STRING", 
+        description: "블로그 카테고리 중 반드시 택1 (예: 교통사고, 배상책임, 후유장해, 실손의료비, 보험상식 등)"
+      },
+      specialtyCategory: { 
+        type: "STRING", 
+        description: "전문 진료과목 분류 (예: 정형외과, 신경외과, 재활의학과 등)" 
+      },
+      tags: {
+        type: "ARRAY",
+        items: { type: "STRING" },
+        description: "블로그 키워드와 관련된 태그 목록 (5개)"
+      },
+      keywords: { 
+        type: "STRING", 
+        description: "포스팅의 검색 노출 대상이 되는 타겟 핵심 키워드 목록 (쉼표로 구분)" 
+      }
+    },
+    required: ["slug", "title", "category", "specialtyCategory", "tags", "keywords"]
+  };
+
+  const topic = await callGemini(topicPrompt, topicSchema);
   console.log(`[1] 토픽 기획 완료: ${topic.title} (${topic.slug})`);
 
   // 2. 본문 작성
-  const content = await callGemini(buildPrompt(topic, existingPosts));
-  console.log(`[2] 본문 생성 완료: ${content.length}자`);
+  // 본문 작성을 위한 스키마
+  const postSchema = {
+    type: "OBJECT",
+    properties: {
+      content: {
+        type: "STRING",
+        description: "마크다운(Markdown) 포맷으로 작성된 블로그 본문 전체 (최소 2,500자 이상). 프롬프트 헌법 규칙을 빈틈없이 완벽하게 준수해야 합니다."
+      },
+      seoSummary: {
+        type: "STRING",
+        description: "구글 검색엔진 노출을 유도하기 위해 150자 이내로 간결하고 매력적으로 쓰인 글 요약 (SEO 메타 디스크립션)"
+      }
+    },
+    required: ["content", "seoSummary"]
+  };
+
+  const postResult = await callGemini(buildPrompt(topic, existingPosts), postSchema);
+  console.log(`[2] 본문 및 요약문 생성 완료 (본문: ${postResult.content.length}자, 요약: ${postResult.seoSummary.length}자)`);
 
   // 3. 파일 저장 전처리
-  let summary = topic.title.replace(/"/g, "'");
-  let finalContent = content;
-  const summaryMatch = content.match(/\[SEO_SUMMARY\]:\s*(.+)/);
-  if (summaryMatch) {
-    summary = summaryMatch[1].trim().slice(0, 150).replace(/"/g, "'");
-    finalContent = content.replace(/\[SEO_SUMMARY\]:\s*(.+)/, '').trim();
-  }
+  const summary = postResult.seoSummary.replace(/"/g, "'").trim();
+  const finalContent = postResult.content.trim();
 
   const kstDate = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
   const tagsStr = topic.tags.map(t => `"${t}"`).join(',');

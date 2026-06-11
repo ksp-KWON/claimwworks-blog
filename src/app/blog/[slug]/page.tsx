@@ -50,7 +50,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const jsonLd = {
+  // FAQ 파싱 헬퍼 (마크다운 본문에서 동적으로 FAQ 스키마 생성용 데이터 추출)
+  const lines = post.content.split('\n');
+  const faqs: { q: string; a: string }[] = [];
+  let inFAQSection = false;
+  let currentQ = '';
+  let currentA = '';
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^##\s+/.test(trimmed) && /(?:faq|자주\s*묻는)/i.test(trimmed)) {
+      inFAQSection = true;
+      continue;
+    }
+    if (inFAQSection) {
+      if (/^##\s+/.test(trimmed)) break; // 다음 H2 대제목을 만나면 종료
+      if (/^###\s+/.test(trimmed)) {
+        if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
+        currentQ = trimmed.replace(/^###\s*/, '').replace(/^[Q\d.\s#]+/i, '').trim();
+        currentA = '';
+      } else if (currentQ) {
+        if (trimmed === '---') continue;
+        currentA += line + '\n';
+      }
+    }
+  }
+  if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
+
+  // 1. Article 구조화 데이터
+  const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": post.title,
@@ -62,12 +90,62 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     }
   };
 
+  // 2. Breadcrumb 구조화 데이터
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "홈",
+        "item": "https://claimworks-blog.pages.dev"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "블로그",
+        "item": "https://claimworks-blog.pages.dev/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.title,
+        "item": `https://claimworks-blog.pages.dev/blog/${slug}`
+      }
+    ]
+  };
+
+  // 3. FAQ 구조화 데이터 (존재하는 경우에만 생성)
+  const faqJsonLd = faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a.replace(/\*\*/g, '').replace(/<[^>]*>/g, '') // 마크다운 볼드 및 HTML 태그 제거
+      }
+    }))
+  } : null;
+
   return (
     <article className="w-full bg-white dark:bg-[#202124] rounded-none sm:rounded-3xl py-6 sm:p-10 lg:p-12 border-y sm:border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] relative">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       {/* 상단 네비게이션 */}
       <div className="mb-6">
         <Link

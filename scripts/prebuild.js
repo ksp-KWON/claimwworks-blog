@@ -101,6 +101,45 @@ function run() {
   rssXml += `</channel>\n</rss>`;
   fs.writeFileSync(rssOutputPath, rssXml, 'utf8');
   console.log(`Successfully generated RSS feed to ${rssOutputPath}`);
+
+  // Sitemap 자동 생성 (public/sitemap.xml)
+  const sitemapOutputPath = path.join(process.cwd(), 'public/sitemap.xml');
+  let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 메인 홈 -->
+  <url>
+    <loc>${siteUrl}/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- 소개 페이지 -->
+  <url>
+    <loc>${siteUrl}/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <!-- 블로그 전체 목록 -->
+  <url>
+    <loc>${siteUrl}/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+
+  posts.forEach(post => {
+    const lastmod = post.date || new Date().toISOString().split('T')[0];
+    sitemapXml += `  <url>
+    <loc>${siteUrl}/blog/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>\n`;
+  });
+
+  sitemapXml += `</urlset>`;
+  fs.writeFileSync(sitemapOutputPath, sitemapXml, 'utf8');
+  console.log(`Successfully generated Sitemap to ${sitemapOutputPath}`);
 }
 
 run();
