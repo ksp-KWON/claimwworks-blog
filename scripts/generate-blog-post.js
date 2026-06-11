@@ -108,10 +108,10 @@ function buildPrompt(topic, existingPosts) {
     : "- (없음)";
 
   return `# Role
-당신은 '보상스쿨' 블로그의 수석 콘텐츠 기획자이자 손해사정 전문 테크니컬 라이터입니다.
+당신은 '보상스쿨' 블로그의 수석 콘텐츠 기획자이자 손해사정 전문 테크니컬 라이터입니다. 당신은 구글 검색엔진 최적화(SEO)의 최상위 가이드라인인 '유용하고 신뢰할 수 있는 사용자 중심 콘텐츠(Helpful Content)' 제작 원칙을 완벽히 이해하고 있습니다.
 
 # Objective
-주어진 타겟 키워드를 바탕으로, 구글 E-E-A-T(경험/전문성/권위성/신뢰성) 기준을 충족하는 최소 2,500자 이상의 전문 칼럼을 작성합니다.
+주어진 타겟 키워드를 바탕으로, 구글 E-E-A-T(경험/전문성/권위성/신뢰성) 및 YMYL(재정적/의학적 중대 의사결정) 기준을 완벽하게 만족하는 최소 2,500자 이상의 초고품질 전문 칼럼을 작성합니다.
 
 # Input Data
 - 타겟 키워드: ${topic.keywords}
@@ -124,11 +124,15 @@ function buildPrompt(topic, existingPosts) {
 - 오직 순수 마크다운(Markdown) 문법으로 바로 본문부터 출력.
 - 특별 허용 사항: 본문 중간에 보상금 계산기 위젯을 띄울 수 있습니다. 주제가 **맥브라이드 장해평가, 교통사고, 배상책임** 등과 관련된 케이스라면 본문 적절한 곳에 \`<calculator type="auto" />\` 태그를, **실손의료비(실비보험)나 병원비** 관련이라면 \`<calculator type="medical" />\` 태그를 무조건 단 한 번 삽입하세요. (다른 HTML/JSX 태그는 금지)
 
-## 2. 전문성 및 경험 (Anti-Plagiarism)
-- 원론적이고 사전적인 정의 지양. 
-- 구체적인 사례, 통계적 수치(가상의 논리적 추정치 포함), 최신 트렌드, 현업 손해사정사로서의 실무적인 애로사항과 해결 노하우를 최소 1개 이상 반드시 포함할 것.
+## 2. 구글 E-E-A-T 및 YMYL 준수 (Helpful Content)
+- **독창성 (Originality)**: 단순히 다른 웹페이지나 법률 약관을 짜깁기한 사전적 나열을 엄격히 금지합니다.
+- **경험(Experience) 및 전문성(Expertise) 소명**: 실제 손해사정사로서 수년간 분쟁을 해결하며 얻은 주관적인 실무 노하우(예: "보험사 대리인의 현장 실사 요구 시 녹취 및 대처법", "의료자문 동의 요구 방어 꿀팁")와 같은 **독창적이고 실질적인 분석 기법**을 최소 2개 이상 상세히 제시하십시오.
+- **YMYL 신뢰성**: 의학적/법률적 팩트(대법원 판례, 근로복지공단 지침, 장해평가 약관 등)는 철저히 정밀하게 검증된 수치와 함께 언급하십시오.
 
-## 3. 구조적 가독성 (Readability & Structure)
+## 3. 친자연적 전문용어 해설 (Readability for People-First)
+- 본문에 **'맥브라이드 장해평가', 'AMA 기준', '기왕증 공제(기존 병력 삭감)', '동요도 측정', '휴업손해', '도시일용노임'** 등 고도의 보상/손해사정 전문용어가 최초 등장할 때, 독자가 즉석에서 이해할 수 있도록 반드시 괄호나 한 줄 주석 형태로 **"(뜻: ~)"** 과 같이 일반인 눈높이에 맞춰 친절하게 해설하십시오.
+
+## 4. 구조적 가독성 (Readability & Structure)
 - **오프닝 규칙:** 글의 시작은 독자의 억울한 상황에 공감하는 자연스럽고 따뜻한 톤의 2~3문장으로 작성 ("안녕하세요 보상스쿨 손해사정사입니다" 같은 형식적인 인사말은 필수가 아니며 문맥에 맞게 선택적으로 사용). 그 후 "이번 포스팅에서는 [주제]에 대해 실제 보상 실무 관점에서 안내해 드리겠습니다."로 서론 마무리.
 - **Key Points:** 오프닝 직후, 반드시 **[💡 Key Points]** (H2) 섹션을 만들어 3가지 핵심 포인트를 불릿(-)으로 제시.
 - **강조 색상 다변화:** 무조건 파란색(기본 \`**\`)만 쓰지 말고, 내용의 경중에 따라 다채롭게 강조하세요.
@@ -141,27 +145,27 @@ function buildPrompt(topic, existingPosts) {
 - **본문 구조:** 소제목은 \`## (H2)\`와 \`### (H3)\` 계층 엄수. 정보 비교 시 최소 2곳 이상에서 '마크다운 표(Table)' 활용. 이때 표의 헤더 열 개수와 구분선 행 및 데이터 행들의 열(Column) 개수가 반드시 일치해야 합니다. 문단 전환 시 가로 실선(\`---\`) 적절히 배치.
 - **전문가 조언:** 주의사항 부분은 인용구(\`> \`) 블록을 활용하여 박스로 강조.
 
-## 4. 톤앤매너 (Tone & Manner)
-- LLM 특유의 상투어("결론적으로", "주의를 기울여야 합니다" 등) 절대 금지.
+## 5. 톤앤매너 (Tone & Manner)
+- LLM 특유의 상투어("결론적으로", "주의를 기울여야 합니다", "궁극적으로" 등) 절대 금지.
 - 도입부/주의사항은 따뜻한 공감 톤, 해결책/기준은 단호한 전문가 톤 혼용.
 - 문단은 3~4줄로 짧게 끊고 핵심 키워드는 **볼드** 처리. 어미는 '~입니다/합니다' 통일.
 
-## 5. 자동 내부 링크 (Internal Linking)
+## 6. 자동 내부 링크 (Internal Linking)
 - 우리 블로그의 기존 글 목록:
 ${postsContext}
 - 본문 작성 중 자연스러운 문맥에서 위 글 중 1~2개를 \`[관련 글 제목](/blog/슬러그)\` 형태로 삽입.
 
-## 6. 자가진단 (Self-Check)
+## 7. 자가진단 (Self-Check)
 - 본문 중간 핵심 내용이 끝나는 지점에 **[🛡️ 내 보험금/보상금 1분 자가진단 체크리스트]** (H2) 추가.
 - 독자가 상황을 판단할 수 있는 체크박스(☑️) 형태의 질문 3~5개 작성.
 
-## 7. 자주 묻는 질문 (FAQ)
+## 8. 자주 묻는 질문 (FAQ)
 - 글의 맨 마지막에 **[💡 자주 묻는 질문 (FAQ) TOP 3]** (H2) 추가. 핵심 질문 3가지(H3)와 명확한 팩트 기반 답변 작성.
 
-## 8. 마크다운 표(Table) 작성 주의사항
-- 정보 비교를 위해 표를 작성할 때, 헤더 행의 열 개수와 구분선 행 및 내용 데이터 행의 열(Column) 개수가 반드시 일치하도록 하십시오. 파이프(|) 구분자를 올바르게 배치하여 렌더링이 깨지지 않게 하십시오.
+## 9. 마크다운 표(Table) 작성 규격
+- 정보 비교를 위해 표를 작성할 때, 헤더 행의 열 개수와 구분선 행 및 내용 데이터 행의 열(Column) 개수가 반드시 일치하도록 하십시오. 파이프(|) 구분자를 올바르게 배치하여 렌더링이 깨지지 않게 하십시오. (예: 2열짜리 표라면 모든 행이 2개의 열을 갖추어야 함)
 
-## 9. 외부 링크 삽입 제한 (중복 방지)
+## 10. 외부 링크 삽입 제한 (중복 방지)
 - 글 본문 내부에는 카카오톡 링크(https://open.kakao.com/...)나 기타 외부 상담 신청서 링크를 마크다운 텍스트 형태로 중복 삽입하지 마십시오. (사이트 하단에 상담 배너가 항상 상시 노출됩니다.)
 
 위 규칙을 엄격히 준수하여 본문을 작성해 주세요.`;
@@ -221,29 +225,35 @@ ${trendContext}
   console.log(`[1] 토픽 기획 완료: ${topic.title} (${topic.slug})`);
 
   // 2. 본문 작성
-  // 본문 작성을 위한 스키마
-  const postSchema = {
+  // 긴 본문(최소 2,500자) 작성 시 JSON 스키마를 억지로 씌우면 중간에 잘리는 한계가 있습니다.
+  // 따라서 본문은 순수 텍스트(마크다운) 모드로 끝까지 완벽하게 작성받습니다.
+  const content = await callGemini(buildPrompt(topic, existingPosts));
+  console.log(`[2] 본문 생성 완료 (본문: ${content.length}자)`);
+
+  // 3. SEO 요약문 생성 (3차 호출 - JSON 스키마 적용하여 150자 이내의 메타설명을 완벽하게 수집)
+  console.log(`[3] SEO 요약문 추출을 위한 API 호출 중...`);
+  const summaryPrompt = `다음 작성된 블로그 포스팅 본문을 읽고, 구글 검색 결과 화면에 노출될 150자 이내의 매력적인 클릭 유도용 요약문(SEO 메타 디스크립션)을 작성해 주세요.
+  
+포스팅 본문:
+${content}`;
+
+  const summarySchema = {
     type: "OBJECT",
     properties: {
-      content: {
-        type: "STRING",
-        description: "마크다운(Markdown) 포맷으로 작성된 블로그 본문 전체 (최소 2,500자 이상). 프롬프트 헌법 규칙을 빈틈없이 완벽하게 준수해야 합니다."
-      },
       seoSummary: {
         type: "STRING",
-        description: "구글 검색엔진 노출을 유도하기 위해 150자 이내로 간결하고 매력적으로 쓰인 글 요약 (SEO 메타 디스크립션)"
+        description: "구글 검색엔진에 노출될 150자 이내의 매력적인 한글 요약문"
       }
     },
-    required: ["content", "seoSummary"]
+    required: ["seoSummary"]
   };
 
-  const postResult = await callGemini(buildPrompt(topic, existingPosts), postSchema);
-  console.log(`[2] 본문 및 요약문 생성 완료 (본문: ${postResult.content.length}자, 요약: ${postResult.seoSummary.length}자)`);
+  const summaryResult = await callGemini(summaryPrompt, summarySchema);
+  const summary = summaryResult.seoSummary.replace(/"/g, "'").trim();
+  console.log(`[3] SEO 요약문 생성 완료: ${summary}`);
 
-  // 3. 파일 저장 전처리
-  const summary = postResult.seoSummary.replace(/"/g, "'").trim();
-  const finalContent = postResult.content.trim();
-
+  // 4. 파일 저장 전처리
+  const finalContent = content.trim();
   const kstDate = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
   const tagsStr = topic.tags.map(t => `"${t}"`).join(',');
 
@@ -262,7 +272,7 @@ ${finalContent}
 
   const filePath = path.join(POSTS_DIR, `${topic.slug}.md`);
   fs.writeFileSync(filePath, md, 'utf8');
-  console.log(`[3] 저장 완료: ${filePath}\n=== 자동글쓰기 종료 ===`);
+  console.log(`[4] 저장 완료: ${filePath}\n=== 자동글쓰기 종료 ===`);
 }
 
 main().catch(err => {
