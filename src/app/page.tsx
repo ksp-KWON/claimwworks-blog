@@ -86,7 +86,7 @@ export default function Home() {
   const posts = getSortedPostsData();
 
   return (
-    <div className="space-y-8 px-3 sm:px-0">
+    <div className="space-y-8 sm:px-0">
       
       {/* 유튜브 전문가 브리핑 섹션 (소개글 위쪽 배치) */}
       <YouTubeBriefing />
@@ -115,9 +115,9 @@ export default function Home() {
             return (
               <article 
                 key={post.slug}
-                className={`group bg-white dark:bg-[#202124] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] ${colors.border} hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col min-h-[220px]`}
+                className={`group bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] ${colors.border} hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-300 flex flex-col min-h-[220px]`}
               >
-                <Link href={`/blog/${post.slug}`} className="p-5 flex flex-col justify-between h-full flex-1">
+                <Link href={`/blog/${post.slug}`} className="p-4 sm:p-5 flex flex-col justify-between h-full flex-1">
                   
                   {/* 상단: 카테고리 배지와 날짜 */}
                   <div className="flex items-center justify-between gap-2 mb-3">

@@ -32,7 +32,7 @@ export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo
       </div>
 
       {/* 2. 모바일에서는 슬라이더, 데스크탑에서는 3열 그리드로 전환 & 그림자 잘림 방지 py-4 패딩 추가 */}
-      <div className="flex overflow-x-auto gap-4 py-4 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-3 px-3 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible">
+      <div className="flex overflow-x-auto gap-4 py-4 pb-6 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-2 px-2 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:overflow-visible">
         {videos.slice(0, 3).map(video => (
           <a
             key={video.id}
