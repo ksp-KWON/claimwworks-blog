@@ -9,25 +9,28 @@ jobs:
   auto-generate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write      # 자동 작성된 글을 저장소에 커밋/푸시할 권한 부여
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Generate blog post
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate-blog-post.js
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Install & Prebuild
-        run: |
-          npm ci
-          node scripts/prebuild.js
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate blog post
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-blog-post.js
+
+      - name: Prebuild
+        run: node scripts/prebuild.js
 
       - name: Build
         run: npm run build
