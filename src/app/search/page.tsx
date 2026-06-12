@@ -18,10 +18,11 @@ function SearchResults() {
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || '';
   const [results, setResults] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // 클라이언트 환경에서 /data/posts-data.json을 fetch하여 검색
+    if (!q) return;
+
     const fetchPosts = async () => {
       setIsLoading(true);
       try {
@@ -42,16 +43,12 @@ function SearchResults() {
       }
     };
 
-    if (q) {
-      fetchPosts();
-    } else {
-
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setResults([]);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsLoading(false);
-    }
+    fetchPosts();
   }, [q]);
+
+  // q가 없을 때는 상태에 상관없이 빈 배열 및 로딩 해제 처리 (렌더링 계산 위임으로 린트 에러 해결)
+  const displayResults = q ? results : [];
+  const displayLoading = q ? isLoading : false;
 
   return (
     <div className="space-y-6">
@@ -64,14 +61,14 @@ function SearchResults() {
           )}
         </h1>
         <p className="text-[#5f6368] dark:text-[#9aa0a6] mt-2">
-          {isLoading ? '검색 중...' : `총 ${results.length}건의 문서가 검색되었습니다.`}
+          {displayLoading ? '검색 중...' : `총 ${displayResults.length}건의 문서가 검색되었습니다.`}
         </p>
       </div>
 
-      {!isLoading && (
+      {!displayLoading && (
         <div className="space-y-4 px-3 sm:px-0">
-          {results.length > 0 ? (
-            results.map((post) => (
+          {displayResults.length > 0 ? (
+            displayResults.map((post) => (
               <article
                 key={post.slug}
                 className="bg-white dark:bg-[#202124] rounded-[24px] border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow p-5 sm:p-6"

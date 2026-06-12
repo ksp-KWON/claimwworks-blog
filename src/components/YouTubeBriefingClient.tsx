@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import type { YouTubeVideo } from './YouTubeBriefing';
 
 export default function YouTubeBriefingClient({ videos: initialVideos }: { videos: YouTubeVideo[] }) {
@@ -30,7 +31,7 @@ export default function YouTubeBriefingClient({ videos: initialVideos }: { video
             title: titleMatch ? titleMatch[1] : '',
             published: publishedMatch ? new Date(publishedMatch[1]).toLocaleDateString('ko-KR') : ''
           };
-        }).filter((v: any) => v.id).slice(0, 10);
+        }).filter((v: YouTubeVideo) => v.id).slice(0, 10);
 
         if (parsedVideos.length > 0) {
           setVideos(parsedVideos);
@@ -82,9 +83,12 @@ export default function YouTubeBriefingClient({ videos: initialVideos }: { video
           >
             {/* 썸네일 영역 */}
             <div className="relative aspect-video w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden">
-              <img 
+              <Image 
                 src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`} 
                 alt={video.title} 
+                width={360}
+                height={203}
+                unoptimized
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               {/* 유튜브 플레이 아이콘 포인트 */}

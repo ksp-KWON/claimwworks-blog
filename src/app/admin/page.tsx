@@ -1,9 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BlogPostContent from '@/components/BlogPostContent';
 
@@ -11,13 +8,30 @@ const REPO_OWNER = 'ksp-KWON';
 const REPO_NAME = 'claimworks-blog';
 const POSTS_PATH = 'src/content/posts';
 
+interface GitHubFile {
+  name: string;
+  sha: string;
+  download_url?: string;
+  content?: string;
+}
+
 export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState('');
   
-  // Settings
-  const [geminiKey, setGeminiKey] = useState('');
-  const [githubToken, setGithubToken] = useState('');
+  // Settings - Lazy initialization to avoid calling setState synchronously in useEffect
+  const [geminiKey, setGeminiKey] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('GEMINI_API_KEY') || '';
+    }
+    return '';
+  });
+  const [githubToken, setGithubToken] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('GITHUB_TOKEN') || '';
+    }
+    return '';
+  });
   
   // App State
   const [mode, setMode] = useState<'manual' | 'semi-auto' | 'edit'>('manual');
@@ -127,18 +141,14 @@ export default function AdminPage() {
       
       // 글 목록 새로고침
       await fetchPostList();
-    } catch (error: any) {
-      setStatusMessage(`삭제 실패: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      setStatusMessage(`삭제 실패: ${err.message}`);
     }
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    const savedGemini = localStorage.getItem('GEMINI_API_KEY');
-    const savedGithub = localStorage.getItem('GITHUB_TOKEN');
-    if (savedGemini) setGeminiKey(savedGemini);
-    if (savedGithub) setGithubToken(savedGithub);
-  }, []);
+  // Removed redundant useEffect to avoid synchronous setState calls
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,16 +175,16 @@ export default function AdminPage() {
         headers: { 'Authorization': `Bearer ${githubToken}` }
       });
       if (!res.ok) throw new Error('목록을 불러오지 못했습니다. 토큰을 확인해주세요.');
-      const githubFiles = await res.json();
-      const mdFiles = githubFiles.filter((f: any) => f.name.endsWith('.md'));
+      const githubFiles = await res.json() as GitHubFile[];
+      const mdFiles = githubFiles.filter((f: GitHubFile) => f.name.endsWith('.md'));
 
       // 2. 빠르고 직관적인 제목 매핑을 위해 빌드된 posts-data.json 활용
-      let titlesMap: Record<string, string> = {};
+      const titlesMap: Record<string, string> = {};
       try {
         const dataRes = await fetch('/data/posts-data.json');
         if (dataRes.ok) {
-          const postsData = await dataRes.json();
-          postsData.forEach((post: any) => {
+          const postsData = await dataRes.json() as { slug: string; title: string }[];
+          postsData.forEach((post) => {
             titlesMap[`${post.slug}.md`] = post.title;
           });
         }
@@ -183,7 +193,7 @@ export default function AdminPage() {
       }
 
       // 3. 데이터 결합 (제목이 없으면 파일명 표시)
-      const combined = mdFiles.map((file: any) => ({
+      const combined = mdFiles.map((file: GitHubFile) => ({
         name: file.name,
         sha: file.sha,
         title: titlesMap[file.name] || file.name.replace('.md', '')
@@ -192,8 +202,9 @@ export default function AdminPage() {
       setPostList(combined);
       setStatusMessage('📄 기존 글 목록을 성공적으로 불러왔습니다.');
       setTimeout(() => setStatusMessage(''), 3000);
-    } catch (error: any) {
-      setStatusMessage(`오류: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      setStatusMessage(`오류: ${err.message}`);
     }
     setIsLoading(false);
   };
@@ -207,14 +218,15 @@ export default function AdminPage() {
       const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${POSTS_PATH}/${filename}`, {
         headers: { 'Authorization': `Bearer ${githubToken}` }
       });
-      const data = await res.json();
+      const data = await res.json() as { content: string };
       const content = decodeURIComponent(escape(window.atob(data.content)));
       setGeneratedMarkdown(content);
       setIsPreview(true);
       setShowPostList(false); // 기존 글 목록은 자동으로 접어서 작성창 크기를 극대화합니다.
       setStatusMessage(`📝 편집 모드: 수정을 완료한 뒤 우측 발행 버튼을 누르세요.`);
-    } catch (error: any) {
-      setStatusMessage(`오류: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      setStatusMessage(`오류: ${err.message}`);
     }
     setIsLoading(false);
   };
@@ -232,7 +244,7 @@ export default function AdminPage() {
           generationConfig: { temperature: 0.7 }
         })
       });
-      const data = await response.json();
+      const data = await response.json() as { error?: { message: string }; candidates: { content: { parts: { text: string }[] } }[] };
       if (data.error) throw new Error(data.error.message);
       
       const text = data.candidates[0].content.parts[0].text;
@@ -247,8 +259,9 @@ export default function AdminPage() {
       setGeneratedMarkdown(text);
       setIsPreview(true);
       setStatusMessage('🎉 작성이 완료되었습니다! 미리보기를 확인하고 발행하세요.');
-    } catch (error: any) {
-      setStatusMessage(`API 오류: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      setStatusMessage(`API 오류: ${err.message}`);
     }
     setIsLoading(false);
   };
@@ -286,6 +299,7 @@ export default function AdminPage() {
 11. **상담 유도 CTA 배너 :** FAQ 직후 H2 제목으로 '## [📞 교통사고 보상, 전문가의 도움으로 권리를 찾으세요]' 형태로 상담 권유 섹션을 만들고 그 아래에 카카오톡 무료 상담 링크 '[👉 카카오톡 1:1 무료 상담하기 (클릭)](https://open.kakao.com/o/sWeszp7)' 단추를 만드세요.
 12. **SEO 요약문 분리 :** 글의 가장 마지막 줄에 '[SEO_SUMMARY]: 요약글' 형태로 150자 이내의 검색 노출용 요약문을 반드시 작성해 주세요.
 13. **자동 내부 링크 :** 아래의 기존 글 목록 중 연관된 글을 찾아 본문에 자연스럽게 '[글제목](/blog/슬러그)' 링크로 1~2개 엮어 넣으세요.
+14. **부연 설명 및 사족 금지 (절대 필수 규칙):** 답변 시 마크다운(YAML frontmatter를 포함한 본문) 내용 이외에 "알겠습니다", "글을 작성했습니다" 등의 인사말, 부연 설명, 메타 코멘트는 단 한 글자도 출력하지 마세요. 오직 발행 가능한 마크다운 파일 내용 자체만 그대로 리턴해 주어야 합니다.
 ${existingPostsList}
 `;
 
@@ -361,7 +375,12 @@ ${inputText}
       const filename = `${slug}.md`;
       const path = `${POSTS_PATH}/${filename}`;
       
-      const body: any = {
+      const body: {
+        message: string;
+        content: string;
+        branch: string;
+        sha?: string;
+      } = {
         message: `docs: 관리자 페이지에서 자동 작성된 포스팅 발행 (${filename})`,
         content: contentBase64,
         branch: 'main'
@@ -382,7 +401,7 @@ ${inputText}
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
+        const errorData = await res.json() as { message: string };
         throw new Error(errorData.message);
       }
 
@@ -391,8 +410,9 @@ ${inputText}
       setGeneratedMarkdown('');
       setInputText('');
       setSelectedPostSha('');
-    } catch (error: any) {
-      setStatusMessage(`발행 실패: ${error.message}`);
+    } catch (error) {
+      const err = error as Error;
+      setStatusMessage(`발행 실패: ${err.message}`);
     }
     setIsLoading(false);
   };
@@ -538,7 +558,7 @@ ${inputText}
             ].map(view => (
               <button
                 key={view.id}
-                onClick={() => setLayoutView(view.id as any)}
+                onClick={() => setLayoutView(view.id as 'split' | 'editor' | 'preview')}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all border ${
                   layoutView === view.id
                     ? 'bg-blue-600 border-blue-650 text-white shadow-sm'
@@ -571,7 +591,7 @@ ${inputText}
                 <button
                   key={m.id}
                   onClick={() => {
-                    setMode(m.id as any);
+                    setMode(m.id as 'manual' | 'semi-auto' | 'edit');
                     if (m.id === 'edit') {
                       fetchPostList();
                       setShowPostList(true); // 수정 탭으로 갈 때는 목록을 펼칩니다

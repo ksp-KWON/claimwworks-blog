@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MedicalInsuranceData, initialMedicalData, TreatmentType } from './medical-calculator-types';
+import { MedicalInsuranceData, initialMedicalData } from './medical-calculator-types';
 import MedicalCalculatorResult from './MedicalCalculatorResult';
 
 export default function ExpertMedicalForm() {
