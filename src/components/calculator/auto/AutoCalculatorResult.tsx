@@ -216,28 +216,31 @@ export default function AutoCalculatorResult({ data }: Props) {
   };
 
   return (
-    <div ref={resultRef} className="bg-blue-50 dark:bg-[#303134]/50 rounded-3xl p-5 sm:p-8 border border-blue-100 dark:border-gray-800 shadow-sm sticky top-6">
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-        <span className="w-1.5 h-6 bg-blue-600 rounded-full inline-block shrink-0" />
+    <div ref={resultRef} className="bg-[#f8faff] dark:bg-[#1e2736]/30 rounded-3xl p-6 sm:p-8 border border-blue-100/70 dark:border-blue-900/20 shadow-[0_8px_30px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+      <h3 className="text-lg font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+        <span className="w-1.5 h-5 bg-blue-600 rounded-full inline-block shrink-0" />
         산출 명세서 (추정치)
       </h3>
 
-      <div className="space-y-4 text-sm mb-8">
+      <div className="space-y-4 text-xs sm:text-sm mb-6">
         {alimony > 0 && (
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 dark:text-gray-400 font-medium">{appliedAlimonyLabel} <span className="text-xs text-blue-500 ml-1">(최대치 적용)</span></span>
+          <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+            <span className="text-gray-600 dark:text-gray-400 font-medium">
+              {appliedAlimonyLabel} 
+              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded ml-1.5">최대치 적용</span>
+            </span>
             <span className="font-bold text-gray-900 dark:text-white">{alimony.toLocaleString()} 원</span>
           </div>
         )}
         
         {data.hasInjury && (
           <>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark:text-gray-400">휴업손해 (입원 {data.hospitalDays}일)</span>
+            <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+              <span className="text-gray-600 dark:text-gray-400 font-medium">휴업손해 (입원 {data.hospitalDays}일)</span>
               <span className="font-bold text-gray-900 dark:text-white">{lostIncome.toLocaleString()} 원</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark:text-gray-400">기타손배금 (통원 {data.outpatientDays}일)</span>
+            <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+              <span className="text-gray-600 dark:text-gray-400 font-medium">기타손배금 (통원 {data.outpatientDays}일)</span>
               <span className="font-bold text-gray-900 dark:text-white">{otherDamages.toLocaleString()} 원</span>
             </div>
           </>
@@ -245,35 +248,35 @@ export default function AutoCalculatorResult({ data }: Props) {
         
         {data.hasDeath && (
           <>
-            <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">사망 장례비</span>
+            <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+              <span className="text-gray-600 dark:text-gray-400 font-medium">사망 장례비</span>
               <span className="font-bold text-gray-900 dark:text-white">{funeralCost.toLocaleString()} 원</span>
             </div>
-            <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">상실수익액 (사망, 만 {data.ageAtAccident}세)</span>
+            <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+              <span className="text-gray-600 dark:text-gray-400 font-medium">상실수익액 (사망, 만 {data.ageAtAccident}세)</span>
               <span className="font-bold text-gray-900 dark:text-white">{lostEarnings.toLocaleString()} 원</span>
             </div>
           </>
         )}
         
         {!data.hasDeath && data.hasDisability && (
-          <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-gray-600 dark:text-gray-400">상실수익액 (장해 {data.disabilityRate}%)</span>
+          <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+            <span className="text-gray-600 dark:text-gray-400 font-medium">상실수익액 (장해 {data.disabilityRate}%)</span>
             <span className="font-bold text-gray-900 dark:text-white">{lostEarnings.toLocaleString()} 원</span>
           </div>
         )}
 
         {(data.directReceipts > 0 || data.futureTreatmentCost > 0) && (
-          <div className="flex flex-col gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col gap-2 pb-2">
             {data.directReceipts > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 dark:text-gray-400">직불 치료비 (영수증)</span>
+                <span className="text-gray-600 dark:text-gray-400 font-medium">직불 치료비 (영수증)</span>
                 <span className="font-bold text-gray-900 dark:text-white">{directReceipts.toLocaleString()} 원</span>
               </div>
             )}
             {data.futureTreatmentCost > 0 && (
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 dark:text-gray-400">향후치료비 추정액</span>
+                <span className="text-gray-600 dark:text-gray-400 font-medium">향후치료비 추정액</span>
                 <span className="font-bold text-gray-900 dark:text-white">{futureTreatmentCost.toLocaleString()} 원</span>
               </div>
             )}
@@ -281,55 +284,70 @@ export default function AutoCalculatorResult({ data }: Props) {
         )}
 
         {data.faultRatio > 0 && (
-          <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700 text-red-500">
-            <span className="font-medium">과실 상계 ({data.faultRatio}%)</span>
-            <span className="font-bold">-{Math.floor(totalBeforeFault * (data.faultRatio / 100)).toLocaleString()} 원</span>
+          <div className="flex justify-between items-center pt-2 text-red-500 font-bold">
+            <span>과실 상계 ({data.faultRatio}%)</span>
+            <span>-{Math.floor(totalBeforeFault * (data.faultRatio / 100)).toLocaleString()} 원</span>
           </div>
         )}
 
         {formulas.length > 0 && (
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl space-y-2 mt-4 text-sm border border-blue-100 dark:border-blue-900/30">
-            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2">적용된 산출 계산식</h4>
-            <ul className="list-disc list-inside text-blue-700 dark:text-blue-400 space-y-1 text-xs">
+          <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-xl space-y-1.5 mt-4 border border-blue-100/50 dark:border-blue-900/20">
+            <h4 className="font-bold text-blue-800 dark:text-blue-300 text-xs">적용된 산출 계산식</h4>
+            <ul className="list-disc list-inside text-blue-700 dark:text-blue-400 space-y-1 text-[11px] leading-relaxed">
               {formulas.map((formula, idx) => (
-                <li key={idx}>{formula}</li>
+                <li key={idx} className="break-all">{formula}</li>
               ))}
             </ul>
           </div>
         )}
       </div>
 
-      <div className="bg-white dark:bg-[#202124] rounded-2xl p-5 sm:p-6 border border-blue-100 dark:border-gray-800 text-center shadow-sm">
-        <h4 className="text-gray-500 dark:text-gray-400 font-bold mb-2">최종 합의금 (추정치)</h4>
-        <div className="text-4xl sm:text-5xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tighter">
-          {finalTotal.toLocaleString()}<span className="text-2xl ml-1 text-gray-900 dark:text-white">원</span>
+      {/* 최종 합의금 카드: 멋진 파란색 그라데이션 적용 */}
+      <div className="bg-gradient-to-br from-[#1A73E8] to-[#1557b0] dark:from-[#2e7bf2] dark:to-[#1A73E8] rounded-2xl p-6 text-white text-center shadow-md relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div className="absolute top-0 right-0 opacity-10 transform translate-x-8 -translate-y-8">
+          <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        </div>
+        <div className="relative z-10">
+          <h4 className="text-white/80 font-bold text-xs uppercase tracking-wider mb-1">최종 합의금 (추정치)</h4>
+          <div className="text-3xl sm:text-4xl font-black tracking-tight flex items-center justify-center gap-1">
+            {finalTotal.toLocaleString()}
+            <span className="text-lg font-bold text-white/90">원</span>
+          </div>
         </div>
       </div>
 
-      <div className="mt-6 text-xs text-gray-500 bg-white/50 dark:bg-black/20 p-4 rounded-xl">
-        <strong className="text-red-500">⚠️ 참고:</strong> 위 결과는 대인배상 약관 및 단순화된 호프만계수를 적용한 참고용 추정치입니다. 실제로는 치료비 상계가 발생할 수 있으며, 법원 기준(특인) 적용 시 수백~수천만 원 이상 증액될 수 있습니다. 섣불리 합의하지 마시고 반드시 전문가와 상담하세요.
+      <div className="mt-5 text-[11px] leading-relaxed text-gray-500 dark:text-gray-400 bg-white/60 dark:bg-black/10 p-3.5 rounded-xl border border-gray-100 dark:border-transparent">
+        <span className="font-bold text-red-500 inline-block mr-1">⚠️ 참고:</span> 위 결과는 보험회사 약관 기준을 적용한 참고용 수치입니다. 실제 피해자의 직업, 입원 기간에 따른 치료비 상계 및 법원 소송 기준(특인) 적용 여부에 따라 수백만 원에서 수천만 원까지 증액될 수 있으므로 섣불리 합의서에 서명하지 마시고 보상 전문가와 상담하세요.
       </div>
 
-      <div className="mt-6 flex flex-col sm:flex-row gap-3">
-        <button 
-          onClick={shareResult}
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#FEE500] hover:bg-[#F4DC00] text-black rounded-xl font-bold transition-colors"
+      {/* 버튼들 */}
+      <div className="mt-5 space-y-2">
+        <div className="grid grid-cols-2 gap-2">
+          <button 
+            onClick={shareResult}
+            className="flex items-center justify-center gap-1.5 py-3 bg-[#FEE500] hover:bg-[#F4DC00] active:scale-[0.98] text-black rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow-sm"
+          >
+            <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.541 2 10.908c0 2.502 1.432 4.745 3.659 6.13-.314 1.157-1.14 4.183-1.182 4.341-.053.197.075.18.156.126.104-.07 3.324-2.222 4.606-3.084.887.24 1.821.366 2.761.366 5.523 0 10-3.541 10-7.908C22 6.541 17.523 3 12 3z"/></svg>
+            결과 공유하기
+          </button>
+          <button 
+            onClick={exportPDF}
+            className="flex items-center justify-center gap-1.5 py-3 bg-white hover:bg-gray-50 active:scale-[0.98] border border-gray-200 text-gray-700 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow-sm dark:bg-[#202124] dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#303134]"
+          >
+            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            PDF 다운로드
+          </button>
+        </div>
+        
+        <a 
+          href="https://open.kakao.com/o/sWeszp7" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="block text-center w-full py-3.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.99] text-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-50 rounded-xl font-extrabold text-sm transition-all shadow-md"
         >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.541 2 10.908c0 2.502 1.432 4.745 3.659 6.13-.314 1.157-1.14 4.183-1.182 4.341-.053.197.075.18.156.126.104-.07 3.324-2.222 4.606-3.084.887.24 1.821.366 2.761.366 5.523 0 10-3.541 10-7.908C22 6.541 17.523 3 12 3z"/></svg>
-          결과 공유하기
-        </button>
-        <button 
-          onClick={exportPDF}
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl font-bold transition-colors dark:bg-[#202124] dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#303134]"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          PDF 다운로드
-        </button>
+          보상스쿨 1:1 무료 상담 신청하기
+        </a>
       </div>
-
-      <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-3 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
-        보상스쿨 무료 상담 신청하기
-      </a>
     </div>
   );
 }

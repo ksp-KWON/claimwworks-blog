@@ -307,29 +307,24 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
 
       return (
         <div className="my-12 relative w-full mx-auto">
-          {/* 가상의 기기/스마트폰(태블릿 가로모드) 프레임 */}
-          <div className="bg-[#f0f0f0] dark:bg-[#2c2d30] rounded-[24px] sm:rounded-[32px] p-2 sm:p-3 shadow-[0_20px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-[#e0e0e0] dark:border-[#3a3b3e]">
-            {/* 내부 스크린 */}
-            <div className="bg-white dark:bg-[#202124] rounded-[16px] sm:rounded-[24px] overflow-hidden flex flex-col h-full border border-gray-200 dark:border-[#424346] shadow-inner">
-              
-              {/* 상단 앱 상태바 / 맥OS 스타일 버튼 */}
-              <div className="bg-[#f8f9fa] dark:bg-[#303134] px-4 py-3 border-b border-gray-200 dark:border-[#424346] flex items-center justify-between shrink-0">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full border border-[#e0443e] bg-[#ff5f56]" />
-                  <div className="w-3 h-3 rounded-full border border-[#dea123] bg-[#ffbd2e]" />
-                  <div className="w-3 h-3 rounded-full border border-[#1aab29] bg-[#27c93f]" />
-                </div>
-                <div className="text-[11px] font-bold text-gray-500 dark:text-gray-400 tracking-wider">
-                  BOSANG SCHOOL PRO
-                </div>
-                <div className="w-10"></div> {/* 우측 여백 맞춤용 */}
+          {/* 세련된 프리미엄 카드 프레임 (스크롤 바 제거, 높이 자동 확장) */}
+          <div className="bg-white dark:bg-[#202124] rounded-3xl p-5 sm:p-8 shadow-[0_16px_48px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)] border border-gray-100 dark:border-white/5 transition-all duration-300">
+            {/* 상단 통합 제어 바 */}
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-4 mb-6">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#1A73E8] animate-pulse" />
+                <span className="text-[11px] font-extrabold text-[#1A73E8] dark:text-[#8ab4f8] tracking-widest uppercase">
+                  {isAuto ? 'AUTO INSURANCE SIMULATOR' : 'MEDICAL BILL ESTIMATOR'}
+                </span>
               </div>
+              <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500">
+                보상스쿨 안심 계산기
+              </span>
+            </div>
 
-              {/* 실제 계산기 렌더링 컨테이너 (세로폭 제한, 가로모드 느낌) */}
-              <div className="p-1 sm:p-2 overflow-y-auto h-[450px] sm:h-[500px] custom-scrollbar bg-gray-50 dark:bg-black/20">
-                {isAuto ? <AutoCalculatorContainer /> : <MedicalCalculator />}
-              </div>
-
+            {/* 실제 계산기 렌더링 영역 (높이 제한 없이 자연스럽게 늘어남) */}
+            <div className="w-full">
+              {isAuto ? <AutoCalculatorContainer /> : <MedicalCalculator />}
             </div>
           </div>
         </div>

@@ -35,31 +35,10 @@ export default function MedicalCalculatorPage() {
           </p>
         </header>
 
-        <div className="relative w-full mx-auto">
-          {/* 가상의 기기/스마트폰(태블릿 가로모드) 프레임 */}
-          <div className="bg-[#f0f0f0] dark:bg-[#2c2d30] rounded-[24px] sm:rounded-[32px] p-2 sm:p-3 shadow-[0_20px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-[#e0e0e0] dark:border-[#3a3b3e]">
-            {/* 내부 스크린 */}
-            <div className="bg-white dark:bg-[#202124] rounded-[16px] sm:rounded-[24px] overflow-hidden flex flex-col h-full border border-gray-200 dark:border-[#424346] shadow-inner">
-              
-              {/* 상단 앱 상태바 / 맥OS 스타일 버튼 */}
-              <div className="bg-[#f8f9fa] dark:bg-[#303134] px-4 py-3 border-b border-gray-200 dark:border-[#424346] flex items-center justify-between shrink-0">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full border border-[#e0443e] bg-[#ff5f56]" />
-                  <div className="w-3 h-3 rounded-full border border-[#dea123] bg-[#ffbd2e]" />
-                  <div className="w-3 h-3 rounded-full border border-[#1aab29] bg-[#27c93f]" />
-                </div>
-                <div className="text-[11px] font-bold text-gray-500 dark:text-gray-400 tracking-wider">
-                  BOSANG SCHOOL PRO
-                </div>
-                <div className="w-10"></div> {/* 우측 여백 맞춤용 */}
-              </div>
-
-              {/* 실제 계산기 렌더링 컨테이너 (세로폭 제한, 가로모드 느낌) */}
-              <div className="p-1 sm:p-2 overflow-y-auto h-[450px] sm:h-[500px] custom-scrollbar bg-gray-50 dark:bg-black/20">
-                <MedicalCalculatorContainer />
-              </div>
-
-            </div>
+        <div className="w-full mx-auto">
+          {/* 스크롤바와 기기 프레임을 제거하고, 전체 화면에 넓고 세련되게 펼쳐지는 카드 형태로 변경 */}
+          <div className="bg-white dark:bg-[#202124] rounded-2xl sm:rounded-3xl p-2 sm:p-6 shadow-sm border border-gray-100 dark:border-white/5">
+            <MedicalCalculatorContainer />
           </div>
         </div>
       </article>

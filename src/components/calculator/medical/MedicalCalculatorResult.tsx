@@ -197,77 +197,94 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
   };
 
   return (
-    <div ref={resultRef} className="bg-white dark:bg-[#202124] rounded-2xl shadow-sm border border-green-200 dark:border-green-900 overflow-hidden">
-      <div className="bg-green-600 dark:bg-green-800 p-5 sm:p-6 text-white text-center">
-        <h3 className="text-xl font-bold mb-2">실손의료비 예상 보상금</h3>
-        <p className="text-green-100 text-sm">※ 가입 시기와 약관에 따라 실제 지급액과 다를 수 있습니다.</p>
-      </div>
+    <div ref={resultRef} className="bg-[#f4faf6] dark:bg-[#15271e]/30 rounded-3xl p-6 sm:p-8 border border-green-100/60 dark:border-green-900/20 shadow-[0_8px_30px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+      <h3 className="text-lg font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+        <span className="w-1.5 h-5 bg-green-600 rounded-full inline-block shrink-0" />
+        실손의료비 산출 결과 (추정치)
+      </h3>
 
-      <div className="p-5 sm:p-6 space-y-6">
-        <div className="flex justify-between items-end border-b border-gray-100 dark:border-gray-800 pb-6">
-          <div>
-            <span className="block text-sm font-bold text-gray-500 dark:text-gray-400 mb-1">고객님께서 받으실 금액</span>
-            <span className="text-3xl sm:text-4xl font-extrabold text-green-600 dark:text-green-400">{result.totalPayout.toLocaleString()}원</span>
-          </div>
+      <div className="space-y-4 text-xs sm:text-sm mb-6">
+        <div className="flex justify-between text-sm pb-2 border-b border-dashed border-gray-200 dark:border-gray-800">
+          <span className="text-gray-500 dark:text-gray-400 font-medium">총 발생 의료비</span>
+          <span className="font-bold text-gray-900 dark:text-white">{result.totalCost.toLocaleString()} 원</span>
+        </div>
+        <div className="flex justify-between text-sm pb-2 border-b border-dashed border-gray-200 dark:border-gray-800 text-red-500">
+          <span className="font-medium">(-) 본인부담 공제금액</span>
+          <span className="font-bold">-{result.totalDeduction.toLocaleString()} 원</span>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">총 발생 의료비</span>
-            <span className="font-bold text-gray-900 dark:text-white">{result.totalCost.toLocaleString()}원</span>
+        <div className="bg-white/80 dark:bg-black/10 p-4 rounded-xl space-y-2.5 border border-green-100/40 dark:border-transparent">
+          <h4 className="font-bold text-green-800 dark:text-green-300 text-xs border-b border-green-100/30 pb-2 mb-2">세부 보상 내역</h4>
+          <div className="flex justify-between text-xs sm:text-sm">
+            <span className="text-gray-500 dark:text-gray-400">급여 보상액 (지급액)</span>
+            <span className="font-bold text-gray-900 dark:text-white">{result.coveredPayout.toLocaleString()} 원</span>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-red-500 dark:text-red-400 font-medium">(-) 본인부담 공제금액</span>
-            <span className="font-bold text-red-500 dark:text-red-400">-{result.totalDeduction.toLocaleString()}원</span>
+          <div className="flex justify-between text-xs sm:text-sm">
+            <span className="text-gray-500 dark:text-gray-400">일반 비급여 보상액 (지급액)</span>
+            <span className="font-bold text-gray-900 dark:text-white">{result.nonCoveredPayout.toLocaleString()} 원</span>
           </div>
-        </div>
-
-        <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl space-y-2 mt-4 text-sm border border-gray-100 dark:border-gray-800">
-          <h4 className="font-bold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">세부 보상 내역</h4>
-          <div className="flex justify-between">
-            <span className="text-gray-500 dark:text-gray-400">급여 보상액</span>
-            <span className="font-bold text-gray-900 dark:text-white">{result.coveredPayout.toLocaleString()}원</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-500 dark:text-gray-400">일반 비급여 보상액</span>
-            <span className="font-bold text-gray-900 dark:text-white">{result.nonCoveredPayout.toLocaleString()}원</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-500 dark:text-gray-400">3대 비급여 보상액</span>
-            <span className="font-bold text-gray-900 dark:text-white">{result.specialPayout.toLocaleString()}원</span>
+          <div className="flex justify-between text-xs sm:text-sm">
+            <span className="text-gray-500 dark:text-gray-400">3대 비급여 보상액 (지급액)</span>
+            <span className="font-bold text-gray-900 dark:text-white">{result.specialPayout.toLocaleString()} 원</span>
           </div>
         </div>
 
         {result.formulas && result.formulas.length > 0 && (
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl space-y-2 mt-4 text-sm border border-blue-100 dark:border-blue-900/30">
-            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2">적용된 산출 계산식</h4>
-            <ul className="list-disc list-inside text-blue-700 dark:text-blue-400 space-y-1 text-xs">
+          <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-xl space-y-1.5 mt-4 border border-blue-100/50 dark:border-blue-900/20">
+            <h4 className="font-bold text-blue-800 dark:text-blue-300 text-xs">적용된 산출 계산식</h4>
+            <ul className="list-disc list-inside text-blue-700 dark:text-blue-400 space-y-1 text-[11px] leading-relaxed">
               {result.formulas.map((formula, idx) => (
-                <li key={idx}>{formula}</li>
+                <li key={idx} className="break-all">{formula}</li>
               ))}
             </ul>
           </div>
         )}
+      </div>
 
-        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+      {/* 최종 예상 보상금 카드: 멋진 초록색 그라데이션 적용 */}
+      <div className="bg-gradient-to-br from-[#34A853] to-[#137333] dark:from-[#34A853] dark:to-[#188038] rounded-2xl p-6 text-white text-center shadow-md relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div className="absolute top-0 right-0 opacity-10 transform translate-x-8 -translate-y-8">
+          <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        </div>
+        <div className="relative z-10">
+          <h4 className="text-white/85 font-bold text-xs uppercase tracking-wider mb-1">예상 수령액 (추정치)</h4>
+          <div className="text-3xl sm:text-4xl font-black tracking-tight flex items-center justify-center gap-1">
+            {result.totalPayout.toLocaleString()}
+            <span className="text-lg font-bold text-white/90">원</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 text-[11px] leading-relaxed text-gray-500 dark:text-gray-400 bg-white/60 dark:bg-black/10 p-3.5 rounded-xl border border-gray-100 dark:border-transparent">
+        <span className="font-bold text-red-500 inline-block mr-1">⚠️ 참고:</span> 위 보상액은 세대별 기본 통원/입원 지급 기준에 따라 단순 계산된 추정치입니다. 급여/비급여 비율, 가입 한도 초과 여부, 보상에서 제외되는 질환(면책 상병) 유무 등에 따라 실제 지급액과 다를 수 있습니다. 청구 절차가 까다롭거나 지급이 보류된 경우 전문가의 상담을 받으시길 권장합니다.
+      </div>
+
+      {/* 버튼들 */}
+      <div className="mt-5 space-y-2">
+        <div className="grid grid-cols-2 gap-2">
           <button 
             onClick={shareResult}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-[#FEE500] hover:bg-[#F4DC00] text-black rounded-xl font-bold transition-colors"
+            className="flex items-center justify-center gap-1.5 py-3 bg-[#FEE500] hover:bg-[#F4DC00] active:scale-[0.98] text-black rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow-sm"
           >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.541 2 10.908c0 2.502 1.432 4.745 3.659 6.13-.314 1.157-1.14 4.183-1.182 4.341-.053.197.075.18.156.126.104-.07 3.324-2.222 4.606-3.084.887.24 1.821.366 2.761.366 5.523 0 10-3.541 10-7.908C22 6.541 17.523 3 12 3z"/></svg>
+            <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.541 2 10.908c0 2.502 1.432 4.745 3.659 6.13-.314 1.157-1.14 4.183-1.182 4.341-.053.197.075.18.156.126.104-.07 3.324-2.222 4.606-3.084.887.24 1.821.366 2.761.366 5.523 0 10-3.541 10-7.908C22 6.541 17.523 3 12 3z"/></svg>
             결과 공유하기
           </button>
           <button 
             onClick={exportPDF}
-            className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 rounded-xl font-bold transition-colors dark:bg-[#202124] dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#303134]"
+            className="flex items-center justify-center gap-1.5 py-3 bg-white hover:bg-gray-50 active:scale-[0.98] border border-gray-200 text-gray-700 rounded-xl font-extrabold text-xs sm:text-sm transition-all shadow-sm dark:bg-[#202124] dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#303134]"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             PDF 다운로드
           </button>
         </div>
-
-        <a href="https://open.kakao.com/o/sWeszp7" target="_blank" rel="noopener noreferrer" className="block text-center w-full mt-3 py-4 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white rounded-xl font-bold transition-colors">
-          보상스쿨 무료 상담 신청하기
+        
+        <a 
+          href="https://open.kakao.com/o/sWeszp7" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="block text-center w-full py-3.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.99] text-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-50 rounded-xl font-extrabold text-sm transition-all shadow-md"
+        >
+          보상스쿨 1:1 무료 상담 신청하기
         </a>
       </div>
     </div>
