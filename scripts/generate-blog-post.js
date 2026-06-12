@@ -47,6 +47,9 @@ function getExistingPostsInfo() {
 }
 
 // ── Gemini API 호출 (지수 백오프 5회 재시도 + 이중 모델 폴백) ──
+// 429: 분당 요청 한도 초과 → 65초 대기 후 재시도 (1분 쿼터 리셋 기다림)
+// 503: 서버 과부하 → 지수 백오프 (3s→6s→12s→24s)
+// 404: 모델 없음 → 즉시 다음 모델로 전환 (재시도 무의미)
 async function callGemini(prompt, schema = null) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey || apiKey.length < 10) throw new Error('유효하지 않은 GEMINI_API_KEY. 깃허브 Secrets를 확인하세요.');
@@ -61,8 +64,8 @@ async function callGemini(prompt, schema = null) {
   for (const model of GEMINI_MODELS) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     console.log(`  [API] 모델 '${model}' 사용 시도...`);
+    let modelFailed = false;
 
-    // 지수 백오프: 최대 5회 (3초 → 6초 → 12초 → 24초 → 포기)
     for (let attempt = 1; attempt <= 5; attempt++) {
       try {
         const res = await fetch(url, {
@@ -76,17 +79,29 @@ async function callGemini(prompt, schema = null) {
 
         if (!res.ok) {
           const errText = await res.text();
-          // 404(모델 없음)는 재시도해도 의미 없음 → 즉시 다음 모델로 전환
+
+          // 404: 모델 자체가 없음 → 재시도 무의미, 즉시 다음 모델로
           if (res.status === 404) {
-            throw new Error(`API HTTP 404: 모델 '${model}'을 찾을 수 없습니다.`);
+            console.error(`  [API] '${model}' 모델 없음(404). 다음 모델로 전환합니다.`);
+            modelFailed = true;
+            break;
           }
-          // 503(과부하), 429(요청 초과), 500번대 서버 에러는 재시도 대상
-          if ((res.status === 503 || res.status === 429 || res.status >= 500) && attempt < 5) {
-            const waitMs = 3000 * Math.pow(2, attempt - 1); // 3s, 6s, 12s, 24s
+
+          // 429: 분당 요청 한도 초과 → 65초 대기 (쿼터 리셋 대기)
+          if (res.status === 429 && attempt < 5) {
+            console.warn(`  [API 경고] ${model} - HTTP 429 (분당 한도 초과). 65초 대기 후 재시도... (${attempt}/5)`);
+            await new Promise(r => setTimeout(r, 65000));
+            continue;
+          }
+
+          // 503, 500번대: 서버 과부하 → 지수 백오프
+          if ((res.status === 503 || res.status >= 500) && attempt < 5) {
+            const waitMs = 5000 * Math.pow(2, attempt - 1); // 5s, 10s, 20s, 40s
             console.warn(`  [API 경고] ${model} - HTTP ${res.status}. ${waitMs / 1000}초 후 재시도... (${attempt}/5)`);
             await new Promise(r => setTimeout(r, waitMs));
             continue;
           }
+
           throw new Error(`API HTTP ${res.status}: ${errText}`);
         }
 
@@ -101,14 +116,19 @@ async function callGemini(prompt, schema = null) {
         return text;
 
       } catch (err) {
+        if (modelFailed) break;
         if (attempt === 5) {
           console.error(`  [API 실패] '${model}' 5회 모두 실패. 백업 모델로 전환합니다.`);
-          break; // 백업 모델로 넘어감
+          break;
         }
-        const waitMs = 3000 * Math.pow(2, attempt - 1);
-        console.warn(`  [API 오류] ${err.message}. ${waitMs / 1000}초 후 재시도... (${attempt}/5)`);
+        const waitMs = 5000 * Math.pow(2, attempt - 1);
+        console.warn(`  [API 오류] ${err.message.slice(0, 80)}. ${waitMs / 1000}초 후 재시도... (${attempt}/5)`);
         await new Promise(r => setTimeout(r, waitMs));
       }
+    }
+
+    if (!modelFailed) {
+      // 정상 반환은 내부 루프에서 처리됨 - 여기까지 오면 해당 모델 실패
     }
   }
 
