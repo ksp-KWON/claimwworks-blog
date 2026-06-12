@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { motion, AnimatePresence } from 'framer-motion';
+import BlogPostContent from '@/components/BlogPostContent';
 
 const REPO_OWNER = 'ksp-KWON';
 const REPO_NAME = 'claimworks-blog';
@@ -32,6 +33,17 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [isPreview, setIsPreview] = useState(false);
+  
+  // 화면 레이아웃 보기 모드 (split: 반반, editor: 작성창만, preview: 미리보기만)
+  const [layoutView, setLayoutView] = useState<'split' | 'editor' | 'preview'>('split');
+  // 글 수정 탭에서 목록 창 접고 펼치기 상태
+  const [showPostList, setShowPostList] = useState(true);
+
+  // 마크다운 최상단의 YAML Frontmatter(설정 영역)를 지워주는 함수
+  const cleanFrontmatter = (markdown: string) => {
+    if (!markdown) return '';
+    return markdown.replace(/^---[\s\S]*?---/, '').trim();
+  };
 
   // Textarea DOM reference for inserting markdown formatting
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -199,6 +211,7 @@ export default function AdminPage() {
       const content = decodeURIComponent(escape(window.atob(data.content)));
       setGeneratedMarkdown(content);
       setIsPreview(true);
+      setShowPostList(false); // 기존 글 목록은 자동으로 접어서 작성창 크기를 극대화합니다.
       setStatusMessage(`📝 편집 모드: 수정을 완료한 뒤 우측 발행 버튼을 누르세요.`);
     } catch (error: any) {
       setStatusMessage(`오류: ${error.message}`);
@@ -507,10 +520,43 @@ ${inputText}
           )}
         </AnimatePresence>
 
+        {/* Layout Mode Control - Slim */}
+        <div className="flex justify-between items-center bg-white/40 dark:bg-black/10 px-4 py-2 rounded-xl border border-gray-200 dark:border-white/5 flex-shrink-0 z-10">
+          <div className="text-[11px] font-bold text-gray-500 dark:text-gray-400 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+            작업 공간
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 mr-1 hidden sm:inline">📺 화면 구성:</span>
+            {[
+              { id: 'split', label: '🌓 좌우 분할', desc: '작성창과 미리보기를 함께 봅니다 (기본)' },
+              { id: 'editor', label: '📝 작성창 크게', desc: '마크다운 에디터만 넓게 봅니다' },
+              { id: 'preview', label: '👁️ 미리보기 크게', desc: '발행될 디자인을 실제 크기로 봅니다' }
+            ].map(view => (
+              <button
+                key={view.id}
+                onClick={() => setLayoutView(view.id as any)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all border ${
+                  layoutView === view.id
+                    ? 'bg-blue-600 border-blue-650 text-white shadow-sm'
+                    : 'bg-white dark:bg-[#2a2a2c] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:bg-gray-150 dark:hover:bg-[#323235]'
+                }`}
+                title={view.desc}
+              >
+                {view.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Main Workspace - Adaptive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
+        <div className={`grid gap-4 flex-1 min-h-0 ${
+          layoutView === 'split' ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'
+        }`}>
           {/* Left Column: Input Panel */}
-          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0">
+          <div className={`bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0 ${
+            layoutView === 'preview' ? 'hidden' : ''
+          }`}>
             
             {/* Mode Tab Switcher */}
             <div className="flex bg-gray-100/50 dark:bg-black/20 p-1 rounded-xl mb-4 flex-shrink-0">
@@ -523,7 +569,10 @@ ${inputText}
                   key={m.id}
                   onClick={() => {
                     setMode(m.id as any);
-                    if (m.id === 'edit') fetchPostList();
+                    if (m.id === 'edit') {
+                      fetchPostList();
+                      setShowPostList(true); // 수정 탭으로 갈 때는 목록을 펼칩니다
+                    }
                   }}
                   className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all ${mode === m.id ? 'bg-white dark:bg-[#3f3f42] text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
                 >
@@ -532,14 +581,31 @@ ${inputText}
               ))}
             </div>
 
-            {mode === 'edit' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 flex-shrink-0 flex flex-col min-h-0 max-h-72">
+            {mode === 'edit' && showPostList && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                className={`mb-3 flex-shrink-0 flex flex-col min-h-0 transition-all duration-300 ${
+                  isPreview ? 'max-h-40' : 'flex-1 max-h-none'
+                }`}
+              >
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-gray-500 dark:text-gray-400">발행된 포스팅 목록 ({postList.length}개)</span>
-                  <button onClick={fetchPostList} className="text-[10px] font-bold text-blue-600 hover:text-blue-500 flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.775 2.775M21 21v-5h-5.583"></path></svg>
-                    새로고침
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button onClick={fetchPostList} className="text-[10px] font-bold text-blue-600 hover:text-blue-500 flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.775 2.775M21 21v-5h-5.583"></path></svg>
+                      새로고침
+                    </button>
+                    {isPreview && (
+                      <button 
+                        onClick={() => setShowPostList(false)} 
+                        className="text-[10px] font-extrabold text-gray-500 hover:text-gray-750 dark:hover:text-gray-300"
+                        title="목록 접기"
+                      >
+                        [접기 📁]
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <div className="flex-1 overflow-y-auto border border-gray-200 dark:border-white/10 rounded-xl bg-white/40 dark:bg-black/25 p-2 space-y-1.5 custom-scrollbar min-h-[140px]">
                   {postList.length === 0 ? (
@@ -596,6 +662,20 @@ ${inputText}
 
             {isPreview && (
                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col min-h-0 relative">
+                  {/* 기존 글 목록이 접혀있을 때 펼치기 바 */}
+                  {mode === 'edit' && !showPostList && (
+                    <div className="mb-2 flex items-center justify-between bg-blue-50/50 dark:bg-blue-900/10 px-3 py-1.5 rounded-lg border border-blue-100 dark:border-blue-900/20 flex-shrink-0">
+                      <span className="text-[10px] font-medium text-blue-800 dark:text-blue-300">
+                        📁 수정 중: {slug}.md
+                      </span>
+                      <button
+                        onClick={() => setShowPostList(true)}
+                        className="text-[10px] font-bold text-blue-600 hover:text-blue-500 hover:underline"
+                      >
+                        기존 글 목록 열기 📂
+                      </button>
+                    </div>
+                  )}
                   {/* 마크다운 빌더 툴바 영역 */}
                   <div className="flex flex-col gap-2 p-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl mb-2 flex-shrink-0">
                     {/* 1층: 블로그 구성요소 생성 버튼들 */}
@@ -656,7 +736,9 @@ ${inputText}
           </div>
 
           {/* Right Column: Preview Panel */}
-          <div className="bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0 relative overflow-hidden">
+          <div className={`bg-white/70 dark:bg-[#2a2a2c]/80 backdrop-blur-xl p-5 rounded-2xl shadow-sm border border-white/50 dark:border-white/5 flex flex-col h-full min-h-0 relative overflow-hidden ${
+            layoutView === 'editor' ? 'hidden' : ''
+          }`}>
             <div className="flex items-center justify-between mb-3 z-10 flex-shrink-0">
               <h2 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -683,11 +765,9 @@ ${inputText}
             
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar z-10 bg-white/40 dark:bg-black/10 rounded-xl p-4 sm:p-5 border border-white/40 dark:border-white/5 min-h-0">
               {generatedMarkdown ? (
-                <article className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                    {generatedMarkdown}
-                  </ReactMarkdown>
-                </article>
+                <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                  <BlogPostContent content={cleanFrontmatter(generatedMarkdown)} />
+                </div>
               ) : (
                 <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                   <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
