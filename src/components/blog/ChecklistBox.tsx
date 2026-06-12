@@ -22,7 +22,7 @@ export default function ChecklistBox({ items }: ChecklistBoxProps) {
           </div>
           <div>
             <p className="font-extrabold text-gray-900 dark:text-white text-[16px] tracking-tight">
-              내 보험금 자가진단
+              보험 자가테스트
             </p>
             <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
               해당 항목을 클릭해 체크해 보세요

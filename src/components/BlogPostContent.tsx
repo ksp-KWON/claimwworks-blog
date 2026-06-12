@@ -24,6 +24,7 @@ import MedicalCalculator from './calculator/MedicalCalculator';
 // 분리된 서브 컴포넌트 임포트
 import KeyPointsBox from './blog/KeyPointsBox';
 import FAQBox from './blog/FAQBox';
+import GlossaryBox from './blog/GlossaryBox';
 import CTABanner from './blog/CTABanner';
 import ChecklistBox from './blog/ChecklistBox';
 import AuthorBioCard from './blog/AuthorBioCard';
@@ -35,6 +36,7 @@ const SCROLL_OFFSET = 140;
 // ─── 본문에서 식별할 섹션 패턴 ───
 const KEY_POINT_PATTERNS = /(?:핵심\s*요약|key\s*point)/i;
 const CHECKLIST_PATTERNS = /(?:자가진단|체크리스트)/i;
+const GLOSSARY_PATTERNS = /(?:용어\s*사전|보상\s*용어)/i;
 const FAQ_PATTERNS = /(?:faq|자주\s*묻는)/i;
 const CTA_PATTERNS = /(?:카카오톡|call\s*to\s*action|상담\s*신청)/i;
 
@@ -97,11 +99,40 @@ function extractFAQ(content: string): { q: string; a: string }[] {
   return faqs;
 }
 
+// ─── 용어 사전 추출 ───
+function extractGlossary(content: string): { term: string; definition: string }[] {
+  const lines = content.split('\n');
+  const glossary: { term: string; definition: string }[] = [];
+  let inSection = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^##\s+/.test(trimmed) && GLOSSARY_PATTERNS.test(trimmed)) {
+      inSection = true;
+      continue;
+    }
+    if (inSection) {
+      if (/^#{1,2}\s/.test(trimmed)) break; // Stop at next H1/H2
+      if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
+
+      if (/^[-*]\s+/.test(trimmed)) {
+        const text = trimmed.replace(/^[-*]\s*/, '').trim();
+        // "**용어**: 설명" 또는 "**용어** : 설명" 패턴 매칭
+        const match = text.match(/^\*\*([^*]+?)\*\*\s*:\s*(.*)/);
+        if (match) {
+          glossary.push({ term: match[1].trim(), definition: match[2].trim() });
+        }
+      }
+    }
+  }
+  return glossary;
+}
+
 // ─── 본문 전처리 ───
 function preprocessBody(content: string): string {
   const lines = content.split('\n');
   const result: string[] = [];
-  let skipType: 'NONE' | 'KEY_POINTS' | 'CHECKLIST' | 'FAQ' | 'CTA' = 'NONE';
+  let skipType: 'NONE' | 'KEY_POINTS' | 'CHECKLIST' | 'GLOSSARY' | 'FAQ' | 'CTA' = 'NONE';
   let clBuffer: string[] = [];
 
   const flushChecklist = () => {
@@ -117,6 +148,7 @@ function preprocessBody(content: string): string {
     if (/^##\s+/.test(trimmed)) {
       if (KEY_POINT_PATTERNS.test(trimmed)) { skipType = 'KEY_POINTS'; continue; }
       if (CHECKLIST_PATTERNS.test(trimmed)) { skipType = 'CHECKLIST'; clBuffer = []; continue; }
+      if (GLOSSARY_PATTERNS.test(trimmed)) { skipType = 'GLOSSARY'; continue; }
       if (FAQ_PATTERNS.test(trimmed)) { skipType = 'FAQ'; continue; }
       if (CTA_PATTERNS.test(trimmed)) { skipType = 'CTA'; continue; }
     }
@@ -128,7 +160,7 @@ function preprocessBody(content: string): string {
       if (/^#{1,6}\s/.test(trimmed)) {
         flushChecklist();
         skipType = 'NONE';
-      } else if (/^[-*]\s+/.test(trimmed)) {
+      } else if (/^[-*]\s+/.test(trimmed) || /^[☑️✅[\]]/.test(trimmed)) {
         const text = trimmed
           .replace(/^[-*]\s*/, '')
           .replace(/^\[[ x]\]\s*/i, '')
@@ -136,12 +168,12 @@ function preprocessBody(content: string): string {
           .trim();
         if (text) clBuffer.push(text);
         continue;
-      } else if (trimmed === '' || trimmed === '---') {
-        continue;
       } else {
-        flushChecklist();
-        skipType = 'NONE';
+        // 설명 문구나 빈 줄 등은 무시하고, 다음 H2/H1 소제목을 만날 때까지 CHECKLIST 모드를 계속 유지합니다.
+        continue;
       }
+    } else if (skipType === 'GLOSSARY') {
+      if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
     } else if (skipType === 'FAQ') {
       if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
     } else if (skipType === 'CTA') {
@@ -173,6 +205,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
   const [activeId, setActiveId] = useState('');
 
   const keyPoints    = extractKeyPoints(content);
+  const glossaryItems = extractGlossary(content);
   const faqItems     = extractFAQ(content);
   const bodyContent  = preprocessBody(content);
 
@@ -375,15 +408,17 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
         >
           {bodyContent}
         </ReactMarkdown>
+        {/* 4. 용어 사전 (본문 끝나는 부분에 위치) */}
+        {glossaryItems.length > 0 && <GlossaryBox items={glossaryItems} />}
       </div>
 
-      {/* 4. FAQ */}
+      {/* 5. FAQ */}
       {faqItems.length > 0 && <FAQBox items={faqItems} />}
 
-      {/* 5. 저자 바이오 카드 (E-E-A-T 신호) */}
+      {/* 6. 저자 바이오 카드 (E-E-A-T 신호) */}
       <AuthorBioCard />
 
-      {/* 6. CTA 배너 */}
+      {/* 7. CTA 배너 */}
       <CTABanner />
     </div>
   );
