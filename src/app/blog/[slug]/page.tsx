@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     "headline": post.title,
     "description": post.summary,
     "datePublished": post.date,
-    "dateModified": post.date,
+    "dateModified": post.updatedAt || post.date,
     "url": postUrl,
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -214,10 +214,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <span className="px-2.5 py-1 font-bold rounded-md bg-[var(--google-surface-variant)] text-[#5f6368] dark:bg-[#303134] dark:text-[#9aa0a6] border border-transparent">
             {post.category}
           </span>
-          <time className="text-[#5f6368] dark:text-[#9aa0a6] font-medium tracking-wide flex items-center gap-1">
+          {/* 발행일 */}
+          <time dateTime={post.date} className="text-[#5f6368] dark:text-[#9aa0a6] font-medium tracking-wide flex items-center gap-1">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            {post.date}
+            발행 {post.date}
           </time>
+          {/* 수정일 — 발행일과 다를 때만 표시 */}
+          {post.updatedAt && post.updatedAt !== post.date && (
+            <time dateTime={post.updatedAt} className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold tracking-wide flex items-center gap-1">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              업데이트 {post.updatedAt}
+            </time>
+          )}
           {post.specialtyCategory && (
             <span className="px-2.5 py-1 font-bold rounded-md bg-[#e8f0fe] dark:bg-[#174ea6]/20 text-[var(--google-blue)] dark:text-[#8ab4f8] text-xs">
               {post.specialtyCategory}

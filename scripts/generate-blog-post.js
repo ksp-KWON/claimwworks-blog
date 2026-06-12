@@ -296,6 +296,7 @@ ${trendCtx}
   const md = `---
 title: "${topic.title}"
 date: "${kstDate}"
+updatedAt: "${kstDate}"
 summary: "${summary}"
 category: "${topic.category}"
 specialtyCategory: "${topic.specialtyCategory}"

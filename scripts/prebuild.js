@@ -44,6 +44,7 @@ function run() {
         slug,
         title: data.title || '',
         date: formatDate(data.date),
+        updatedAt: data.updatedAt ? formatDate(data.updatedAt) : undefined,
         summary: data.summary || '',
         category: data.category || '',
         regionCategory: data.regionCategory || '',

@@ -4,6 +4,7 @@ export interface PostData {
   slug: string;
   title: string;
   date: string;
+  updatedAt?: string;         // 최종 수정일 (없으면 date와 동일하게 처리)
   summary: string;
   category: string;          // 기본 카테고리 (병원보상가이드 등)
   regionCategory: string;    // 지역 카테고리 (서울강남구, 부산해운대구 등)
@@ -42,6 +43,7 @@ export function getSortedPostsData(includeUnpublished = false): Omit<PostData, '
         slug: post.slug,
         title: post.title || '',
         date: formatDate(post.date),
+        updatedAt: post.updatedAt ? formatDate(post.updatedAt) : undefined,
         summary: post.summary || '',
         category: post.category || '',
         regionCategory: post.regionCategory || '',
@@ -82,6 +84,7 @@ export function getPostData(slug: string, includeUnpublished = false): PostData 
       slug,
       title: post.title || '',
       date: formatDate(post.date),
+      updatedAt: post.updatedAt ? formatDate(post.updatedAt) : undefined,
       summary: post.summary || '',
       category: post.category || '',
       regionCategory: post.regionCategory || '',
