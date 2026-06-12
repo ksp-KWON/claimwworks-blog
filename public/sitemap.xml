@@ -2,97 +2,97 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- 메인 홈 -->
   <url>
-    <loc>https://claimworks-blog.pages.dev/</loc>
+    <loc>https://claim-works.com/</loc>
     <lastmod>2026-06-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <!-- 소개 페이지 -->
   <url>
-    <loc>https://claimworks-blog.pages.dev/about</loc>
+    <loc>https://claim-works.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <!-- 블로그 전체 목록 -->
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog</loc>
+    <loc>https://claim-works.com/blog</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/medical-malpractice-compensation-guide</loc>
+    <loc>https://claim-works.com/blog/medical-malpractice-compensation-guide</loc>
     <lastmod>2026-06-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/cancer-insurance-claim-guide</loc>
+    <loc>https://claim-works.com/blog/cancer-insurance-claim-guide</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/cataract-surgery-private-health-insurance</loc>
+    <loc>https://claim-works.com/blog/cataract-surgery-private-health-insurance</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/guide-premises-liability-no-fault</loc>
+    <loc>https://claim-works.com/blog/guide-premises-liability-no-fault</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/guide-slip-fall-compensation</loc>
+    <loc>https://claim-works.com/blog/guide-slip-fall-compensation</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/industrial-accident-compensation-guide</loc>
+    <loc>https://claim-works.com/blog/industrial-accident-compensation-guide</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/private-health-insurance-claim-guide</loc>
+    <loc>https://claim-works.com/blog/private-health-insurance-claim-guide</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/spinal-compression-fracture-disability-compensation</loc>
+    <loc>https://claim-works.com/blog/spinal-compression-fracture-disability-compensation</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/cruciate-ligament-rupture-disability-compensation</loc>
+    <loc>https://claim-works.com/blog/cruciate-ligament-rupture-disability-compensation</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/herniated-disc-disability-compensation</loc>
+    <loc>https://claim-works.com/blog/herniated-disc-disability-compensation</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/traffic-settlement-guide</loc>
+    <loc>https://claim-works.com/blog/traffic-settlement-guide</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/auto-accident-settlement-guide</loc>
+    <loc>https://claim-works.com/blog/auto-accident-settlement-guide</loc>
     <lastmod>2026-06-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://claimworks-blog.pages.dev/blog/welcome</loc>
+    <loc>https://claim-works.com/blog/welcome</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -168,7 +168,7 @@ export default function MedicalCalculatorResult({ data }: { data: MedicalInsuran
         content: {
           title: '보상스쿨 실손의료비 산출 결과',
           description: `예상 보상금: ${result.totalPayout.toLocaleString()}원\n자세한 보상 명세서를 확인해 보세요!`,
-          imageUrl: 'https://claimworks-blog.pages.dev/og-image.png',
+          imageUrl: 'https://claim-works.com/og-image.png',
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,

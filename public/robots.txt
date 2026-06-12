@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://claimworks-blog.pages.dev/sitemap.xml
+Sitemap: https://claim-works.com/sitemap.xml

@@ -69,7 +69,7 @@ function run() {
 
   // RSS 피드 자동 생성 (public/rss.xml)
   const rssOutputPath = path.join(process.cwd(), 'public/rss.xml');
-  const siteUrl = 'https://claimworks-blog.pages.dev'; // 프로젝트 배포 주소
+  const siteUrl = 'https://claim-works.com'; // 프로젝트 배포 주소
   let rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>

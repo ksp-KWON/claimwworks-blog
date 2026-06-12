@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       publishedTime: post.date,
     },
     alternates: {
-      canonical: `https://claimworks-blog.pages.dev/blog/${slug}`,
+      canonical: `https://claim-works.com/blog/${slug}`,
     },
   };
 }
@@ -99,19 +99,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         "@type": "ListItem",
         "position": 1,
         "name": "홈",
-        "item": "https://claimworks-blog.pages.dev"
+        "item": "https://claim-works.com"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "블로그",
-        "item": "https://claimworks-blog.pages.dev/blog"
+        "item": "https://claim-works.com/blog"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": post.title,
-        "item": `https://claimworks-blog.pages.dev/blog/${slug}`
+        "item": `https://claim-works.com/blog/${slug}`
       }
     ]
   };

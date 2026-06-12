@@ -187,7 +187,7 @@ export default function AutoCalculatorResult({ data }: Props) {
         content: {
           title: '보상스쿨 자동차사고 합의금 산출 결과',
           description: `예상 합의금: ${finalTotal.toLocaleString()}원\n자세한 보상 명세서를 확인해 보세요!`,
-          imageUrl: 'https://claimworks-blog.pages.dev/og-image.png',
+          imageUrl: 'https://claim-works.com/og-image.png',
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,
