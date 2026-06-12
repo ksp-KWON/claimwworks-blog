@@ -57,7 +57,15 @@ export default function ExpertModeForm() {
   };
 
   const handleChange = (field: keyof AutoInsuranceData, value: number | boolean) => {
-    setData(prev => ({ ...prev, [field]: value }));
+    let finalValue = value;
+    if (typeof value === 'number') {
+      if (field === 'faultRatio' || field === 'disabilityRate') {
+        finalValue = Math.min(100, Math.max(0, value));
+      } else {
+        finalValue = Math.max(0, value);
+      }
+    }
+    setData(prev => ({ ...prev, [field]: finalValue }));
   };
 
   const addValue = (field: keyof AutoInsuranceData, addAmount: number, max?: number) => {
@@ -74,7 +82,7 @@ export default function ExpertModeForm() {
     if (!val) return '';
     return Number(val.toString().replace(/,/g, '')).toLocaleString();
   };
-  const parse = (val: string) => Number(val.replace(/[^0-9]/g, ''));
+  const parse = (val: string) => Math.max(0, Number(val.replace(/[^0-9]/g, '')) || 0);
 
   // ── 탭 컨텐츠 렌더링 ──
   const renderStep = () => {
@@ -90,6 +98,7 @@ export default function ExpertModeForm() {
               <div className="relative">
                 <input
                   type="text"
+                  inputMode="numeric"
                   value={data.income ? fmt(data.income) : ''}
                   onChange={e => handleChange('income', parse(e.target.value))}
                   placeholder="3,500,000"
@@ -128,6 +137,7 @@ export default function ExpertModeForm() {
                 <input
                   type="number"
                   min="0" max="100"
+                  inputMode="numeric"
                   value={data.faultRatio === 0 ? '0' : (data.faultRatio || '')}
                   onChange={e => handleChange('faultRatio', Number(e.target.value))}
                   className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-3 pl-4 pr-12 text-[15px] text-[#202124] dark:text-[#e8eaed] font-bold focus:ring-2 focus:ring-[#1A73E8] focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all"
@@ -243,7 +253,9 @@ export default function ExpertModeForm() {
                     <div key={field}>
                       <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5">{label}</label>
                       <div className="relative mb-1.5">
-                        <input type="number" value={data[field] === 0 ? '0' : (data[field] || '')}
+                        <input type="number" 
+                          inputMode="numeric"
+                          value={data[field] === 0 ? '0' : (data[field] || '')}
                           onChange={e => handleChange(field, Number(e.target.value))}
                           className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-2.5 pl-3 pr-8 text-[14px] font-bold text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[#1A73E8] focus:outline-none transition-all" />
                         <span className="absolute right-3 top-3 text-[11px] text-gray-400">{unit}</span>
@@ -267,7 +279,9 @@ export default function ExpertModeForm() {
                   <div>
                     <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5">맥브라이드 장해율</label>
                     <div className="relative mb-1.5">
-                      <input type="number" value={data.disabilityRate === 0 ? '0' : (data.disabilityRate || '')}
+                      <input type="number" 
+                        inputMode="numeric"
+                        value={data.disabilityRate === 0 ? '0' : (data.disabilityRate || '')}
                         onChange={e => handleChange('disabilityRate', Number(e.target.value))}
                         className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-2.5 pl-3 pr-8 text-[14px] font-bold text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[#7C4DFF] focus:outline-none transition-all" />
                       <span className="absolute right-3 top-3 text-[11px] text-gray-400">%</span>
@@ -281,7 +295,9 @@ export default function ExpertModeForm() {
                   <div>
                     <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5">장해 기간 (0=영구)</label>
                     <div className="relative mb-1.5">
-                      <input type="number" value={data.disabilityYears === 0 ? '0' : (data.disabilityYears || '')}
+                      <input type="number" 
+                        inputMode="numeric"
+                        value={data.disabilityYears === 0 ? '0' : (data.disabilityYears || '')}
                         onChange={e => handleChange('disabilityYears', Number(e.target.value))}
                         className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-2.5 pl-3 pr-8 text-[14px] font-bold text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[#7C4DFF] focus:outline-none transition-all" />
                       <span className="absolute right-3 top-3 text-[11px] text-gray-400">년</span>
@@ -303,6 +319,7 @@ export default function ExpertModeForm() {
                   <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5">사고 당시 만 나이</label>
                   <div className="relative mb-1.5">
                     <input type="number"
+                      inputMode="numeric"
                       value={data.ageAtAccident || ''}
                       onChange={e => handleChange('ageAtAccident', Number(e.target.value))}
                       className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-2.5 pl-3 pr-8 text-[14px] font-bold text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[#d93025] focus:outline-none transition-all" />
@@ -340,6 +357,7 @@ export default function ExpertModeForm() {
                 <label className="block text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-2">{icon} {label}</label>
                 <div className="relative mb-2">
                   <input type="text"
+                    inputMode="numeric"
                     value={data[field] ? fmt(data[field] as number) : ''}
                     onChange={e => handleChange(field, parse(e.target.value))}
                     placeholder="0"

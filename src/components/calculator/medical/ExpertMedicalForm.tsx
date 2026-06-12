@@ -15,7 +15,7 @@ export default function ExpertMedicalForm() {
     if (!val) return '';
     return Number(val.toString().replace(/,/g, '')).toLocaleString();
   };
-  const parseCurrency = (val: string) => Number(val.replace(/,/g, ''));
+  const parseCurrency = (val: string) => Math.max(0, Number(val.replace(/[^0-9]/g, '')) || 0);
 
   return (
     <div className="w-full max-w-6xl mx-auto">
@@ -87,6 +87,7 @@ export default function ExpertMedicalForm() {
                       <div className="relative flex-1">
                         <input 
                           type="number" 
+                          inputMode="numeric"
                           value={data.outpatientDays || 1} 
                           onChange={e => handleChange('outpatientDays', Math.max(1, Number(e.target.value)))} 
                           className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2 pl-4 pr-8 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-green-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all text-xs" 
@@ -139,6 +140,7 @@ export default function ExpertMedicalForm() {
                 <div className="relative">
                   <input
                     type="text"
+                    inputMode="numeric"
                     value={data.coveredCost ? formatCurrency(data.coveredCost) : ''}
                     onChange={e => handleChange('coveredCost', parseCurrency(e.target.value))}
                     placeholder="0"
@@ -152,6 +154,7 @@ export default function ExpertMedicalForm() {
                 <div className="relative">
                   <input
                     type="text"
+                    inputMode="numeric"
                     value={data.nonCoveredCost ? formatCurrency(data.nonCoveredCost) : ''}
                     onChange={e => handleChange('nonCoveredCost', parseCurrency(e.target.value))}
                     placeholder="0"
@@ -175,21 +178,21 @@ export default function ExpertMedicalForm() {
                 <div>
                   <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">도수치료/체외충격파</label>
                   <div className="relative">
-                    <input type="text" value={data.manualTherapyCost ? formatCurrency(data.manualTherapyCost) : ''} onChange={e => handleChange('manualTherapyCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
+                    <input type="text" inputMode="numeric" value={data.manualTherapyCost ? formatCurrency(data.manualTherapyCost) : ''} onChange={e => handleChange('manualTherapyCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
                     <span className="absolute right-3 top-2.5 text-xs text-gray-400">원</span>
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">비급여 주사료</label>
                   <div className="relative">
-                    <input type="text" value={data.injectionCost ? formatCurrency(data.injectionCost) : ''} onChange={e => handleChange('injectionCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
+                    <input type="text" inputMode="numeric" value={data.injectionCost ? formatCurrency(data.injectionCost) : ''} onChange={e => handleChange('injectionCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
                     <span className="absolute right-3 top-2.5 text-xs text-gray-400">원</span>
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">비급여 MRI/MRA</label>
                   <div className="relative">
-                    <input type="text" value={data.mriCost ? formatCurrency(data.mriCost) : ''} onChange={e => handleChange('mriCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
+                    <input type="text" inputMode="numeric" value={data.mriCost ? formatCurrency(data.mriCost) : ''} onChange={e => handleChange('mriCost', parseCurrency(e.target.value))} placeholder="0" className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-2.5 pl-3 pr-8 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold text-xs" />
                     <span className="absolute right-3 top-2.5 text-xs text-gray-400">원</span>
                   </div>
                 </div>

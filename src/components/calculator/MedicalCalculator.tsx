@@ -55,7 +55,7 @@ export default function MedicalCalculator() {
     if (!val) return '';
     return Number(val.toString().replace(/,/g, '')).toLocaleString();
   };
-  const parse = (val: string) => Number(val.replace(/[^0-9]/g, ''));
+  const parse = (val: string) => Math.max(0, Number(val.replace(/[^0-9]/g, '')) || 0);
 
   const { deductible, returnAmount, coverageRate } = calcResult(generation, hospitalType, medicalBill);
   const coveragePct = Math.round(coverageRate * 100);
@@ -134,6 +134,7 @@ export default function MedicalCalculator() {
             <div className="relative mb-3">
               <input
                 type="text"
+                inputMode="numeric"
                 value={medicalBill ? fmt(medicalBill) : ''}
                 onChange={e => setMedicalBill(parse(e.target.value))}
                 placeholder="100,000"
