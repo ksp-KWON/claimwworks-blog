@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -32,6 +32,94 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [isPreview, setIsPreview] = useState(false);
+
+  // Textarea DOM reference for inserting markdown formatting
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // 텍스트 영역의 커서 위치에 마크다운 템플릿을 자동으로 삽입해주는 헬퍼 함수
+  const insertMarkdown = (template: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setGeneratedMarkdown(prev => prev + '\n' + template);
+      return;
+    }
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const before = text.substring(0, start);
+    const after = text.substring(end, text.length);
+    
+    setGeneratedMarkdown(before + template + after);
+    
+    // 포커스를 돌려주고 커서 위치를 삽입 텍스트 바로 뒤로 이동
+    setTimeout(() => {
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + template.length;
+    }, 0);
+  };
+
+  // 선택된(드래그) 텍스트를 특정 HTML 색상 태그 등으로 감싸주는 함수
+  const wrapTextWithTag = (tagName: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selectedText = text.substring(start, end);
+    
+    const wrapped = `<${tagName}>${selectedText || '강조텍스트'}</${tagName}>`;
+    const before = text.substring(0, start);
+    const after = text.substring(end, text.length);
+    
+    setGeneratedMarkdown(before + wrapped + after);
+    
+    setTimeout(() => {
+      textarea.focus();
+      textarea.selectionStart = start;
+      textarea.selectionEnd = start + wrapped.length;
+    }, 0);
+  };
+
+  // GitHub REST API를 사용하여 원격 파일 삭제 요청 전송
+  const deletePost = async (filename: string, sha: string) => {
+    if (!githubToken) return alert('GitHub 토큰이 필요합니다.');
+    const confirmed = window.confirm(`[⚠️ 영구 삭제 경고]\n정말로 "${filename}" 포스팅 파일을 원격 저장소에서 영구히 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`);
+    if (!confirmed) return;
+    
+    setIsLoading(true);
+    setStatusMessage(`🗑️ GitHub에서 "${filename}" 파일을 영구 삭제하고 있습니다...`);
+    
+    try {
+      const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${POSTS_PATH}/${filename}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `docs: 관리자 페이지에서 포스팅 삭제 (${filename})`,
+          sha: sha,
+          branch: 'main'
+        })
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message);
+      }
+      
+      setStatusMessage(`✅ "${filename}" 포스팅이 성공적으로 삭제되었습니다! (반영까지 2~3분 소요)`);
+      setTimeout(() => setStatusMessage(''), 4000);
+      
+      // 글 목록 새로고침
+      await fetchPostList();
+    } catch (error: any) {
+      setStatusMessage(`삭제 실패: ${error.message}`);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const savedGemini = localStorage.getItem('GEMINI_API_KEY');
@@ -445,31 +533,47 @@ ${inputText}
             </div>
 
             {mode === 'edit' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 flex-shrink-0">
-                <div className="relative">
-                  <select 
-                    className="w-full pl-4 pr-10 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-black/20 text-gray-950 dark:text-white text-xs font-medium appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    onChange={(e) => {
-                      const post = postList.find(p => p.name === e.target.value);
-                      if(post) loadPost(post.name, post.sha);
-                    }}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>수정할 글을 선택해 주세요</option>
-                    {postList.map(post => (
-                      <option key={post.name} value={post.name}>
-                        {post.title}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 flex-shrink-0 flex flex-col min-h-0 max-h-72">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-bold text-gray-500 dark:text-gray-400">발행된 포스팅 목록 ({postList.length}개)</span>
+                  <button onClick={fetchPostList} className="text-[10px] font-bold text-blue-600 hover:text-blue-500 flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89l-2.775 2.775M21 21v-5h-5.583"></path></svg>
+                    새로고침
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto border border-gray-200 dark:border-white/10 rounded-xl bg-white/40 dark:bg-black/25 p-2 space-y-1.5 custom-scrollbar min-h-[140px]">
+                  {postList.length === 0 ? (
+                    <div className="text-center py-8 text-xs text-gray-400">등록된 글이 없거나 GITHUB 토큰이 필요합니다.</div>
+                  ) : (
+                    postList.map(post => (
+                      <div key={post.name} className="flex justify-between items-center p-2 rounded-lg bg-white/80 dark:bg-[#202124]/70 border border-gray-100 dark:border-white/5 shadow-xs transition-all hover:bg-white dark:hover:bg-[#202124]">
+                        <div className="flex-1 min-w-0 pr-3 text-left">
+                          <div className="text-xs font-bold text-gray-900 dark:text-white truncate">{post.title}</div>
+                          <div className="text-[10px] text-gray-400 mt-0.5 truncate">{post.name}</div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => loadPost(post.name, post.sha)}
+                            className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-950/30 dark:hover:bg-blue-950/60 dark:text-blue-400 rounded-lg text-[11px] font-bold transition-all"
+                          >
+                            ✏️ 불러오기
+                          </button>
+                          <button
+                            onClick={() => deletePost(post.name, post.sha)}
+                            className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-500 hover:text-red-600 rounded-lg transition-all"
+                            title="글 삭제"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </motion.div>
             )}
 
-            {(mode === 'manual' || mode === 'semi-auto') && (
+            {(mode === 'manual' || mode === 'semi-auto') && !isPreview && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col min-h-0">
                 <textarea
                   value={inputText}
@@ -490,10 +594,59 @@ ${inputText}
               </motion.div>
             )}
 
-            {mode === 'edit' && isPreview && (
+            {isPreview && (
                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col min-h-0 relative">
-                  <div className="absolute top-2.5 right-3 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[9px] font-bold rounded">수동 마크다운 편집기</div>
+                  {/* 마크다운 빌더 툴바 영역 */}
+                  <div className="flex flex-col gap-2 p-2 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl mb-2 flex-shrink-0">
+                    {/* 1층: 블로그 구성요소 생성 버튼들 */}
+                    <div className="flex gap-1 overflow-x-auto pb-1 custom-scrollbar shrink-0">
+                      <span className="text-[10px] font-bold text-gray-400 flex items-center shrink-0 pr-1.5 border-r border-gray-200 dark:border-white/10 mr-1.5">🧱 요소 빌더:</span>
+                      {[
+                        { label: '💡 요점', template: '\n## [💡 Key Points]\n- 여기에 핵심 요점을 입력하세요.\n- 여기에 핵심 요점을 입력하세요.\n- 여기에 핵심 요점을 입력하세요.\n' },
+                        { label: '📋 자가진단', template: '\n## [🛡️ 내 보험금/보상금 1분 자가진단 체크리스트]\n- [ ] ☑️ 자가진단 요건 1\n- [ ] ☑️ 자가진단 요건 2\n- [ ] ☑️ 자가진단 요건 3\n' },
+                        { label: '📊 표 그리기', template: '\n| 구분 | 상세 내용 | 보상 기준 |\n| :--- | :--- | :--- |\n| 항목1 | 내용1 | 기준1 |\n| 항목2 | 내용2 | 기준2 |\n' },
+                        { label: '❓ FAQ TOP3', template: '\n## [💡 자주 묻는 질문 (FAQ) TOP 3]\n### Q1. 질문 제목을 적으세요.\n답변 내용을 여기에 입력하세요.\n\n### Q2. 질문 제목을 적으세요.\n답변 내용을 여기에 입력하세요.\n\n### Q3. 질문 제목을 적으세요.\n답변 내용을 여기에 입력하세요.\n' },
+                        { label: '🚗 자동차계산기', template: '\n<calculator type="auto"></calculator>\n' },
+                        { label: '🏥 실손계산기', template: '\n<calculator type="medical"></calculator>\n' },
+                        { label: '📞 상담 CTA', template: '\n## [📞 보상 문제, 전문가의 도움으로 권리를 찾으세요]\n[👉 카카오톡 1:1 무료 상담하기 (클릭)](https://open.kakao.com/o/sWeszp7)\n' }
+                      ].map(item => (
+                        <button
+                          key={item.label}
+                          onClick={() => insertMarkdown(item.template)}
+                          type="button"
+                          className="px-2 py-1 bg-white hover:bg-gray-100 dark:bg-[#303134] dark:hover:bg-[#3f3f42] border border-gray-200 dark:border-white/5 rounded-lg text-[10px] font-bold text-gray-700 dark:text-gray-200 transition-colors shrink-0 active:scale-95 shadow-xs"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* 2층: 텍스트 강조 컬러 태그 버튼들 */}
+                    <div className="flex gap-1 items-center shrink-0">
+                      <span className="text-[10px] font-bold text-gray-400 flex items-center shrink-0 pr-1.5 border-r border-gray-200 dark:border-white/10 mr-1.5">🎨 강조 색상:</span>
+                      {[
+                        { label: '🔴 빨강', tag: 'red' },
+                        { label: '🟠 주황', tag: 'orange' },
+                        { label: '🟢 초록', tag: 'green' },
+                        { label: '🔵 파랑', tag: 'blue' },
+                        { label: '🟣 보라', tag: 'purple' }
+                      ].map(color => (
+                        <button
+                          key={color.tag}
+                          onClick={() => wrapTextWithTag(color.tag)}
+                          type="button"
+                          className="px-2 py-0.5 bg-white hover:bg-gray-100 dark:bg-[#303134] dark:hover:bg-[#3f3f42] border border-gray-255 dark:border-white/5 rounded-md text-[10px] font-bold text-gray-750 dark:text-gray-200 transition-colors active:scale-95"
+                        >
+                          {color.label}
+                        </button>
+                      ))}
+                      <span className="text-[9px] text-gray-400 font-medium ml-2 shrink-0">(글자 드래그 후 적용)</span>
+                    </div>
+                  </div>
+
+                  <div className="absolute top-[80px] right-3 px-2 py-0.5 bg-yellow-100/80 text-yellow-800 text-[9px] font-bold rounded z-20 pointer-events-none">마크다운 편집기</div>
                   <textarea
+                    ref={textareaRef}
                     value={generatedMarkdown}
                     onChange={(e) => setGeneratedMarkdown(e.target.value)}
                     className="flex-1 w-full p-4 font-mono text-xs leading-relaxed rounded-xl border border-gray-250 dark:border-white/10 bg-gray-50/50 dark:bg-[#1e1e20]/80 text-gray-800 dark:text-gray-300 resize-none focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all custom-scrollbar"
