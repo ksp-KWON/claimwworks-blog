@@ -233,8 +233,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       </header>
 
-      {/* 본문 — 새로운 BlogPostContent 컴포넌트로 렌더링 */}
+      {/* 본문 — BlogPostContent 컴포넌트로 렌더링 */}
       <BlogPostContent content={post.content} />
+
+      {/* 관련 글 보기 — 내부 링크 SEO + 이탈율 감소 */}
+      <RelatedPostsBox currentSlug={slug} currentPost={post} />
 
       {/* 태그 목록 */}
       <footer className="mt-14 pt-8 border-t border-[var(--google-border)]">
@@ -251,5 +254,59 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </footer>
     </article>
+  );
+}
+
+// ─── 관련 글 보기 박스 ───
+function RelatedPostsBox({
+  currentSlug,
+  currentPost,
+}: {
+  currentSlug: string;
+  currentPost: { category: string; tags: string[]; title: string };
+}) {
+  const allPosts = getSortedPostsData(false);
+
+  // 같은 카테고리이거나 태그가 겹치는 글 → 점수 높은 순 최대 3개
+  const scored = allPosts
+    .filter(p => p.slug !== currentSlug)
+    .map(p => {
+      let score = 0;
+      if (p.category === currentPost.category) score += 3;
+      const sharedTags = p.tags.filter(t => currentPost.tags.includes(t)).length;
+      score += sharedTags * 2;
+      return { ...p, score };
+    })
+    .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date))
+    .slice(0, 3);
+
+  if (scored.length === 0) return null;
+
+  return (
+    <div className="mt-12">
+      <div className="flex items-center gap-2.5 mb-5">
+        <div className="w-1 h-5 rounded-full bg-[#1A73E8]" />
+        <h2 className="text-[15px] font-extrabold text-gray-900 dark:text-white tracking-tight">
+          함께 읽으면 도움이 되는 글
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {scored.map(p => (
+          <Link
+            key={p.slug}
+            href={`/blog/${p.slug}`}
+            className="group flex flex-col gap-2 p-4 rounded-2xl bg-gray-50 dark:bg-[#2d2e30] border border-gray-100 dark:border-white/5 hover:border-[#1A73E8]/30 hover:bg-[#f0f7ff] dark:hover:bg-[#1a2540] hover:shadow-md transition-all duration-200"
+          >
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#e8f0fe] dark:bg-[#174ea6]/20 text-[#1A73E8] dark:text-[#8ab4f8] w-fit">
+              {p.category}
+            </span>
+            <span className="text-[13px] font-bold text-gray-800 dark:text-gray-100 leading-snug line-clamp-2 group-hover:text-[#1A73E8] dark:group-hover:text-[#8ab4f8] transition-colors">
+              {p.title}
+            </span>
+            <span className="text-[11px] text-gray-400 dark:text-gray-500 mt-auto">{p.date}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
