@@ -2,21 +2,25 @@
  * generate-blog-post.js
  * 보상스쿨 블로그 자동글쓰기 스크립트 (Core Agent)
  * - Gemini AI를 활용한 SEO 특화 전문 포스팅 자동 생성
+ * - 지수 백오프(Exponential Backoff) 5회 재시도 + 이중 모델 폴백(Fallback) 안전망
  */
 'use strict';
 const fs = require('fs');
 const path = require('path');
 
-// ── 환경변수 로드 ──
+// ── 환경변수 로드 (.env.local) ──
 const envPath = path.join(process.cwd(), '.env.local');
 if (fs.existsSync(envPath)) {
   fs.readFileSync(envPath, 'utf8').split('\n').forEach(line => {
-    const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/(^['"]|['"]$)/g, '').trim();
+    const m = line.match(/^\s*([\w.-]+)\s*=\s*(.*?)?\s*$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2]?.replace(/(^['"]|['"]$)/g, '').trim() ?? '';
   });
 }
 
 const POSTS_DIR = path.join(process.cwd(), 'src/content/posts');
+
+// ── Gemini 모델 목록 (앞이 주력, 뒤가 백업) ──
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash'];
 
 // ── 구글 트렌드 수집 ──
 async function fetchGoogleTrends() {
@@ -29,83 +33,88 @@ async function fetchGoogleTrends() {
   }
 }
 
-// ── 기존 포스트 정보 ──
+// ── 기존 포스트 정보 수집 ──
 function getExistingPostsInfo() {
   if (!fs.existsSync(POSTS_DIR)) return [];
-  return fs.readdirSync(POSTS_DIR).filter(f => f.endsWith('.md')).map(f => {
-    const match = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8').match(/title:\s*["']([^"']+)["']/);
-    return match ? { slug: f.replace(/\.md$/, ''), title: match[1] } : null;
-  }).filter(Boolean);
+  return fs.readdirSync(POSTS_DIR)
+    .filter(f => f.endsWith('.md'))
+    .map(f => {
+      const match = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8').match(/title:\s*["']([^"']+)["']/);
+      return match ? { slug: f.replace(/\.md$/, ''), title: match[1] } : null;
+    })
+    .filter(Boolean);
 }
 
-// ── Gemini API 호출 코어 ──
-async function callGemini(prompt, schema = null, retries = 3, delayMs = 2000) {
+// ── Gemini API 호출 (지수 백오프 5회 재시도 + 이중 모델 폴백) ──
+async function callGemini(prompt, schema = null) {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey.length < 10) throw new Error('유효하지 않은 GEMINI_API_KEY');
+  if (!apiKey || apiKey.length < 10) throw new Error('유효하지 않은 GEMINI_API_KEY. 깃허브 Secrets를 확인하세요.');
 
-  // v1beta API 사용 (Structured Outputs 지원)
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  
-  const generationConfig = { 
-    temperature: 0.75, 
-    maxOutputTokens: 8192 
-  };
-
+  const generationConfig = { temperature: 0.75, maxOutputTokens: 8192 };
   if (schema) {
     generationConfig.responseMimeType = 'application/json';
     generationConfig.responseSchema = schema;
   }
 
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig,
-        }),
-      });
+  // 주력 모델 → 백업 모델 순서로 시도
+  for (const model of GEMINI_MODELS) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    console.log(`  [API] 모델 '${model}' 사용 시도...`);
 
-      if (!res.ok) {
-        if (res.status === 429 || (res.status >= 500 && res.status < 600)) {
-          if (attempt < retries) {
-            console.warn(`[API 경고] 호출 실패 (${res.status}). ${delayMs}ms 후 재시도합니다... (시도 ${attempt}/${retries})`);
-            await new Promise(resolve => setTimeout(resolve, delayMs));
+    // 지수 백오프: 최대 5회 (3초 → 6초 → 12초 → 24초 → 포기)
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig,
+          }),
+        });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          // 503(과부하), 429(요청 초과), 500번대 서버 에러는 재시도 대상
+          if ((res.status === 503 || res.status === 429 || res.status >= 500) && attempt < 5) {
+            const waitMs = 3000 * Math.pow(2, attempt - 1); // 3s, 6s, 12s, 24s
+            console.warn(`  [API 경고] ${model} - HTTP ${res.status}. ${waitMs / 1000}초 후 재시도... (${attempt}/5)`);
+            await new Promise(r => setTimeout(r, waitMs));
             continue;
           }
+          throw new Error(`API HTTP ${res.status}: ${errText}`);
         }
-        throw new Error(`API HTTP ${res.status}: ${await res.text()}`);
-      }
-      
-      const data = await res.json();
-      const parts = data?.candidates?.[0]?.content?.parts || [];
-      const text = parts.map(p => p.text || '').join('');
-      if (!text) throw new Error('응답 텍스트 파싱 실패');
 
-      if (schema) {
-        try {
-          return JSON.parse(text.trim());
-        } catch (e) {
-          throw new Error(`JSON 파싱 에러: ${text} | 상세: ${e.message}`);
+        const data = await res.json();
+        const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+        if (!text) throw new Error('응답 텍스트가 비어 있습니다.');
+
+        if (schema) {
+          try { return JSON.parse(text.trim()); }
+          catch (e) { throw new Error(`JSON 파싱 에러: ${e.message} | 원본: ${text.slice(0, 200)}`); }
         }
+        return text;
+
+      } catch (err) {
+        if (attempt === 5) {
+          console.error(`  [API 실패] '${model}' 5회 모두 실패. 백업 모델로 전환합니다.`);
+          break; // 백업 모델로 넘어감
+        }
+        const waitMs = 3000 * Math.pow(2, attempt - 1);
+        console.warn(`  [API 오류] ${err.message}. ${waitMs / 1000}초 후 재시도... (${attempt}/5)`);
+        await new Promise(r => setTimeout(r, waitMs));
       }
-      return text;
-    } catch (err) {
-      if (attempt === retries) {
-        throw err;
-      }
-      console.warn(`[API 오류] ${err.message}. ${delayMs}ms 후 재시도합니다... (시도 ${attempt}/${retries})`);
-      await new Promise(resolve => setTimeout(resolve, delayMs));
     }
   }
+
+  throw new Error('모든 Gemini 모델이 응답하지 않았습니다. 잠시 후 다시 실행해 주세요.');
 }
 
 // ── 프롬프트 헌법(Rules) 설정 ──
 function buildPrompt(topic, existingPosts) {
-  const postsContext = existingPosts.length > 0 
+  const postsContext = existingPosts.length > 0
     ? existingPosts.map(p => `- [${p.title}](/blog/${p.slug})`).join('\n')
-    : "- (없음)";
+    : '- (없음)';
 
   return `# Role
 당신은 '보상스쿨' 블로그의 수석 콘텐츠 기획자이자 손해사정 전문 테크니컬 라이터입니다. 당신은 구글 검색엔진 최적화(SEO)의 최상위 가이드라인인 '유용하고 신뢰할 수 있는 사용자 중심 콘텐츠(Helpful Content)' 제작 원칙을 완벽히 이해하고 있습니다.
@@ -120,7 +129,7 @@ function buildPrompt(topic, existingPosts) {
 # Strict Rules (블로그 작성 헌법)
 
 ## 1. System Safety & Output Format
-- 대화형 응답("네, 작성하겠습니다" 등) 금지. 프론트매터(Frontmatter)나 H1 제목('# 제목') 금지. 
+- 대화형 응답("네, 작성하겠습니다" 등) 금지. 프론트매터(Frontmatter)나 H1 제목('# 제목') 금지.
 - 오직 순수 마크다운(Markdown) 문법으로 바로 본문부터 출력.
 - 특별 허용 사항: 본문 중간에 보상금 계산기 위젯을 띄울 수 있습니다. 주제가 **맥브라이드 장해평가, 교통사고, 배상책임** 등과 관련된 케이스라면 본문 적절한 곳에 \`<calculator type="auto" />\` 태그를, **실손의료비(실비보험)나 병원비** 관련이라면 \`<calculator type="medical" />\` 태그를 무조건 단 한 번 삽입하세요. (다른 HTML/JSX 태그는 금지)
 
@@ -133,7 +142,7 @@ function buildPrompt(topic, existingPosts) {
 - 본문에 **'맥브라이드 장해평가', 'AMA 기준', '기왕증 공제(기존 병력 삭감)', '동요도 측정', '휴업손해', '도시일용노임'** 등 고도의 보상/손해사정 전문용어가 최초 등장할 때, 독자가 즉석에서 이해할 수 있도록 반드시 괄호나 한 줄 주석 형태로 **"(뜻: ~)"** 과 같이 일반인 눈높이에 맞춰 친절하게 해설하십시오.
 
 ## 4. 구조적 가독성 (Readability & Structure)
-- **오프닝 규칙:** 글의 시작은 독자의 억울한 상황에 공감하는 자연스럽고 따뜻한 톤의 2~3문장으로 작성 ("안녕하세요 보상스쿨 손해사정사입니다" 같은 형식적인 인사말은 필수가 아니며 문맥에 맞게 선택적으로 사용). 그 후 "이번 포스팅에서는 [주제]에 대해 실제 보상 실무 관점에서 안내해 드리겠습니다."로 서론 마무리.
+- **오프닝 규칙:** 글의 시작은 독자의 억울한 상황에 공감하는 자연스럽고 따뜻한 톤의 2~3문장으로 작성. 그 후 "이번 포스팅에서는 [주제]에 대해 실제 보상 실무 관점에서 안내해 드리겠습니다."로 서론 마무리.
 - **Key Points:** 오프닝 직후, 반드시 **[💡 Key Points]** (H2) 섹션을 만들어 3가지 핵심 포인트를 불릿(-)으로 제시.
 - **강조 색상 다변화:** 무조건 파란색(기본 \`**\`)만 쓰지 말고, 내용의 경중에 따라 다채롭게 강조하세요.
   - 경고/위험/금지: \`<red>절대 합의하지 마세요</red>\`
@@ -141,7 +150,7 @@ function buildPrompt(topic, existingPosts) {
   - 긍정/해결/안전: \`<green>휴업손해 전액 인정 가능합니다</green>\`
   - 핵심 강조: \`<blue>보상스쿨에 문의하세요</blue>\`
   - 심화 내용: \`<purple>후유장해 진단서 발급</purple>\`
-- **단어 간격 규칙:** 제목(title)은 물론, **본문 내의 모든 소제목(H2, H3 등)과 본문 내용 전체에서** 콜론(\`:\`)을 사용할 때는 가독성을 위해 예외 없이 반드시 앞뒤로 한 칸씩 띄어 쓰세요. (예: \`## 2. 꿀팁 : 향후치료비\`, \`위자료 : 부상 급수\`)
+- **단어 간격 규칙:** 본문 내의 모든 소제목(H2, H3 등)과 본문 전체에서 콜론(\`:\`)을 사용할 때는 반드시 앞뒤로 한 칸씩 띄어 쓰세요. (예: \`## 2. 꿀팁 : 향후치료비\`)
 - **본문 구조:** 소제목은 \`## (H2)\`와 \`### (H3)\` 계층 엄수. 정보 비교 시 최소 2곳 이상에서 '마크다운 표(Table)' 활용. 이때 표의 헤더 열 개수와 구분선 행 및 데이터 행들의 열(Column) 개수가 반드시 일치해야 합니다. 문단 전환 시 가로 실선(\`---\`) 적절히 배치.
 - **전문가 조언:** 주의사항 부분은 인용구(\`> \`) 블록을 활용하여 박스로 강조.
 
@@ -174,86 +183,56 @@ ${postsContext}
 // ── 실행 ──
 async function main() {
   console.log(`=== 자동글쓰기 시작 (${new Date().toISOString()}) ===`);
-
   if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
 
-  // 1. 토픽 기획
+  // Step 1. 토픽 기획
   const existingPosts = getExistingPostsInfo();
   const trends = await fetchGoogleTrends();
-  const trendContext = trends.length > 0 
-    ? `오늘 구글 트렌드: ${trends.join(', ')}\n(관련이 있다면 트래픽 탈취를 위해 타겟팅하고, 억지스럽다면 독자적인 고품질 타겟 키워드 생성)`
+  const trendContext = trends.length > 0
+    ? `오늘 구글 트렌드: ${trends.join(', ')}\n(관련 있다면 타겟팅, 억지스럽다면 독자적인 고품질 키워드 생성)`
     : '(트렌드 생략)';
 
   const topicPrompt = `현재 슬러그: [${existingPosts.map(p => p.slug).join(', ')}]
 ${trendContext}
 이 목록과 중복되지 않으면서 검색량이 폭발할 '손해사정/의료/보상' 관련 타겟 키워드 1개를 선정해 주세요.`;
 
-  // 토픽 정보 설계를 위한 스키마
   const topicSchema = {
-    type: "OBJECT",
+    type: 'OBJECT',
     properties: {
-      slug: { 
-        type: "STRING", 
-        description: "URL 경로명으로 사용할 하이픈(-) 구분 영문 소문자 문자열 (예: car-accident-settlement-calculation)"
-      },
-      title: { 
-        type: "STRING", 
-        description: "구글 검색엔진 최적화(SEO) 및 E-E-A-T 기준에 부합하는 가독성이 높은 포스팅 제목" 
-      },
-      category: { 
-        type: "STRING", 
-        description: "블로그 카테고리 중 반드시 택1 (예: 교통사고, 배상책임, 후유장해, 실손의료비, 보험상식 등)"
-      },
-      specialtyCategory: { 
-        type: "STRING", 
-        description: "전문 진료과목 분류 (예: 정형외과, 신경외과, 재활의학과 등)" 
-      },
-      tags: {
-        type: "ARRAY",
-        items: { type: "STRING" },
-        description: "블로그 키워드와 관련된 태그 목록 (5개)"
-      },
-      keywords: { 
-        type: "STRING", 
-        description: "포스팅의 검색 노출 대상이 되는 타겟 핵심 키워드 목록 (쉼표로 구분)" 
-      }
+      slug: { type: 'STRING', description: 'URL 경로명. 하이픈(-) 구분 영문 소문자 (예: car-accident-settlement)' },
+      title: { type: 'STRING', description: 'SEO 최적화된 포스팅 제목' },
+      category: { type: 'STRING', description: '블로그 카테고리 (예: 교통사고, 배상책임, 후유장해, 실손의료비, 보험상식)' },
+      specialtyCategory: { type: 'STRING', description: '전문 진료과목 (예: 정형외과, 신경외과, 재활의학과)' },
+      tags: { type: 'ARRAY', items: { type: 'STRING' }, description: '관련 태그 5개' },
+      keywords: { type: 'STRING', description: '타겟 핵심 키워드 목록 (쉼표 구분)' },
     },
-    required: ["slug", "title", "category", "specialtyCategory", "tags", "keywords"]
+    required: ['slug', 'title', 'category', 'specialtyCategory', 'tags', 'keywords'],
   };
 
   const topic = await callGemini(topicPrompt, topicSchema);
   console.log(`[1] 토픽 기획 완료: ${topic.title} (${topic.slug})`);
 
-  // 2. 본문 작성
-  // 긴 본문(최소 2,500자) 작성 시 JSON 스키마를 억지로 씌우면 중간에 잘리는 한계가 있습니다.
-  // 따라서 본문은 순수 텍스트(마크다운) 모드로 끝까지 완벽하게 작성받습니다.
+  // Step 2. 본문 작성 (순수 텍스트/마크다운 모드 - JSON 스키마 없이 전체 길이 보장)
   const content = await callGemini(buildPrompt(topic, existingPosts));
-  console.log(`[2] 본문 생성 완료 (본문: ${content.length}자)`);
+  console.log(`[2] 본문 생성 완료 (${content.length}자)`);
 
-  // 3. SEO 요약문 생성 (3차 호출 - JSON 스키마 적용하여 150자 이내의 메타설명을 완벽하게 수집)
-  console.log(`[3] SEO 요약문 추출을 위한 API 호출 중...`);
-  const summaryPrompt = `다음 작성된 블로그 포스팅 본문을 읽고, 구글 검색 결과 화면에 노출될 150자 이내의 매력적인 클릭 유도용 요약문(SEO 메타 디스크립션)을 작성해 주세요.
-  
-포스팅 본문:
-${content}`;
-
+  // Step 3. SEO 요약문 생성 (JSON 스키마 강제)
+  console.log('[3] SEO 요약문 추출 중...');
   const summarySchema = {
-    type: "OBJECT",
+    type: 'OBJECT',
     properties: {
-      seoSummary: {
-        type: "STRING",
-        description: "구글 검색엔진에 노출될 150자 이내의 매력적인 한글 요약문"
-      }
+      seoSummary: { type: 'STRING', description: '구글 검색 노출용 150자 이내 매력적인 한글 요약문' },
     },
-    required: ["seoSummary"]
+    required: ['seoSummary'],
   };
+  const { seoSummary } = await callGemini(
+    `다음 블로그 포스팅 본문을 읽고, 구글 검색 결과에 노출될 150자 이내의 매력적인 클릭 유도용 한글 요약문(SEO 메타 디스크립션)을 작성해 주세요.\n\n포스팅 본문:\n${content}`,
+    summarySchema
+  );
+  const summary = seoSummary.replace(/"/g, "'").trim();
+  console.log(`[3] SEO 요약문 완료: ${summary}`);
 
-  const summaryResult = await callGemini(summaryPrompt, summarySchema);
-  const summary = summaryResult.seoSummary.replace(/"/g, "'").trim();
-  console.log(`[3] SEO 요약문 생성 완료: ${summary}`);
-
-  // 4. 파일 저장 전처리
-  const finalContent = content.trim();
+  // Step 4. 마크다운 파일 저장
   const kstDate = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
   const tagsStr = topic.tags.map(t => `"${t}"`).join(',');
 
@@ -267,7 +246,7 @@ tags: [${tagsStr}]
 published: true
 ---
 
-${finalContent}
+${content.trim()}
 `;
 
   const filePath = path.join(POSTS_DIR, `${topic.slug}.md`);

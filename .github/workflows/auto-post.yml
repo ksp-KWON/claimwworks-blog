@@ -4,13 +4,15 @@ on:
   schedule:
     - cron: '0 22 * * *'  # 매일 한국시간 오전 7시 (UTC 22:00 전날)
   workflow_dispatch:       # 수동 실행 버튼
+  repository_dispatch:     # 외부 크론 서비스(cron-job.org)에서 강제 호출 가능
+    types: [run-auto-post]
 
 jobs:
   auto-generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20    # 지수 백오프 재시도 시간 여유 확보 (15→20분)
     permissions:
-      contents: write      # 자동 작성된 글을 저장소에 커밋/푸시할 권한 부여
+      contents: write      # 자동 작성된 글을 저장소에 커밋/푸시할 권한
 
     steps:
       - name: Checkout
@@ -46,7 +48,7 @@ jobs:
             git commit -m "chore: auto-post [$(date +'%Y-%m-%d')]"
             git push
           else
-            echo "새 글 없음"
+            echo "새 글 없음 (중복 슬러그 방지)"
           fi
 
       - name: Deploy to Cloudflare Pages
