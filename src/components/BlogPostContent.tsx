@@ -160,14 +160,6 @@ function preprocessBody(content: string): string {
     .replace(/<calculator\s+type="([^"]+)"\s*\/>/g, '<calculator type="$1"></calculator>')
     .replace(/\[SEO_SUMMARY\]:.*/gi, '')
     .replace(/\[[^\]]*(?:카카오|상담)[^\]]*\]\([^)]*\)/g, '')
-    .replace(/((?:[ \t]*[*-][ \t]+(?:☑️|✅)[^\n]+\n?){2,})/gmu, (match) => {
-      const items = match.split('\n')
-        .filter(l => /☑️|✅/u.test(l))
-        .map(l => l.replace(/^[ \t]*[*-][ \t]+(?:☑️|✅)[ \t]*/u, '').trim())
-        .filter(Boolean);
-      if (items.length < 2) return match;
-      return `\n<inlinechecklist data="${encodeURIComponent(items.join('||'))}"></inlinechecklist>\n`;
-    })
     .trim();
 
   return processed.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
@@ -192,7 +184,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
         text: (h.textContent || '')
           .trim()
           .replace(/^\d+\.\s*/, '')
-          .replace(/[💡🛡️✅☑️]/g, '')
+          .replace(/\p{Extended_Pictographic}|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu, '')
           .trim(),
       }));
       setToc(items);
