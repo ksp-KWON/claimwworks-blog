@@ -111,10 +111,10 @@ function HospitalListView({
     <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3.5 py-5 sm:p-8 lg:p-10">
       <div className="flex items-center justify-between mb-6 border-b border-[var(--google-border)] pb-4">
         <div>
-          <h2 className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
+          <h1 className="text-xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
             <svg className="w-6 h-6 text-[var(--google-red)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             {regionName} <span className="text-[var(--google-blue)] dark:text-[#8ab4f8]">{specialtyName}</span> 전체보기
-          </h2>
+          </h1>
           <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6] mt-2 flex items-center gap-1.5">
             <svg className="w-4 h-4 text-[var(--google-green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             총 <strong className="text-[#202124] dark:text-[#e8eaed] mx-0.5">{specialtyData.hospitals.length}</strong>곳의 검증된 의료기관 리스트입니다.
@@ -417,9 +417,9 @@ export default function BlogPageClient() {
         </div>
 
         <div className="bg-white dark:bg-[#202124] rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-4 py-5 sm:p-6">
-          <h2 className="text-lg font-bold text-[#202124] dark:text-[#e8eaed] mb-1">
+          <h1 className="text-lg sm:text-xl font-bold text-[#202124] dark:text-[#e8eaed] mb-1">
             {sido} 구/군 선택
-          </h2>
+          </h1>
           <p className="text-sm text-[#5f6368] dark:text-[#9aa0a6] mb-5 pb-4 border-b border-[var(--google-border)]">
             원하시는 지역을 선택하면 해당 지역의 진료과목별 병원 통계를 보실 수 있습니다.
           </p>
@@ -505,6 +505,20 @@ export default function BlogPageClient() {
   // ─── 기본 블로그 목록 ───
   return (
     <div className="space-y-6">
+      {/* 블로그 페이지 헤더 (SEO H1) */}
+      <div className="border-b border-[var(--google-border)] pb-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed] flex items-center gap-2">
+          <svg className="w-6 h-6 text-[var(--google-blue)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+          </svg>
+          보상 실무 가이드 & 칼럼 목록
+        </h1>
+        <p className="text-xs sm:text-sm text-[#5f6368] dark:text-[#9aa0a6] mt-1.5">
+          교통사고, 후유장해, 실손보험 청구 등 손해사정 실무 가이드를 모아서 제공합니다.
+        </p>
+      </div>
+
       {/* 태그 필터 활성 표시 */}
       {tagFilter && (
         <div className="flex items-center gap-3 flex-wrap">

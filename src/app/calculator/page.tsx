@@ -3,6 +3,9 @@ import Link from "next/link";
 export const metadata = {
   title: '스마트 보상금 계산기 | 보상스쿨',
   description: '자동차보험 합의금 및 실손의료비 보상금을 계산해 보세요.',
+  alternates: {
+    canonical: 'https://claim-works.com/calculator',
+  },
 };
 
 export default function CalculatorIndexPage() {

@@ -126,6 +126,36 @@ function run() {
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 계산기 메인 -->
+  <url>
+    <loc>${siteUrl}/calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- 자동차보험 계산기 -->
+  <url>
+    <loc>${siteUrl}/calculator/auto</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 실손의료비 계산기 -->
+  <url>
+    <loc>${siteUrl}/calculator/medical</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 개인정보처리방침 -->
+  <url>
+    <loc>${siteUrl}/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- 이용약관 -->
+  <url>
+    <loc>${siteUrl}/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 `;
 
   posts.forEach(post => {

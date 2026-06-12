@@ -45,13 +45,10 @@ async function fetchGoogleTrends() {
 // ── 기존 포스트 목록 ──
 function getExistingPostsInfo() {
   if (!fs.existsSync(POSTS_DIR)) return [];
-  return fs.readdirSync(POSTS_DIR)
-    .filter(f => f.endsWith('.md'))
-    .map(f => {
-      const m = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8').match(/title:\s*["']([^"']+)["']/);
-      return m ? { slug: f.replace(/\.md$/, ''), title: m[1] } : null;
-    })
-    .filter(Boolean);
+  const files = fs.readdirSync(POSTS_DIR)
+    .filter(f => f.endsWith('.md'));
+  // 최대 20개까지만 노출, 슬러그만 반환하여 프롬프트 토큰 절약
+  return files.slice(-20).map(f => f.replace(/\.md$/, ''));
 }
 
 // ── Gemini API 호출 (429 전용 65초 대기 / 503 지수백오프 / 404 즉시 폴백) ──
@@ -136,7 +133,7 @@ async function callGemini(prompt, schema = null) {
 // ── 프롬프트 헌법 (완전판 - 고품질 규칙 전면 복원) ──
 function buildPrompt(topic, existingPosts) {
   const postsCtx = existingPosts.length > 0
-    ? existingPosts.map(p => `- [${p.title}](/blog/${p.slug})`).join('\n')
+    ? existingPosts.map(slug => `- /blog/${slug}`).join('\n')
     : '- (없음)';
 
   return `# Role
@@ -188,9 +185,8 @@ SEO_META:[구글 검색 결과에 노출될 150자 이내의 매력적인 클릭
 - 문단은 3~4줄로 짧게 끊고 핵심 키워드는 **볼드** 처리. 어미는 '~입니다/합니다' 통일.
 
 ## 6. 자동 내부 링크 (Internal Linking)
-- 우리 블로그의 기존 글 목록 :
+- 우리 블로그의 기존 글 슬러그 목록 (이 슬러그들을 사용하여 본문 문맥상 자연스럽게 1~2개 내부 링크를 `[관련 내용 설명](/blog/슬러그)` 형태로 생성하십시오):
 ${postsCtx}
-- 본문 작성 중 자연스러운 문맥에서 위 글 중 1~2개를 \`[관련 글 제목](/blog/슬러그)\` 형태로 삽입.
 
 ## 7. 자가진단 (Self-Check)
 - 본문 중간 핵심 내용이 끝나는 지점에 **[🛡️ 내 보험금/보상금 1분 자가진단 체크리스트]** (H2) 추가.
@@ -238,7 +234,7 @@ async function main() {
     ? `오늘 구글 트렌드: ${trends.join(', ')}\n(관련 있으면 타겟팅, 억지스러우면 독자 키워드 생성)`
     : '(트렌드 생략)';
 
-  const topicPrompt = `기존 슬러그: [${existingPosts.map(p => p.slug).join(', ')}]
+  const topicPrompt = `기존 슬러그: [${existingPosts.join(', ')}]
 ${trendCtx}
 중복 없이 검색량 높은 '손해사정/의료/보상' 타겟 키워드 1개 선정.`;
 
@@ -285,6 +281,11 @@ ${trendCtx}
     const plainText = content.replace(/[#*`>\[\]]/g, '').replace(/\s+/g, ' ').trim();
     summary = plainText.slice(0, 140);
     console.warn('  [경고] SEO_META 파싱 실패. 본문 앞부분으로 대체합니다.');
+  }
+
+  // 구글 검색 최적화를 위한 158자 이내 요약 제한 자동 적용 (Group 7)
+  if (summary.length > 158) {
+    summary = summary.slice(0, 155) + '...';
   }
 
   console.log(`[2] 본문 생성 완료 (${content.length}자) | SEO: ${summary.slice(0, 30)}...`);

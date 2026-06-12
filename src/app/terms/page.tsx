@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '이용약관 | 보상스쿨 헬스케어 & 손해사정 보상가이드',
   description: '보상스쿨 헬스케어 & 손해사정 보상가이드의 서비스 이용약관입니다.',
+  alternates: {
+    canonical: 'https://claim-works.com/terms',
+  },
 };
 
 export default function TermsPage() {

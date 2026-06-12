@@ -56,13 +56,13 @@ function SearchResults() {
   return (
     <div className="space-y-6">
       <div className="border-b border-[var(--google-border)] pb-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed]">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#202124] dark:text-[#e8eaed]">
           {q ? (
             <><span className="text-[var(--google-blue)]">&quot;{q}&quot;</span> 검색 결과</>
           ) : (
             <>검색어를 입력해주세요</>
           )}
-        </h2>
+        </h1>
         <p className="text-[#5f6368] dark:text-[#9aa0a6] mt-2">
           {isLoading ? '검색 중...' : `총 ${results.length}건의 문서가 검색되었습니다.`}
         </p>

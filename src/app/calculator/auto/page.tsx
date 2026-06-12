@@ -1,9 +1,13 @@
 import Link from "next/link";
 import AutoCalculatorContainer from "@/components/calculator/auto/AutoCalculatorContainer";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: '자동차보험 합의금 계산기 | 보상스쿨',
   description: '약관 지급기준(부상, 장해, 사망) 및 호프만계수를 적용한 정확한 예상 합의금을 확인하세요.',
+  alternates: {
+    canonical: 'https://claim-works.com/calculator/auto',
+  },
 };
 
 export default function AutoCalculatorPage() {

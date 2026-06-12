@@ -1,9 +1,13 @@
 import Link from "next/link";
 import MedicalCalculatorContainer from "@/components/calculator/medical/MedicalCalculatorContainer";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: '실손의료비 계산기 | 보상스쿨',
   description: '급여/비급여 병원비, 약제비 본인부담금을 공제한 예상 실손 보상금을 산출해 보세요.',
+  alternates: {
+    canonical: 'https://claim-works.com/calculator/medical',
+  },
 };
 
 export default function MedicalCalculatorPage() {

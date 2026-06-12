@@ -4,6 +4,9 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "플랫폼 소개 | 보상스쿨 헬스케어 & 손해사정 보상가이드",
   description: "보상스쿨 헬스케어 & 손해사정 보상가이드의 핵심 미션과 E-E-A-T 4대 가치를 소개합니다.",
+  alternates: {
+    canonical: "https://claim-works.com/about",
+  },
 };
 
 export default function AboutPage() {

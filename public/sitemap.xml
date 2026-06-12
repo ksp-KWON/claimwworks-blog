@@ -19,6 +19,36 @@
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 계산기 메인 -->
+  <url>
+    <loc>https://claim-works.com/calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- 자동차보험 계산기 -->
+  <url>
+    <loc>https://claim-works.com/calculator/auto</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 실손의료비 계산기 -->
+  <url>
+    <loc>https://claim-works.com/calculator/medical</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 개인정보처리방침 -->
+  <url>
+    <loc>https://claim-works.com/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- 이용약관 -->
+  <url>
+    <loc>https://claim-works.com/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
   <url>
     <loc>https://claim-works.com/blog/loss-adjuster-appointment-guide</loc>
     <lastmod>2026-06-12</lastmod>

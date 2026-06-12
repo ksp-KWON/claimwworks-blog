@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '개인정보처리방침 | 보상스쿨 헬스케어 & 손해사정 보상가이드',
   description: '보상스쿨 헬스케어 & 손해사정 보상가이드의 개인정보처리방침입니다.',
+  alternates: {
+    canonical: 'https://claim-works.com/privacy',
+  },
 };
 
 export default function PrivacyPage() {

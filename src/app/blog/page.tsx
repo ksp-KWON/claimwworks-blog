@@ -5,6 +5,9 @@ import BlogPageClient from './BlogPageClient';
 export const metadata: Metadata = {
   title: '건강 정보 블로그 | 심평원 의료 통계 기반 전문 건강 가이드',
   description: '심평원 공공데이터를 기반으로 최신 건강 및 질병 정보를 알아보기 쉽게 정리하여 전해드리는 전문 건강 블로그입니다.',
+  alternates: {
+    canonical: 'https://claim-works.com/blog',
+  },
 };
 
 // useSearchParams() 사용 시 Suspense 경계가 필요
