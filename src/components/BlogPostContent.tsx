@@ -102,9 +102,10 @@ function extractFAQ(content: string): { q: string; a: string }[] {
       if (/^#{1,2}\s/.test(trimmed)) break; // Stop at H1 or H2
       if (/\[SEO_SUMMARY\]/.test(trimmed)) break;
 
-      if (/^###\s+/.test(trimmed)) {
+      if (/^#+\s*/.test(trimmed)) {
         if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
-        currentQ = trimmed.replace(/^###\s*/, '').trim();
+        // 질문 제목 맨 앞에 붙어 있는 모든 샵(#) 기호와 공백을 깔끔하게 제거합니다.
+        currentQ = trimmed.replace(/^(?:#+\s*)+/, '').trim();
         currentA = '';
       } else if (currentQ) {
         if (trimmed === '---') continue; // 마크다운 구분선(---)은 답변 내용에서 제외
