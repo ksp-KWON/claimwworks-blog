@@ -63,7 +63,20 @@ export default function RootLayout({
               "description": "건강보험심사평가원의 공개 정보를 기반으로 보상스쿨 손해사정사가 분석한 보상 노하우를 제공합니다.",
               "publisher": {
                 "@type": "Organization",
-                "name": "보상스쿨"
+                "name": "보상스쿨",
+                "url": "https://claim-works.com",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://claim-works.com/favicon.ico"
+                }
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://claim-works.com/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
               }
             })
           }}

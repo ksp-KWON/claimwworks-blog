@@ -1,6 +1,11 @@
+# 보상스쿨 헬스케어 & 손해사정 보상가이드
+# https://claim-works.com
+
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /api
 
+# 관리자 페이지 크롤링 차단 (검색 노출 불필요)
+Disallow: /admin
+
+# Sitemap 위치 명시 (구글/네이버 크롤러에 필수)
 Sitemap: https://claim-works.com/sitemap.xml

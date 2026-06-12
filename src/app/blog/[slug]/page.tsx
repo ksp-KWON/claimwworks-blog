@@ -27,6 +27,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const ogImageUrl = `https://claim-works.com/blog/${slug}/opengraph-image`;
+
   return {
     title: `${post.title} | 보상스쿨 손해사정 보상가이드`,
     description: post.summary,
@@ -35,6 +37,25 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       description: post.summary,
       type: 'article',
       publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: ['보상스쿨 손해사정사'],
+      siteName: '보상스쿨 헬스케어 & 손해사정 보상가이드',
+      locale: 'ko_KR',
+      url: `https://claim-works.com/blog/${slug}`,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary,
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://claim-works.com/blog/${slug}`,
@@ -77,17 +98,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
   if (currentQ) faqs.push({ q: currentQ, a: currentA.trim() });
 
-  // 1. Article 구조화 데이터
+  const postUrl = `https://claim-works.com/blog/${slug}`;
+  const ogImageUrl = `https://claim-works.com/blog/${slug}/opengraph-image`;
+
+  // 1. BlogPosting 구조화 데이터 (구글 리치결과 완전 자격 요건 충족)
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": post.title,
     "description": post.summary,
     "datePublished": post.date,
+    "dateModified": post.date,
+    "url": postUrl,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": postUrl
+    },
+    "image": {
+      "@type": "ImageObject",
+      "url": ogImageUrl,
+      "width": 1200,
+      "height": 630
+    },
     "author": {
+      "@type": "Person",
+      "name": "보상스쿨 손해사정사",
+      "url": "https://claim-works.com/about"
+    },
+    "publisher": {
       "@type": "Organization",
-      "name": "보상스쿨"
-    }
+      "name": "보상스쿨",
+      "url": "https://claim-works.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://claim-works.com/favicon.ico",
+        "width": 32,
+        "height": 32
+      }
+    },
+    "inLanguage": "ko-KR",
+    "keywords": post.tags?.join(', ') ?? ''
   };
 
   // 2. Breadcrumb 구조화 데이터
@@ -111,7 +161,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         "@type": "ListItem",
         "position": 3,
         "name": post.title,
-        "item": `https://claim-works.com/blog/${slug}`
+        "item": postUrl
       }
     ]
   };
@@ -146,6 +196,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
+
       {/* 상단 네비게이션 */}
       <div className="mb-6">
         <Link
