@@ -2,7 +2,7 @@ name: Auto Generate Daily Blog Post
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # 매일 한국시간 오전 7시 (UTC 22:00 전날)
+    - cron: '47 21 * * *'  # 매일 한국시간 오전 6시 47분 (UTC 21:47 전날) - 혼잡시간대 회피
   workflow_dispatch:       # 수동 실행 버튼
   repository_dispatch:     # 외부 크론 서비스(cron-job.org)에서 강제 호출 가능
     types: [run-auto-post]
