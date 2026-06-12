@@ -40,36 +40,6 @@ const FALLBACK_VIDEOS: YouTubeVideo[] = [
   }
 ];
 
-export default async function YouTubeBriefing() {
-  const channelId = 'UCvjJtHa7eS2G25Vwt4fzezA';
-  const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-  let videos: YouTubeVideo[] = [];
-
-  try {
-    const res = await fetch(rssUrl, { next: { revalidate: 3600 } });
-    if (res.ok) {
-      const xml = await res.text();
-      const entries = xml.split('<entry>').slice(1);
-      videos = entries.map(entry => {
-        const videoIdMatch = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
-        const titleMatch = entry.match(/<title>(.*?)<\/title>/);
-        const publishedMatch = entry.match(/<published>(.*?)<\/published>/);
-        
-        return {
-          id: videoIdMatch ? videoIdMatch[1] : '',
-          title: titleMatch ? titleMatch[1] : '',
-          published: publishedMatch ? new Date(publishedMatch[1]).toLocaleDateString('ko-KR') : ''
-        };
-      }).filter(v => v.id).slice(0, 10); // 가로 슬라이더를 위해 10개 로드
-    }
-  } catch (error) {
-    console.error('Failed to fetch YouTube RSS:', error);
-  }
-
-  // RSS 피드 조회 실패 또는 데이터가 비어있을 경우 실시간 실제 유튜브 영상 목록을 폴백으로 제공
-  if (videos.length === 0) {
-    videos = FALLBACK_VIDEOS;
-  }
-
-  return <YouTubeBriefingClient videos={videos} />;
+export default function YouTubeBriefing() {
+  return <YouTubeBriefingClient videos={FALLBACK_VIDEOS} />;
 }

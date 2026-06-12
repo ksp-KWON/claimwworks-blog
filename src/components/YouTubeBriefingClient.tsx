@@ -1,7 +1,46 @@
 'use client';
+import { useEffect, useState } from 'react';
 import type { YouTubeVideo } from './YouTubeBriefing';
 
-export default function YouTubeBriefingClient({ videos }: { videos: YouTubeVideo[] }) {
+export default function YouTubeBriefingClient({ videos: initialVideos }: { videos: YouTubeVideo[] }) {
+  const [videos, setVideos] = useState<YouTubeVideo[]>(initialVideos);
+
+  useEffect(() => {
+    // 실시간 유튜브 데이터 조회 (CORS 우회를 위해 public CORS 프록시 서비스 사용)
+    const targetUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCvjJtHa7eS2G25Vwt4fzezA';
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+    fetch(proxyUrl)
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('CORS proxy request failed');
+      })
+      .then(data => {
+        const xml = data.contents;
+        if (!xml) throw new Error('No content returned from proxy');
+
+        const entries = xml.split('<entry>').slice(1);
+        const parsedVideos = entries.map((entry: string) => {
+          const videoIdMatch = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
+          const titleMatch = entry.match(/<title>(.*?)<\/title>/);
+          const publishedMatch = entry.match(/<published>(.*?)<\/published>/);
+          
+          return {
+            id: videoIdMatch ? videoIdMatch[1] : '',
+            title: titleMatch ? titleMatch[1] : '',
+            published: publishedMatch ? new Date(publishedMatch[1]).toLocaleDateString('ko-KR') : ''
+          };
+        }).filter((v: any) => v.id).slice(0, 10);
+
+        if (parsedVideos.length > 0) {
+          setVideos(parsedVideos);
+        }
+      })
+      .catch(err => {
+        console.warn('유튜브 실시간 데이터를 불러오는 데 실패하여 백업 데이터를 사용합니다:', err);
+      });
+  }, []);
+
   if (!videos || videos.length === 0) return null;
 
   return (
