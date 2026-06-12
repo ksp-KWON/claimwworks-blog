@@ -20,7 +20,8 @@ if (fs.existsSync(envPath)) {
 const POSTS_DIR = path.join(process.cwd(), 'src/content/posts');
 
 // ── Gemini 모델 목록 (앞이 주력, 뒤가 백업) ──
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash'];
+// gemini-2.5-flash: 최신 주력 모델 / gemini-2.0-flash: v1beta 지원 검증된 백업 모델
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash'];
 
 // ── 구글 트렌드 수집 ──
 async function fetchGoogleTrends() {
