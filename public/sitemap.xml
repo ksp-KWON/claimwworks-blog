@@ -3,7 +3,7 @@
   <!-- 메인 홈 -->
   <url>
     <loc>https://claimworks-blog.pages.dev/</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-06-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,6 +17,12 @@
   <url>
     <loc>https://claimworks-blog.pages.dev/blog</loc>
     <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://claimworks-blog.pages.dev/blog/medical-malpractice-compensation-guide</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
