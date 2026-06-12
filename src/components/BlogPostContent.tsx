@@ -308,23 +308,26 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
 
       return (
         <div className="my-12 relative w-full mx-auto">
-          {/* 세련된 프리미엄 카드 프레임 (스크롤 바 제거, 높이 자동 확장) */}
-          <div className="bg-white dark:bg-[#202124] rounded-3xl p-5 sm:p-8 shadow-[0_16px_48px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)] border border-gray-100 dark:border-white/5 transition-all duration-300">
-            {/* 상단 통합 제어 바 */}
-            <div className="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-4 mb-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#1A73E8] animate-pulse" />
-                <span className="text-[11px] font-extrabold text-[#1A73E8] dark:text-[#8ab4f8] tracking-widest uppercase">
+          {/* 프리미엄 카드 프레임 — 스크롤 없음, 높이 자연 확장 */}
+          <div className="bg-white dark:bg-[#202124] rounded-3xl shadow-[0_16px_48px_rgba(0,0,0,0.07)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.45)] border border-gray-100 dark:border-white/8 overflow-visible">
+            {/* 상단 헤더 바 */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/8">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-[#1A73E8] animate-pulse shadow-[0_0_6px_#1A73E8]" />
+                <span className="text-[11px] font-extrabold text-[#1A73E8] dark:text-[#8ab4f8] tracking-[0.15em] uppercase">
                   {isAuto ? 'AUTO INSURANCE SIMULATOR' : 'MEDICAL BILL ESTIMATOR'}
                 </span>
               </div>
-              <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500">
-                보상스쿨 안심 계산기
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d93025]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#f29900]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+                <span className="ml-2 text-[11px] font-bold text-gray-400 dark:text-gray-500">보상스쿨 안심 계산기</span>
+              </div>
             </div>
 
-            {/* 실제 계산기 렌더링 영역 (높이 제한 없이 자연스럽게 늘어남) */}
-            <div className="w-full">
+            {/* 계산기 본체 — 높이 제한 없음 */}
+            <div className="p-5 sm:p-8">
               {isAuto ? <AutoCalculatorContainer /> : <MedicalCalculator />}
             </div>
           </div>

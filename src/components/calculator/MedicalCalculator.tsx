@@ -2,185 +2,230 @@
 
 import { useState } from 'react';
 
-export default function MedicalCalculator() {
-  const [generation, setGeneration] = useState<number>(1);
-  const [hospitalType, setHospitalType] = useState<number>(1); // 1: 의원, 2: 병원, 3: 종합병원
-  const [medicalBill, setMedicalBill] = useState<number>(100000); // 총 발생 의료비
+// ── 세대별 공제 계산 로직 ──
+function calcResult(generation: number, hospitalType: number, medicalBill: number) {
+  let deductible = 0;
+  let coverageRate = 1;
 
-  const formatCurrency = (val: number | string) => {
+  if (generation === 1) {
+    deductible = 5000;
+    coverageRate = 1.0;
+    deductible = Math.min(deductible, medicalBill);
+    return { deductible, returnAmount: Math.max(0, medicalBill - deductible), coverageRate };
+  }
+
+  const baseDeductible = hospitalType === 1 ? 10000 : hospitalType === 2 ? 15000 : 20000;
+
+  if (generation === 2) {
+    coverageRate = 0.9;
+    const ratioDeductible = medicalBill * 0.1;
+    deductible = Math.max(baseDeductible, ratioDeductible);
+  } else if (generation === 3) {
+    coverageRate = 0.85;
+    const ratioDeductible = medicalBill * 0.15;
+    deductible = Math.max(baseDeductible, ratioDeductible);
+  } else {
+    coverageRate = 0.75;
+    const ratioDeductible = medicalBill * 0.25;
+    deductible = Math.max(baseDeductible, ratioDeductible);
+  }
+
+  return { deductible, returnAmount: Math.max(0, medicalBill - deductible), coverageRate };
+}
+
+const GENERATIONS = [
+  { id: 1, label: '1세대', period: '~09년 8월', color: '#1A73E8', note: '공제 5,000원 / 100% 보장' },
+  { id: 2, label: '2세대', period: '09.10 ~ 17.03', color: '#34A853', note: '자기부담금 10% / 90% 보장' },
+  { id: 3, label: '3세대', period: '17.04 ~ 21.06', color: '#f29900', note: '급여 90% / 비급여 80%' },
+  { id: 4, label: '4세대', period: '21.07 ~ 현재', color: '#d93025', note: '급여 80% / 비급여 70%' },
+];
+
+const HOSPITAL_TYPES = [
+  { id: 1, label: '의원·클리닉', emoji: '🏥', desc: '개인의원, 한의원' },
+  { id: 2, label: '병원', emoji: '🏨', desc: '병원급 (30병상↑)' },
+  { id: 3, label: '종합병원', emoji: '🏫', desc: '대학병원, 상급종합' },
+];
+
+export default function MedicalCalculator() {
+  const [generation, setGeneration] = useState(1);
+  const [hospitalType, setHospitalType] = useState(1);
+  const [medicalBill, setMedicalBill] = useState(100000);
+
+  const fmt = (val: number | string) => {
     if (!val) return '';
     return Number(val.toString().replace(/,/g, '')).toLocaleString();
   };
-  const parseCurrency = (val: string) => Number(val.replace(/[^0-9]/g, ''));
+  const parse = (val: string) => Number(val.replace(/[^0-9]/g, ''));
 
-  // 계산 로직 (단순화된 기준)
-  let returnAmount = 0;
-  let deductible = 0;
-
-  if (generation === 1) {
-    // 1세대 (100% 보장, 통원 공제 5000원)
-    deductible = 5000;
-    returnAmount = Math.max(0, medicalBill - deductible);
-  } else if (generation === 2) {
-    // 2세대 (90% 보장, 통원 의원 1만, 병원 1.5만, 종병 2만)
-    const baseDeductible = hospitalType === 1 ? 10000 : hospitalType === 2 ? 15000 : 20000;
-    const ratioDeductible = medicalBill * 0.1;
-    deductible = Math.max(baseDeductible, ratioDeductible);
-    returnAmount = Math.max(0, medicalBill - deductible);
-  } else if (generation === 3) {
-    // 3세대 (급여 90%, 비급여 80%) -> 단순 평균 85% 로 가정 (초보자용)
-    const baseDeductible = hospitalType === 1 ? 10000 : hospitalType === 2 ? 15000 : 20000;
-    const ratioDeductible = medicalBill * 0.15; // 15% 공제 가정
-    deductible = Math.max(baseDeductible, ratioDeductible);
-    returnAmount = Math.max(0, medicalBill - deductible);
-  } else {
-    // 4세대 (급여 80%, 비급여 70%) -> 단순 평균 75% 로 가정
-    const baseDeductible = hospitalType === 1 ? 10000 : hospitalType === 2 ? 15000 : 20000;
-    const ratioDeductible = medicalBill * 0.25; // 25% 공제 가정
-    deductible = Math.max(baseDeductible, ratioDeductible);
-    returnAmount = Math.max(0, medicalBill - deductible);
-  }
-
-  const finalAmount = returnAmount;
+  const { deductible, returnAmount, coverageRate } = calcResult(generation, hospitalType, medicalBill);
+  const coveragePct = Math.round(coverageRate * 100);
+  const selectedGen = GENERATIONS.find(g => g.id === generation)!;
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      {/* 타이틀 영역 */}
-      <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-white/5 pb-4">
-        <div className="w-10 h-10 rounded-xl bg-[#e6f4ea] dark:bg-[#34A853]/20 flex items-center justify-center text-[var(--google-green)] dark:text-[#81c995] shrink-0">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-        </div>
-        <div>
-          <h3 className="text-base font-extrabold text-[#202124] dark:text-[#e8eaed]">실손의료비(실비) 계산기</h3>
-          <p className="text-xs text-[#5f6368] dark:text-[#9aa0a6] mt-0.5">세대별 자기부담금 단순 추정치 (통원 기준)</p>
-        </div>
-      </div>
+    <div className="w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-      {/* 2단 그리드 레이아웃: 데스크톱 7:5 구조 */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* 좌측: 입력 폼 영역 (7열) */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* 1. 가입 세대 */}
-          <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-200/80 dark:border-white/5 shadow-sm">
-            <label className="block text-xs sm:text-sm font-extrabold text-[#202124] dark:text-[#e8eaed] mb-3">실손 가입 시기 (세대 구분)</label>
+        {/* ── 좌측 입력 패널 ── */}
+        <div className="lg:col-span-6 flex flex-col gap-4">
+
+          {/* 1. 가입 세대 선택 */}
+          <div className="bg-white dark:bg-[#202124] rounded-2xl border border-gray-200 dark:border-white/10 p-5 shadow-sm">
+            <label className="block text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-3">
+              📅 실손 가입 세대
+            </label>
             <div className="grid grid-cols-2 gap-2">
-              {[
-                { id: 1, label: '1세대', desc: '~09년 8월 이전' },
-                { id: 2, label: '2세대', desc: '09.10 ~ 17.03' },
-                { id: 3, label: '3세대', desc: '17.04 ~ 21.06' },
-                { id: 4, label: '4세대', desc: '21.07 ~ 현재' },
-              ].map(gen => (
-                <button 
-                  key={gen.id}
-                  type="button"
-                  onClick={() => setGeneration(gen.id)}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    generation === gen.id 
-                      ? 'border-[var(--google-green)] bg-green-50/50 dark:bg-[#34A853]/15 text-[var(--google-green)] dark:text-[#81c995] font-bold shadow-sm' 
-                      : 'border-gray-200 bg-white dark:bg-[#303134] dark:border-transparent text-[#5f6368] dark:text-[#9aa0a6] hover:border-green-300'
-                  }`}
-                >
-                  <div className="text-xs sm:text-sm">{gen.label}</div>
-                  <div className="text-[10px] opacity-85 mt-0.5">{gen.desc}</div>
-                </button>
-              ))}
+              {GENERATIONS.map(gen => {
+                const isActive = generation === gen.id;
+                return (
+                  <button
+                    key={gen.id}
+                    onClick={() => setGeneration(gen.id)}
+                    className={`p-3 rounded-xl border-2 text-left transition-all ${
+                      isActive
+                        ? 'border-current shadow-sm'
+                        : 'border-gray-200 dark:border-white/8 bg-[#f8f9fa] dark:bg-[#2d2d2d] hover:border-gray-300 dark:hover:border-white/20'
+                    }`}
+                    style={isActive ? { borderColor: gen.color, backgroundColor: `${gen.color}12`, color: gen.color } : {}}
+                  >
+                    <div className="font-extrabold text-[14px]">{gen.label}</div>
+                    <div className={`text-[10px] mt-0.5 font-semibold ${isActive ? 'opacity-80' : 'text-gray-400'}`}>{gen.period}</div>
+                  </button>
+                );
+              })}
+            </div>
+            {/* 선택된 세대 설명 */}
+            <div className="mt-3 px-3 py-2 rounded-xl text-[11px] font-semibold" style={{ backgroundColor: `${selectedGen.color}12`, color: selectedGen.color }}>
+              ℹ️ {selectedGen.note}
             </div>
           </div>
 
-          {/* 2. 병원 규모 */}
-          <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-200/80 dark:border-white/5 shadow-sm">
-            <label className="block text-xs sm:text-sm font-extrabold text-[#202124] dark:text-[#e8eaed] mb-3">방문한 병원 규모</label>
+          {/* 2. 병원 규모 선택 */}
+          <div className="bg-white dark:bg-[#202124] rounded-2xl border border-gray-200 dark:border-white/10 p-5 shadow-sm">
+            <label className="block text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-3">
+              🏥 방문 병원 규모
+            </label>
             <div className="grid grid-cols-3 gap-2">
-              {['일반 의원', '병원', '종합병원'].map((type, idx) => (
-                <button 
-                  key={idx}
-                  type="button"
-                  onClick={() => setHospitalType(idx + 1)}
-                  className={`py-3 rounded-xl border text-center text-xs sm:text-sm transition-all ${
-                    hospitalType === idx + 1 
-                      ? 'border-[var(--google-green)] bg-green-50/50 dark:bg-[#34A853]/15 text-[var(--google-green)] dark:text-[#81c995] font-bold shadow-sm' 
-                      : 'border-gray-200 bg-white dark:bg-[#303134] dark:border-transparent text-[#5f6368] dark:text-[#9aa0a6] hover:border-green-300'
-                  }`}
-                >
-                  {type}
+              {HOSPITAL_TYPES.map(ht => {
+                const isActive = hospitalType === ht.id;
+                return (
+                  <button
+                    key={ht.id}
+                    onClick={() => setHospitalType(ht.id)}
+                    className={`py-3 px-2 rounded-xl border-2 flex flex-col items-center gap-1 transition-all ${
+                      isActive
+                        ? 'border-[#34A853] bg-[#e6f4ea] dark:bg-[#34A853]/15 text-[#34A853] dark:text-[#81c995]'
+                        : 'border-gray-200 dark:border-white/8 bg-[#f8f9fa] dark:bg-[#2d2d2d] text-gray-500 dark:text-gray-400 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-xl">{ht.emoji}</span>
+                    <span className="text-[11px] font-bold leading-tight text-center break-keep">{ht.label}</span>
+                    <span className={`text-[9px] leading-tight text-center ${isActive ? 'opacity-70' : 'text-gray-400'}`}>{ht.desc}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 3. 진료비 입력 */}
+          <div className="bg-white dark:bg-[#202124] rounded-2xl border border-gray-200 dark:border-white/10 p-5 shadow-sm">
+            <label className="block text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-3">
+              💊 총 발생 진료비 (환자 부담 총액)
+            </label>
+            <div className="relative mb-3">
+              <input
+                type="text"
+                value={medicalBill ? fmt(medicalBill) : ''}
+                onChange={e => setMedicalBill(parse(e.target.value))}
+                placeholder="100,000"
+                className="w-full bg-[#f8f9fa] dark:bg-[#2d2d2d] border border-gray-200 dark:border-white/10 rounded-xl py-3.5 pl-4 pr-12 text-[16px] text-[#202124] dark:text-[#e8eaed] font-black focus:ring-2 focus:ring-[#34A853] focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all"
+              />
+              <span className="absolute right-4 top-4 text-[13px] text-gray-400 font-semibold">원</span>
+            </div>
+            {/* 빠른 금액 버튼 */}
+            <div className="grid grid-cols-4 gap-1.5">
+              {[50000, 100000, 300000, 500000].map(v => (
+                <button key={v} onClick={() => setMedicalBill(v)}
+                  className={`py-2 rounded-xl text-[11px] font-bold border transition-all ${
+                    medicalBill === v
+                      ? 'bg-[#34A853] text-white border-[#34A853] shadow-sm'
+                      : 'bg-[#f8f9fa] dark:bg-[#2d2d2d] border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 hover:border-[#34A853]/50 hover:text-[#34A853]'
+                  }`}>
+                  {v >= 100000 ? `${v / 10000}만` : `${v.toLocaleString()}`}
                 </button>
               ))}
             </div>
           </div>
-
-          {/* 3. 총 진료비 */}
-          <div className="bg-white dark:bg-[#202124] p-5 rounded-2xl border border-gray-200/80 dark:border-white/5 shadow-sm">
-            <label className="block text-xs sm:text-sm font-extrabold text-[#202124] dark:text-[#e8eaed] mb-2.5">총 발생 의료비 (영수증 환자부담총액)</label>
-            <div className="relative">
-              <input 
-                type="text"
-                value={medicalBill ? formatCurrency(medicalBill) : ''} 
-                onChange={(e) => setMedicalBill(parseCurrency(e.target.value))}
-                className="w-full bg-[#f8f9fa] dark:bg-[#303134] border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-4 pr-10 text-sm text-[#202124] dark:text-[#e8eaed] focus:ring-2 focus:ring-[var(--google-green)] focus:bg-white dark:focus:bg-[#202124] focus:outline-none transition-all font-bold"
-              />
-              <span className="absolute right-4 top-3.5 text-xs text-gray-400 font-medium">원</span>
-            </div>
-          </div>
         </div>
 
-        {/* 우측: 결과 출력 카드 (5열) - 데스크톱에서 스티키 고정 */}
-        <div className="lg:col-span-5 lg:sticky lg:top-6 lg:self-start">
-          <div className="bg-[#f4faf6] dark:bg-[#15271e]/30 border border-green-100/60 dark:border-green-900/20 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-            <div className="flex justify-between items-center mb-5 border-b border-green-100/30 pb-3">
-              <h4 className="text-xs font-extrabold text-green-800 dark:text-green-300 uppercase tracking-wider flex items-center gap-1.5">
-                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                산출 명세서
-              </h4>
+        {/* ── 우측 결과 패널 ── */}
+        <div className="lg:col-span-6 flex flex-col gap-4">
+          {/* 예상 수령액 카드 (대형) */}
+          <div className="bg-gradient-to-br from-[#34A853] to-[#137333] rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 opacity-10 transform translate-x-8 -translate-y-8">
+              <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
             </div>
-            
-            <div className="space-y-3 mb-6 text-xs sm:text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-[#bdc1c6]">총 진료비</span>
-                <span className="font-semibold text-[#202124] dark:text-[#e8eaed]">{medicalBill.toLocaleString()} 원</span>
+            <div className="relative z-10">
+              <div className="text-[11px] font-bold text-white/80 uppercase tracking-widest mb-1">예상 수령액 (추정치)</div>
+              <div className="text-4xl font-black tracking-tight mb-1">
+                {Math.round(returnAmount).toLocaleString()}
+                <span className="text-xl font-bold text-white/85 ml-1">원</span>
               </div>
-              <div className="flex justify-between text-red-500 font-bold">
-                <span>공제금액 (자기부담금)</span>
-                <span>- {Math.round(deductible).toLocaleString()} 원</span>
+              <div className="text-[12px] text-white/70 font-semibold">
+                {generation}세대 · {HOSPITAL_TYPES.find(h => h.id === hospitalType)?.label} · 보장률 {coveragePct}%
               </div>
             </div>
-
-            {/* 예상 수령액 카드 (그린 그라데이션) */}
-            <div className="bg-gradient-to-br from-[#34A853] to-[#137333] dark:from-[#34A853] dark:to-[#188038] text-white p-5 rounded-2xl text-center shadow-md relative overflow-hidden transition-all duration-300 hover:shadow-lg">
-              <div className="absolute top-0 right-0 opacity-10 transform translate-x-6 -translate-y-6">
-                <svg className="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-              </div>
-              <div className="relative z-10">
-                <span className="block text-[11px] font-bold text-white/85 mb-1">예상 수령액 (추정치)</span>
-                <span className="text-2xl sm:text-3xl font-black tracking-tight flex items-center justify-center gap-1">
-                  {Math.round(finalAmount).toLocaleString()}
-                  <span className="text-sm font-bold text-white/90">원</span>
-                </span>
-              </div>
-            </div>
-
-            {/* 상담 신청 버튼 */}
-            <a 
-              href="https://open.kakao.com/o/sWeszp7" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="block text-center w-full mt-5 py-3.5 bg-gray-900 hover:bg-gray-800 active:scale-[0.99] text-white dark:bg-white dark:text-gray-900 dark:hover:bg-gray-50 rounded-xl font-extrabold text-sm transition-all shadow-md"
-            >
-              보상스쿨 1:1 무료상담 신청하기
-            </a>
           </div>
+
+          {/* 산출 명세 카드 */}
+          <div className="bg-white dark:bg-[#202124] rounded-2xl border border-gray-200 dark:border-white/10 p-5 shadow-sm flex-1">
+            <div className="text-[11px] font-bold text-[#5f6368] dark:text-[#9aa0a6] uppercase tracking-wider mb-4">🧾 산출 명세</div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center py-2 border-b border-dashed border-gray-200 dark:border-white/8">
+                <span className="text-[13px] text-gray-500 dark:text-gray-400">총 진료비</span>
+                <span className="text-[14px] font-bold text-[#202124] dark:text-[#e8eaed]">{medicalBill.toLocaleString()} 원</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-dashed border-gray-200 dark:border-white/8">
+                <span className="text-[13px] text-gray-500 dark:text-gray-400">자기부담금 (공제)</span>
+                <span className="text-[14px] font-bold text-[#d93025]">- {Math.round(deductible).toLocaleString()} 원</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-[13px] font-bold text-[#34A853]">예상 지급액</span>
+                <span className="text-[14px] font-black text-[#34A853]">{Math.round(returnAmount).toLocaleString()} 원</span>
+              </div>
+            </div>
+
+            {/* 보장율 바 */}
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-white/8">
+              <div className="flex justify-between text-[11px] font-bold text-gray-500 dark:text-gray-400 mb-1.5">
+                <span>보장 비율</span>
+                <span style={{ color: selectedGen.color }}>{coveragePct}%</span>
+              </div>
+              <div className="h-2 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${coveragePct}%`, backgroundColor: selectedGen.color }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* 주의사항 */}
+          <div className="bg-[#fce8e6] dark:bg-[#d93025]/10 rounded-xl p-3.5 border border-[#d93025]/15 flex gap-2.5 text-[11px] leading-relaxed text-[#d93025] dark:text-[#f28b82] font-semibold">
+            <span className="shrink-0 text-sm">⚠️</span>
+            <p>위 결과는 <strong>단순 추정치</strong>입니다. 급여/비급여 비율, 면책 상병, 가입 한도 초과에 따라 실제 지급액이 달라질 수 있습니다.</p>
+          </div>
+
+          {/* CTA */}
+          <a
+            href="https://open.kakao.com/o/sWeszp7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-center w-full py-4 bg-[#202124] hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-[#202124] rounded-2xl font-extrabold text-[14px] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          >
+            💬 보상스쿨 1:1 무료상담 신청하기
+          </a>
         </div>
-
       </div>
-
-      {/* 안내 주의 사항 */}
-      <div className="mt-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30 flex gap-3 text-xs leading-relaxed text-red-700 dark:text-red-400 font-semibold">
-        <span className="text-sm shrink-0">⚠️</span>
-        <p>
-          위 결과는 세대별 기본 통원 약관을 바탕으로 한 <strong>단순 추정치</strong>입니다. 실제 영수증상의 급여/비급여 비율, 보상에서 제외되는 질환(면책 상병) 여부, 가입 한도 초과 등에 따라 실제 지급액과 차이가 날 수 있습니다. 청구서류 검토나 지급 거절 사례 상담이 필요하시다면 보상스쿨 무료상담을 신청해 보세요.
-        </p>
-      </div>
-
     </div>
   );
 }
