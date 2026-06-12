@@ -117,47 +117,86 @@ function extractFAQ(content: string): { q: string; a: string }[] {
   return faqs;
 }
 
-// ─── 본문 전처리: 특수 섹션 완벽 제거 ───
+// ─── 본문 전처리: 특수 섹션 처리 + 자가진단 인라인 변환 ───
 function preprocessBody(content: string): string {
   const lines = content.split('\n');
   const result: string[] = [];
   let skipType: 'NONE' | 'KEY_POINTS' | 'CHECKLIST' | 'FAQ' | 'CTA' = 'NONE';
+  let clBuffer: string[] = []; // 자가진단 항목 수집 버퍼
+
+  const flushChecklist = () => {
+    if (clBuffer.length > 0) {
+      result.push(`<inlinechecklist data="${encodeURIComponent(clBuffer.join('||'))}"></inlinechecklist>`);
+      clBuffer = [];
+    }
+  };
 
   for (const line of lines) {
     const trimmed = line.trim();
 
-    // 1. Check if heading starts a skip section
+    // 1. 섹션 시작 감지
     if (/^##\s+/.test(trimmed)) {
       if (KEY_POINT_PATTERNS.test(trimmed)) { skipType = 'KEY_POINTS'; continue; }
-      if (CHECKLIST_PATTERNS.test(trimmed)) { skipType = 'CHECKLIST'; continue; }
+      if (CHECKLIST_PATTERNS.test(trimmed)) { skipType = 'CHECKLIST'; clBuffer = []; continue; }
       if (FAQ_PATTERNS.test(trimmed)) { skipType = 'FAQ'; continue; }
       if (CTA_PATTERNS.test(trimmed)) { skipType = 'CTA'; continue; }
     }
 
-    // 2. Check if we should STOP skipping
+    // 2. 스킵 상태별 처리
     if (skipType === 'KEY_POINTS') {
       if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^#/.test(trimmed)) skipType = 'NONE';
       else if (/^#/.test(trimmed)) skipType = 'NONE';
     } else if (skipType === 'CHECKLIST') {
-      if (trimmed !== '' && !/^[-*]/.test(trimmed) && !/^[☑️✅]/.test(trimmed) && !/^#/.test(trimmed)) skipType = 'NONE';
-      else if (/^#/.test(trimmed)) skipType = 'NONE';
+      // 자가진단 섹션: 항목을 수집해서 나중에 <inlinechecklist>로 변환
+      if (/^#{1,6}\s/.test(trimmed)) {
+        // 다음 헤딩이 나오면 수집 종료 후 태그 삽입 → 스킵 해제 (fall-through)
+        flushChecklist();
+        skipType = 'NONE';
+      } else if (/^[-*]\s+/.test(trimmed)) {
+        // 리스트 항목 수집 (☑️ 유무 관계없이)
+        const text = trimmed
+          .replace(/^[-*]\s*/, '')
+          .replace(/^\[[ x]\]\s*/i, '')
+          .replace(/^[☑️✅]\s*/u, '')
+          .trim();
+        if (text) clBuffer.push(text);
+        continue;
+      } else if (trimmed === '' || trimmed === '---') {
+        continue;
+      } else {
+        // 리스트가 아닌 일반 텍스트 → 수집 종료
+        flushChecklist();
+        skipType = 'NONE';
+        // fall-through: 이 라인은 일반 처리
+      }
     } else if (skipType === 'FAQ') {
       if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
     } else if (skipType === 'CTA') {
       if (/^#{1,2}\s/.test(trimmed)) skipType = 'NONE';
     }
 
-    // 3. Process line
     if (skipType === 'NONE') {
       result.push(line);
     }
   }
+
+  // 파일 끝에서 수집된 항목 처리
+  flushChecklist();
 
   const processed = result
     .join('\n')
     .replace(/<calculator\s+type="([^"]+)"\s*\/>/g, '<calculator type="$1"></calculator>')
     .replace(/\[SEO_SUMMARY\]:.*/gi, '')
     .replace(/\[[^\]]*(?:카카오|상담)[^\]]*\]\([^)]*\)/g, '')
+    // 본문 내 ☑️/✅ 리스트 블록(2개 이상) → 인라인 인터랙티브 체크리스트로 변환
+    .replace(/((?:[ \t]*[*-][ \t]+(?:☑️|✅)[^\n]+\n?){2,})/gmu, (match) => {
+      const items = match.split('\n')
+        .filter(l => /☑️|✅/u.test(l))
+        .map(l => l.replace(/^[ \t]*[*-][ \t]+(?:☑️|✅)[ \t]*/u, '').trim())
+        .filter(Boolean);
+      if (items.length < 2) return match;
+      return `\n<inlinechecklist data="${encodeURIComponent(items.join('||'))}"></inlinechecklist>\n`;
+    })
     .trim();
 
   // remark-gfm의 한글 조사 결합 시 볼드(**) 파싱 버그를 예방하기 위해
@@ -177,7 +216,7 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
   const [activeId, setActiveId] = useState('');
 
   const keyPoints    = extractKeyPoints(content);
-  const checklistItems = extractChecklist(content);
+  // checklistItems는 인라인 변환으로 대체 — 하단 중복 렌더링 제거
   const faqItems     = extractFAQ(content);
   const bodyContent  = preprocessBody(content);
 
@@ -339,6 +378,13 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
     green: ({ children }: { children: React.ReactNode }) => <strong className="text-[#34A853] dark:text-[#81c995] font-bold">{children}</strong>,
     blue: ({ children }: { children: React.ReactNode }) => <strong className="text-[#1A73E8] dark:text-[#8ab4f8] font-bold">{children}</strong>,
     purple: ({ children }: { children: React.ReactNode }) => <strong className="text-[#9333ea] dark:text-[#c084fc] font-bold">{children}</strong>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    inlinechecklist: ({ ...props }: any) => {
+      const encoded = (props['data'] as string) || '';
+      const items = decodeURIComponent(encoded).split('||').filter(Boolean);
+      if (items.length === 0) return null;
+      return <ChecklistBox items={items} />;
+    },
     hr1: () => (
       <div className="my-16 flex items-center justify-center gap-4">
         <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
@@ -381,8 +427,8 @@ export default function BlogPostContent({ content }: BlogPostContentProps) {
         </ReactMarkdown>
       </div>
 
-      {/* 4. 자가진단 체크리스트 */}
-      {checklistItems.length > 0 && <ChecklistBox items={checklistItems} />}
+      {/* 4. 자가진단 체크리스트 — 본문 내 <inlinechecklist> 태그로 인라인 렌더링됨 */}
+
 
       {/* 5. FAQ */}
       {faqItems.length > 0 && <FAQBox items={faqItems} />}
