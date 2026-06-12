@@ -76,6 +76,10 @@ async function callGemini(prompt, schema = null) {
 
         if (!res.ok) {
           const errText = await res.text();
+          // 404(모델 없음)는 재시도해도 의미 없음 → 즉시 다음 모델로 전환
+          if (res.status === 404) {
+            throw new Error(`API HTTP 404: 모델 '${model}'을 찾을 수 없습니다.`);
+          }
           // 503(과부하), 429(요청 초과), 500번대 서버 에러는 재시도 대상
           if ((res.status === 503 || res.status === 429 || res.status >= 500) && attempt < 5) {
             const waitMs = 3000 * Math.pow(2, attempt - 1); // 3s, 6s, 12s, 24s
@@ -213,9 +217,17 @@ ${trendContext}
   const topic = await callGemini(topicPrompt, topicSchema);
   console.log(`[1] 토픽 기획 완료: ${topic.title} (${topic.slug})`);
 
+  // API 연속 호출 간 429 할당량 초과 방지 - 30초 쿨다운
+  console.log('  [대기] API 요청 간격 조절 중... (30초)');
+  await new Promise(r => setTimeout(r, 30000));
+
   // Step 2. 본문 작성 (순수 텍스트/마크다운 모드 - JSON 스키마 없이 전체 길이 보장)
   const content = await callGemini(buildPrompt(topic, existingPosts));
   console.log(`[2] 본문 생성 완료 (${content.length}자)`);
+
+  // API 연속 호출 간 429 할당량 초과 방지 - 30초 쿨다운
+  console.log('  [대기] API 요청 간격 조절 중... (30초)');
+  await new Promise(r => setTimeout(r, 30000));
 
   // Step 3. SEO 요약문 생성 (JSON 스키마 강제)
   console.log('[3] SEO 요약문 추출 중...');
