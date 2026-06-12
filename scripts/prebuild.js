@@ -171,6 +171,56 @@ function run() {
   sitemapXml += `</urlset>`;
   fs.writeFileSync(sitemapOutputPath, sitemapXml, 'utf8');
   console.log(`Successfully generated Sitemap to ${sitemapOutputPath}`);
+
+  // HIRA 병원 정보 분할 생성 추가
+  splitHiraData();
+}
+
+function splitHiraData() {
+  const hiraSourcePath = path.join(process.cwd(), 'src/content/hira-hospitals.json');
+  const hospitalsOutputDir = path.join(process.cwd(), 'public/data/hospitals');
+
+  if (fs.existsSync(hiraSourcePath)) {
+    console.log('Splitting HIRA hospital database into district-level files...');
+    const hiraData = JSON.parse(fs.readFileSync(hiraSourcePath, 'utf8'));
+    
+    if (!fs.existsSync(hospitalsOutputDir)) {
+      fs.mkdirSync(hospitalsOutputDir, { recursive: true });
+    } else {
+      // 기존에 존재하던 JSON 분할 파편 파일 청소
+      const files = fs.readdirSync(hospitalsOutputDir);
+      for (const file of files) {
+        if (file.endsWith('.json')) {
+          fs.unlinkSync(path.join(hospitalsOutputDir, file));
+        }
+      }
+    }
+
+    let splitCount = 0;
+    if (hiraData && hiraData.regions) {
+      for (const [sidoName, sidoData] of Object.entries(hiraData.regions)) {
+        if (!sidoData || !sidoData.districts) continue;
+        for (const [districtName, districtData] of Object.entries(sidoData.districts)) {
+          const fileContent = {
+            sido: sidoName,
+            district: districtName,
+            specialties: districtData.specialties || {}
+          };
+          const outputFileName = `${sidoName}-${districtName}.json`;
+          fs.writeFileSync(
+            path.join(hospitalsOutputDir, outputFileName),
+            JSON.stringify(fileContent, null, 2),
+            'utf8'
+          );
+          splitCount++;
+        }
+      }
+    }
+    console.log(`Successfully split HIRA database into ${splitCount} district files at ${hospitalsOutputDir}`);
+  } else {
+    console.warn(`HIRA source database not found at ${hiraSourcePath}. Skipping split process.`);
+  }
 }
 
 run();
+

@@ -213,13 +213,57 @@ export default function BlogPageClient() {
       setLoading(true);
     }, 0);
 
-    fetch('/data/hira-hospitals.json')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { setHiraData(data); setLoading(false); })
-      .catch(() => { setHiraData(null); setLoading(false); });
+    // 1. sido 이름 찾기 (만약 URL 파라미터로 안 넘어왔다면 REGIONS_DATA에서 역추적)
+    let finalSido = sido;
+    if (!finalSido) {
+      const foundSidoObj = REGIONS_DATA.find(r => r.districts.includes(region));
+      if (foundSidoObj) {
+        finalSido = foundSidoObj.name;
+      }
+    }
+
+    // 2. SIDO_MAP을 이용해 HIRA 파일 구조에 맞는 짧은 이름(예: '서울특별시' -> '서울')으로 매핑
+    const mappedSido = finalSido ? (SIDO_MAP[finalSido] || finalSido) : '';
+
+    if (!mappedSido) {
+      setHiraData(null);
+      setLoading(false);
+      return () => clearTimeout(timer);
+    }
+
+    // 3. 해당 시도-구군에 대응하는 쪼개진 가벼운 JSON 파일만 가져옴
+    const filePath = `/data/hospitals/${encodeURIComponent(mappedSido)}-${encodeURIComponent(region)}.json`;
+
+    fetch(filePath)
+      .then(r => {
+        if (!r.ok) throw new Error('File not found');
+        return r.json();
+      })
+      .then(data => {
+        // 기존 렌더링 로직 및 데이터 필터링 함수와 호환되도록 HiraData 구조로 포장하여 상태값 세팅
+        const wrappedData: HiraData = {
+          updatedAt: new Date().toISOString(),
+          source: 'HIRA',
+          regions: {
+            [data.sido]: {
+              districts: {
+                [data.district]: {
+                  specialties: data.specialties
+                }
+              }
+            }
+          }
+        };
+        setHiraData(wrappedData);
+        setLoading(false);
+      })
+      .catch(() => {
+        setHiraData(null);
+        setLoading(false);
+      });
 
     return () => clearTimeout(timer);
-  }, [region]);
+  }, [region, sido]);
 
   // ─── 지역 파라미터 있음: 병원 사이트맵 또는 진료과목 리스트 ───
   if (region) {
